@@ -93,7 +93,7 @@ class Upload {
 	}
 	public function move() {
 		$this->name = $this->file["name"];
-		if(file_exists($this->imagePath) || preg_match("/[^a-z0-9\ \-\_\+]/i",$this->name)) {
+		if(file_exists($this->imagePath) || preg_match("/[^a-z0-9\ \-\_\+]/",$this->name)) {
 			$ext = explode(".",$this->name);
 			$ext = $ext[count($ext)-1];
 			$this->name = time().$this->id.".".$ext;
