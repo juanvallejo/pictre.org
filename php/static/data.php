@@ -353,7 +353,12 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$get = new Get($pdo);
 		$get->data($_POST);
 	} else {
-		die("NO_DATA");
+		if(isset($_GET['info']) && $_GET['info'] == '--static') {
+			echo "URL -> ".getenv('OPENSHIFT_MYSQL_DB_URL');
+			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_PORT');
+			echo "port -> ".getenv('OPENSHIFT_MYSQL_DB_PORT');
+			die("host -> ".getenv('OPENSHIFT_MYSQL_DB_HOST'));
+		} else die("NO_DATA");
 	}
 } else {
 	die("NO_DATA_SENT");
