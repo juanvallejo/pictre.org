@@ -197,6 +197,7 @@ class Get {
 			}
 			$array["length"] = $results->rowCount();
 			$array["total"] = $total->rowCount();
+			die("test");
 			echo json_encode($array,JSON_FORCE_OBJECT);
 		} catch(PDOException $e) {
 			die($e->getMessage());
@@ -350,7 +351,6 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do = new Action($pdo);
 		$do->togglePrivacy($_POST);
 	} elseif($_POST["type"] == "get_data") {
-		die("get_data");
 		$get = new Get($pdo);
 		$get->data($_POST);
 	} else {
