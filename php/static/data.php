@@ -354,10 +354,10 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$get->data($_POST);
 	} else {
 		if(isset($_GET['n']) && $_GET['n'] == '--static') {
-			echo "Password ommitted for security.";
-			echo "URL -> ".getenv('OPENSHIFT_MYSQL_DB_URL')."\n";
-			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."\n";
-			echo "port -> ".getenv('OPENSHIFT_MYSQL_DB_PORT')."\n";
+			echo "Password ommitted for security.</ br>";
+			echo "URL -> ".getenv('OPENSHIFT_MYSQL_DB_URL')."</ br>";
+			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."</ br>";
+			echo "port -> ".getenv('OPENSHIFT_MYSQL_DB_PORT')."<br />";
 			die("host -> ".getenv('OPENSHIFT_MYSQL_DB_HOST'));
 		} else die("NO_DATA");
 	}
