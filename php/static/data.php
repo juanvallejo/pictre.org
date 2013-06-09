@@ -141,7 +141,6 @@ class Get {
 		$anchor = $data["anchor"];
 		$limit = $data["limit"];
 		$where = empty($data["where"]) ? 1 : stripslashes($data["where"]);
-		die(getenv('OPENSHIFT_DATA_DIR'));
 		$query = "SELECT * FROM `$request` WHERE $where ORDER BY time DESC LIMIT $anchor,$limit";
 		//
 		$c_array = array();
