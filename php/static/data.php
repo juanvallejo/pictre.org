@@ -3,7 +3,6 @@ header('Access-Control-Allow-Origin: *');
 define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
 define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
 include("flip.php");
-die("php sucks");
 class ImgResizer {
     private $originalFile = '';
     public function __construct($originalFile = '') {
@@ -305,8 +304,8 @@ class Action {
 		
 	}
 }
-$dsn = 'mysql:dbname=pictre;host='.HOST.';port='.PORT;
-$pdo = new PDO($dsn,'adminFKpmBIj','yzGJ9GlzleZK');
+$dsn = 'mysql:dbname=static;host='.HOST.';port='.PORT;
+$pdo = new PDO($dsn,'adminHhI41YY','i4JF6GlABkqW');
 if(isset($_FILES) && count($_FILES) > 0) {
 	$up = array();
 	$n = count($_FILES);
