@@ -337,7 +337,6 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		die("There was an error processing your request.");
 	}
 } elseif(isset($_POST)) {
-	die("test");
 	if($_POST["type"] == "store_comment") {
 		$store = new Store($pdo);
 		$store->comment($_POST);
@@ -351,6 +350,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do = new Action($pdo);
 		$do->togglePrivacy($_POST);
 	} elseif($_POST["type"] == "get_data") {
+		die("get_data");
 		$get = new Get($pdo);
 		$get->data($_POST);
 	} else {
