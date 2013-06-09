@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: *');
 define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
 define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
 include("flip.php");
+die("php sucks");
 class ImgResizer {
     private $originalFile = '';
     public function __construct($originalFile = '') {
