@@ -259,24 +259,38 @@ class Action {
 				die($e->getMessage());
 			}
 		} else {
-			if(unlink($this->root.$source[1])) {
-				if(unlink($this->root.$thumb[1])) {
-					try {
-						$this->pdo->query("DELETE FROM `all` WHERE id = '$id'");
+			if(file_exists($this->root.$source[1])) && file_exists($this->root.$this->thumb[1])) {
+				if(unlink($this->root.$source[1])) {
+					if(unlink($this->root.$thumb[1])) {
 						try {
-							$this->pdo->query("DELETE FROM `comments` WHERE pictureId = '$id'");
-							echo "success";
+							$this->pdo->query("DELETE FROM `all` WHERE id = '$id'");
+							try {
+								$this->pdo->query("DELETE FROM `comments` WHERE pictureId = '$id'");
+								echo "success";
+							} catch(PDOException $e) {
+								die("Error removing comment records");
+							}
 						} catch(PDOException $e) {
-							die("Error removing comment records");
+							die("Error removing database records");
 						}
-					} catch(PDOException $e) {
-						die("Error removing database records");
+					} else {
+						die("Error deleting thumbnail");
 					}
 				} else {
-					die("Error deleting thumbnail");
+					die("Error deleting file.");
 				}
 			} else {
-				die("Error deleting file.");
+				try {
+					$this->pdo->query("DELETE FROM `comments` WHERE pictureId='$id'");
+					try {
+						$this->pdo->query("DELETE FROM `all` WHERE id='$id'");
+						echo "success";
+					} catch(PDOException $e) {
+						die("Error removing comment records");
+					}
+				} catch(PDOException $e) {
+					die("Error deleting database record");
+				}
 			}
 		}
 	}
