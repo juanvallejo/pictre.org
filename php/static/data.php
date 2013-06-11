@@ -259,7 +259,7 @@ class Action {
 				die($e->getMessage());
 			}
 		} else {
-			if(file_exists($this->root.$source[1])) && file_exists($this->root.$thumb[1])) {
+			if(file_exists($this->root.$source[1]) && file_exists($this->root.$thumb[1])) {
 				if(unlink($this->root.$source[1])) {
 					if(unlink($this->root.$thumb[1])) {
 						try {
@@ -281,9 +281,9 @@ class Action {
 				}
 			} else {
 				try {
-					$this->pdo->query("DELETE FROM `comments` WHERE pictureId='$id'");
+					$this->pdo->query("DELETE FROM `all` WHERE id='$id'");
 					try {
-						$this->pdo->query("DELETE FROM `all` WHERE id='$id'");
+						$this->pdo->query("DELETE FROM `comments` WHERE pictureId='$id'");
 						echo "success";
 					} catch(PDOException $e) {
 						die("Error removing comment records");
