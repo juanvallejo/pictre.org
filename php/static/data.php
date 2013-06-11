@@ -259,7 +259,7 @@ class Action {
 				die($e->getMessage());
 			}
 		} else {
-			if(file_exists($this->root.$source[1])) && file_exists($this->root.$this->thumb[1])) {
+			if(file_exists($this->root.$source[1])) && file_exists($this->root.$thumb[1])) {
 				if(unlink($this->root.$source[1])) {
 					if(unlink($this->root.$thumb[1])) {
 						try {
