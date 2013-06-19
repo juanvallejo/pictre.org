@@ -338,7 +338,7 @@ class Action {
 		$key = $rand."0".$key;
 		try {
 			$checkDup = $this->pdo->query("SELECT id FROM `albums` WHERE passcode = '$hash'");
-\		} catch(PDOException $e) {
+		} catch(PDOException $e) {
 			die("Error: ".$e->getMessage());
 		}
 		if($checkDup->rowCount() > 0) $this->encrypt($a);
@@ -424,7 +424,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do = new Action($pdo);
 		$do->delete($_POST);
 	} elseif($_POST["type"] == "passcode_set") {
-		$do = new Action;
+		$do = new Action($pdo);
 		$do->setPasscode($_POST);
 	} elseif($_POST["type"] == "board_unlock") {
 		$do = new Action($pdo);
