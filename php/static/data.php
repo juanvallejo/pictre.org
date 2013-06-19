@@ -341,6 +341,7 @@ class Action {
 		else return array("hash"=>$hash,"key"=>$key);
 	}
 	public function setPasscode($post) {
+		die("this isnt funny anymore... ".$post["passcode"]);
 		$album = $post["album"];
 		$enc = $this->encrypt($post["passcode"]);
 		$passcode = $enc["hash"];
