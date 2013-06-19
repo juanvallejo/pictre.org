@@ -420,9 +420,11 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do = new Action($pdo);
 		$do->delete($_POST);
 	} elseif($_POST["type"] == "passcode_set") {
+		die("passcode is being set");
 		$do = new Action;
 		$do->setPasscode($_POST);
 	} elseif($_POST["type"] == "board_unlock") {
+		die("board is being unlocked");
 		$do = new Action;
 		$do->unlockBoard($_POST);
 	} elseif($_POST["type"] == "get_data") {
