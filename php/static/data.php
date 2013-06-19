@@ -345,8 +345,8 @@ class Action {
 		$enc = $this->encrypt($post["passcode"]);
 		$passcode = $enc["hash"];
 		$key = $enc["key"];
-		$sql = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
 		die("this is the key: ".$key);
+		$sql = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
 		if($sql->rowCount() > 0) {
 			try {
 				$this->pdo->query("UPDATE `albums` SET kind = '1',passcode='$passcode',pub_key='$key' WHERE name = '$album'");
