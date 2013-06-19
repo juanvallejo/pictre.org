@@ -345,6 +345,7 @@ class Action {
 		$enc = $this->encrypt($post["passcode"]);
 		$passcode = $enc["hash"];
 		$key = $enc["key"];
+		die("This is the key: ".$key);
 		$sql = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
 		if($sql->rowCount() > 0) {
 			try {
