@@ -336,9 +336,8 @@ class Action {
 		}
 		$key = implode(0,$key);
 		$key = $rand."0".$key;
-		die("this is the hash: ".$hash);
 		$checkDup = $this->pdo->query("SELECT id FROM `albums` WHERE passcode = '$hash'");
-		if($checkDup->rowCount()) encrypt($a);
+		if($checkDup->rowCount() > 0) $this->encrypt($a);
 		else return array("hash"=>$hash,"key"=>$key);
 	}
 	public function setPasscode($post) {
@@ -346,7 +345,6 @@ class Action {
 		$enc = $this->encrypt($post["passcode"]);
 		$passcode = $enc["hash"];
 		$key = $enc["key"];
-		die("This is the key: ".$key);
 		$sql = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
 		if($sql->rowCount() > 0) {
 			try {
