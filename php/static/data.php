@@ -351,7 +351,7 @@ class Action {
 				$this->pdo->query("UPDATE `albums` SET kind = '1',passcode='$passcode',pub_key='$key' WHERE name = '$album'");
 				echo "success";
 			} catch(PDOException $e) {
-				die($e->getMessage());
+				die("Error updating album passcode: ".$e->getMessage());
 			}
 		} else {
 			$time = time();
@@ -359,7 +359,7 @@ class Action {
 				$this->pdo->query("INSERT INTO `albums` (name,kind,passcode,pub_key) VALUES ('$album','1','$passcode','$key')");
 				echo "success";
 			} catch(PDOException $e) {
-				die($e->getMessage());
+				die("Error inserting data: ".$e->getMessage());
 			}
 		}
 		
@@ -420,11 +420,9 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do = new Action($pdo);
 		$do->delete($_POST);
 	} elseif($_POST["type"] == "passcode_set") {
-		die("passcode is being set");
 		$do = new Action;
 		$do->setPasscode($_POST);
 	} elseif($_POST["type"] == "board_unlock") {
-		die("board is being unlocked");
 		$do = new Action;
 		$do->unlockBoard($_POST);
 	} elseif($_POST["type"] == "get_data") {
