@@ -336,6 +336,7 @@ class Action {
 		}
 		$key = implode(0,$key);
 		$key = $rand."0".$key;
+		die("A skyli");
 		try {
 			$checkDup = $this->pdo->query("SELECT id FROM `albums` WHERE passcode = '$hash'");
 		} catch(PDOException $e) {
