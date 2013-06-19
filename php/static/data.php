@@ -337,6 +337,7 @@ class Action {
 		$key = implode(0,$key);
 		$key = $rand."0".$key;
 		try {
+			die("the query is freaking failing lol");
 			$checkDup = $this->pdo->query("SELECT id FROM `albums` WHERE passcode = '$hash'");
 			die("Query is working");
 		} catch(PDOException $e) {
