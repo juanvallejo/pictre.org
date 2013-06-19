@@ -294,14 +294,61 @@ class Action {
 			}
 		}
 	}
-	public function togglePrivacy($post) {
+	public function encrypt($a) {
+		$menu = "aerstuvfawxygzABCDElfgmhijklmnehzbxoapqxFGHsgIrJWdlXkYZk1j2i34567KLMNOcPQRSTUV89bcd";
+		$menuArr = str_split($menu);
+		$arr = str_split($a);
+		$key = array();
+		$rand = rand(1,4);
+		$hash = "";
+		$i = 0;
+		$lim = count($menuArr)-1;
+		foreach($arr as $r) {
+			$key[$i] = rand(0,$lim);
+			$hash .= $menuArr[$key[$i]];
+			$i++;
+		}
+		$keyLength = count($key);
+		$hashLength = $i;
+		$i = 0;
+		foreach($key as $kee) {
+			$key[$i] = intval(intval($kee)*$rand / $keyLength + 1);
+			if($key[$i] % 10 == 0) {
+				$k = explode("0",$key[$i]);
+				$n = count($k);
+				$o = "";
+				for($x=0;$x<$n;$x++) {
+					$o .= "o";
+				}
+				$key[$i] = $k[0];
+			}
+			$i++;
+		}
+		if($hashLength < 8) {
+			$key[$keyLength] = ".1";
+			$hash .= "0";
+			$count = 0;
+			for($i=$keyLength+1;$i<$keyLength+5;$i++) {
+				$key[$i] = rand(0,10);
+				$hash .= $menuArr[$key[$i]];
+				$count++;
+			}
+		}
+		$key = implode(0,$key);
+		$key = $rand."0".$key;
+		$checkDup = $this->pdo->query("SELECT id FROM `albums` WHERE passcode = '$hash'");
+		if($checkDup->rowCount()) encrypt($a);
+		else return array("hash"=>$hash,"key"=>$key);
+	}
+	public function setPasscode($post) {
 		$album = $post["album"];
-		$lock = "0";
-		if($post["command"] == "lock") $lock = "1";
-		$query = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
-		if($query->rowCount() > 0) {
-			try{
-				$this->pdo->query("UPDATE `albums` SET kind = '$lock' WHERE name = '$album'");
+		$enc = $this->encrypt($post["passcode"]);
+		$passcode = $enc["hash"];
+		$key = $enc["key"];
+		$sql = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
+		if($sql->rowCount() > 0) {
+			try {
+				$this->pdo->query("UPDATE `albums` SET kind = '1',passcode='$passcode',pub_key='$key' WHERE name = '$album'");
 				echo "success";
 			} catch(PDOException $e) {
 				die($e->getMessage());
@@ -309,13 +356,25 @@ class Action {
 		} else {
 			$time = time();
 			try {
-				$this->pdo->query("INSERT INTO `albums` (name,kind) VALUES ('$album','$lock')");
+				$this->pdo->query("INSERT INTO `albums` (name,kind,passcode,pub_key) VALUES ('$album','1','$passcode','$key')");
 				echo "success";
 			} catch(PDOException $e) {
 				die($e->getMessage());
 			}
 		}
 		
+	}
+	public function unlockBoard($post) {
+		$name = $post["album"];
+		$sql = $this->pdo->query("SELECT passcode FROM `albums` WHERE name = '$name'");
+		foreach($sql as $get) {
+			$passcode = $get["passcode"];
+		}
+		if($passcode == $post["passcode"]) {
+			echo "success";
+		} else {
+			die("Invalid passcode");
+		}
 	}
 }
 $dsn = 'mysql:dbname=static;host='.HOST.';port='.PORT;
@@ -360,9 +419,12 @@ if(isset($_FILES) && count($_FILES) > 0) {
 	} elseif($_POST["type"] == "command") {
 		$do = new Action($pdo);
 		$do->delete($_POST);
-	} elseif($_POST["type"] == "toggle_privacy") {
-		$do = new Action($pdo);
-		$do->togglePrivacy($_POST);
+	} elseif($_POST["type"] == "passcode_set") {
+		$do = new Action;
+		$do->setPasscode($_POST);
+	} elseif($_POST["type"] == "board_unlock") {
+		$do = new Action;
+		$do->unlockBoard($_POST);
 	} elseif($_POST["type"] == "get_data") {
 		$get = new Get($pdo);
 		$get->data($_POST);
