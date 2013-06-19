@@ -336,6 +336,7 @@ class Action {
 		}
 		$key = implode(0,$key);
 		$key = $rand."0".$key;
+		die("PHP sucks");
 		$checkDup = $this->pdo->query("SELECT id FROM `albums` WHERE passcode = '$hash'");
 		if($checkDup->rowCount()) encrypt($a);
 		else return array("hash"=>$hash,"key"=>$key);
