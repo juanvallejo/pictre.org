@@ -424,7 +424,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do = new Action($pdo);
 		$do->delete($_POST);
 	} elseif($_POST["type"] == "passcode_set") {
-		$do = new Action($pdo);
+		$do = new Action;
 		$do->setPasscode($_POST);
 	} elseif($_POST["type"] == "board_unlock") {
 		$do = new Action($pdo);
