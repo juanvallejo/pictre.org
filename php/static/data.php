@@ -414,6 +414,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		die("There was an error processing your request.");
 	}
 } elseif(isset($_POST)) {
+	die(var_dump($_POST)); //changes --
 	if($_POST["type"] == "store_comment") {
 		$store = new Store($pdo);
 		$store->comment($_POST);
