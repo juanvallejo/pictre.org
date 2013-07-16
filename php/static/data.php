@@ -434,17 +434,17 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$get = new Get($pdo);
 		$get->data($_POST);
 	} else {
-		$ARRAY = array();
-		$post = $HTTP_RAW_POST_DATA;
-		if($post && $post != "") {
-			$arr = explode("&",$post);
+		$POST = array();
+		$data = $HTTP_RAW_POST_DATA;
+		if($data && $data != "") {
+			$arr = explode("&",$data);
 			foreach($arr as $arrval) {
 				$parse = explode("=",$arrval);
 				$key = $parse[0];
 				$value = $parse[1];
-				$ARRAY[$key] = $value;
+				$POST[$key] = $value;
 			}
-			die($ARRAY['ie']);
+			die($POST['ie']);
 
 		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
