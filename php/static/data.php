@@ -435,7 +435,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$get->data($_POST);
 	} else {
 		$post = $HTTP_RAW_POST_DATA;
-		if($post) {
+		if($post && $post != "") {
 			die(var_dump($post));
 		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
