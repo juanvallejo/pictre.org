@@ -445,7 +445,8 @@ if(isset($_FILES) && count($_FILES) > 0) {
 				$POST[$key] = $value;
 			}
 			if($POST['type'] == 'get_data' && $POST['ie'] == "true") {
-				die("data recieved using Internet Explorer");
+				$get = new Get($pdo);
+				$get->data($POST);
 			} else die("NO_DATA");
 		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
