@@ -141,7 +141,7 @@ class Get {
 		$anchor = $data["anchor"];
 		$limit = $data["limit"];
 		$where = empty($data["where"]) ? 1 : stripslashes($data["where"]);
-		die("where = ".$where);
+		die("where = ".$where); ////--
 		$query = "SELECT * FROM `$request` WHERE $where ORDER BY time DESC LIMIT $anchor,$limit";
 		//
 		$c_array = array();
@@ -442,7 +442,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 			foreach($arr as $arrval) {
 				$parse = explode("=",$arrval);
 				$key = $parse[0];
-				$value = $parse[1];
+				$value = urldecode($parse[1]);
 				$POST[$key] = $value;
 			}
 			if($POST['type'] == 'get_data' && $POST['ie'] == "true") {
