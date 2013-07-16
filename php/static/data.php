@@ -414,6 +414,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		die("There was an error processing your request.");
 	}
 } elseif(isset($_POST)) {
+	//use $HTTP_RAW_POST_DATA for IE
 	if($_POST["type"] == "store_comment") {
 		$store = new Store($pdo);
 		$store->comment($_POST);
@@ -433,7 +434,10 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$get = new Get($pdo);
 		$get->data($_POST);
 	} else {
-		if(isset($_GET['n']) && $_GET['n'] == '--static') {
+		$post = $HTTP_RAW_POST_DATA;
+		if($post) {
+			die(var_dump($post));
+		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
 			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."</ br>";
 			echo "port -> ".getenv('OPENSHIFT_MYSQL_DB_PORT')."<br />";
