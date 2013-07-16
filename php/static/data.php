@@ -436,7 +436,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 	} else {
 		$post = $HTTP_RAW_POST_DATA;
 		if($post && $post != "") {
-			die(var_dump($post));
+			die($post);
 		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
 			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."</ br>";
