@@ -434,9 +434,15 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$get = new Get($pdo);
 		$get->data($_POST);
 	} else {
+		$ARRAY = array();
 		$post = $HTTP_RAW_POST_DATA;
 		if($post && $post != "") {
-			die($post);
+			$arr = explode("&",$post);
+			foreach($arr as $key=>$value) {
+				$ARRAY[$key] = $value;
+			}
+			die($ARRAY['ie']);
+
 		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
 			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."</ br>";
