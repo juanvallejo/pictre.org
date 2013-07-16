@@ -444,8 +444,9 @@ if(isset($_FILES) && count($_FILES) > 0) {
 				$value = $parse[1];
 				$POST[$key] = $value;
 			}
-			die($POST['ie']);
-
+			if($POST['type'] == 'get_data' && $POST['ie'] == "true") {
+				die("data recieved using Internet Explorer");
+			} else die("NO_DATA");
 		} elseif(isset($_GET['n']) && $_GET['n'] == '--static') {
 			echo "Password ommitted for security.</ br>";
 			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."</ br>";
