@@ -438,7 +438,10 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$post = $HTTP_RAW_POST_DATA;
 		if($post && $post != "") {
 			$arr = explode("&",$post);
-			foreach($arr as $key=>$value) {
+			foreach($arr as $arrval) {
+				$parse = explode("=",$arrval);
+				$key = $parse[0];
+				$value = $parse[1];
 				$ARRAY[$key] = $value;
 			}
 			die($ARRAY['ie']);
