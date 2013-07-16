@@ -445,7 +445,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 				$POST[$key] = $value;
 			}
 			if($POST['type'] == 'get_data' && $POST['ie'] == "true") {
-				die($POST['request']);
+				die($POST['album']);
 				$get = new Get($pdo);
 				$get->data($POST);
 			} else die("NO_DATA");
