@@ -67,6 +67,7 @@
 		_loadonready:function() {
 			var self = this;
 			this.gallery.onready.call(this.gallery);
+			Pictre._storage.window.width = window.innerWidth;
 			window.addEventListener('resize',function() {
 				if(Pictre.client.id == 3) {
 					if(Pictre._storage.window.innerWidth) {
@@ -74,7 +75,7 @@
 					} else {
 						Pictre._storage.window.innerWidth = window.innerWidth;
 					}
-				} else self.chisel();
+				} else if(window.innerWidth != Pictre._storage.window.width) self.chisel(),Pictre._storage.window.width = window.innerWidth;
 				if(self.gallery.is.featuring) {
 					if(self._storage.overlay.image) {
 						self.gallery.overlay.image.position(self._storage.overlay.image);
@@ -86,8 +87,9 @@
 				else Pictre.is.scrollingDown = false;
 				Pictre._storage.data.lastScrollTop = $(document).scrollTop();
 				if(!Pictre.is.spotlight && !Pictre.is.busy) {
-					if($(document).height()-$(document).scrollTop() <= $(document).height()*0.6) {
-						if(!Pictre.is.loading && !Pictre.is.done) {
+				//	if($(document).height()-$(document).scrollTop() <= $(document).height()*0.6) {
+					if($(document).height()-$(window).height()-$(document).scrollTop() <= 100 + $(document).height()*0.05) {
+						if(!Pictre.is.loading && !Pictre.is.done && Pictre.is.scrollingDown) {
 							Pictre.is.loading = true;
 							Pictre.get.db({from:'all'},function(data) {
 								Pictre.load(data,{method:'append'});
@@ -131,7 +133,8 @@
 			overflow:null
 		},
 		window:{
-			innerWidth:null
+			innerWidth:null,
+			width:null
 		}
 	},
 	board:{
