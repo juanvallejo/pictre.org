@@ -1595,7 +1595,7 @@
 				Pictre.get.ui.home.put().appendTo(a).appendChild(err);
 			} else if(Pictre._settings.pages.restricted.indexOf(Pictre.board.get().toLowerCase()) != -1) {
 				var err = document.createElement("p");
-				err.innerHTML = "403. The album you are looking for is restricted. Try another one by typing it above or rype another album address.";
+				err.innerHTML = "403. The album you are looking for is restricted. Try another one by typing it above or type another album address.";
 				err.className = "Pictre-home-wrapper-about";
 				Pictre.get.ui.notice("This album is private or restricted. Please try another one.");
 				err.appendChild(spacer);
