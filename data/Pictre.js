@@ -82,6 +82,9 @@
 				}
 			});
 			window.addEventListener('scroll',function() {
+				if($(document).scrollTop()-Pictre._storage.data.lastScrollTop >= 0) Pictre.is.scrollingDown = true;
+				else Pictre.is.scrollingDown = false;
+				Pictre._storage.data.lastScrollTop = $(document).scrollTop();
 				if(!Pictre.is.spotlight && !Pictre.is.busy) {
 					if($(document).height()-$(document).scrollTop() <= $(document).height()*0.6) {
 						if(!Pictre.is.loading && !Pictre.is.done) {
@@ -108,6 +111,7 @@
 		},
 		data:{
 			deleted:0,
+			lastScrollTop:0,
 			loaded:0,
 			total:0,
 			totalDiv:null
@@ -148,10 +152,6 @@
 			 return r;
 		},
 		is:{
-			banned:function() {
-				console.log(Pictre.board.get()+" = board name"); ////--
-			//	if(Pictre._settings.pages.restricted.indexOf(Pictre.board.get()))
-			},
 			set:false
 		},
 		set:{
@@ -1648,6 +1648,7 @@
 		done:false,
 		loading:false,
 		loaded:false,
+		scrollingDown:false,
 		spotlight:false,
 		updating:false
 	},
