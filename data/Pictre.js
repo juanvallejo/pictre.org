@@ -49,7 +49,7 @@
 		},
 		minWidth:800,
 		pages:{
-			restricted:['data']
+			restricted:['data','restricted','404','undefined']
 		},
 		picture:{
 			maxWidth:800
@@ -148,6 +148,10 @@
 			 return r;
 		},
 		is:{
+			banned:function() {
+				console.log(Pictre.board.get()+" = board name"); ////--
+			//	if(Pictre._settings.pages.restricted.indexOf(Pictre.board.get()))
+			},
 			set:false
 		},
 		set:{
@@ -1574,6 +1578,8 @@
 		}
 	},
 	init:function(a,b,c) {
+		var spacer = document.createElement("div");
+			spacer.className = "Pictre-spacer";
 		if(b) Pictre._settings.cloud.datadir=b;
 		if(c) Pictre._settings.cloud.address=c;
 		Pictre.get.ui.menu.put(document.body,a);
@@ -1581,12 +1587,17 @@
 		Pictre.board.detect();
 		if(Pictre.board.is.set) {
 			if(Pictre.board.get().toLowerCase().match(/[^a-z0-9\-\.\+\_]/gi)) {
-				var spacer = document.createElement("div");
-					spacer.className = "Pictre-spacer";
 				var err = document.createElement("p");
 				err.innerHTML = "404. The album you are looking for cannot be found.";
 				err.className = "Pictre-home-wrapper-about";
 				Pictre.get.ui.notice("This album does not exist as it contains invalid characters in its name.");
+				err.appendChild(spacer);
+				Pictre.get.ui.home.put().appendTo(a).appendChild(err);
+			} else if(Pictre._settings.pages.restricted.indexOf(Pictre.board.get().toLowerCase()) != -1) {
+				var err = document.createElement("p");
+				err.innerHTML = "403. The album you are looking for is restricted. Try another one by typing it above or type another album address.";
+				err.className = "Pictre-home-wrapper-about";
+				Pictre.get.ui.notice("This album is private or restricted. Please try another one.");
 				err.appendChild(spacer);
 				Pictre.get.ui.home.put().appendTo(a).appendChild(err);
 			} else {
@@ -1612,7 +1623,7 @@
 			Pictre.get.ui.menu.addButton({
 				id:'about',
 				name:'about',
-				title:'How does this thing really work?'
+				title:'What is Pictre?'
 			}).on('click',function() {
 				var body = '<p><span class="brand">Pictre</span> is a picture album library. It allows you to create as many albums as needed, each with a unique name assigned by you.</p>';
 				body += '<p>Each album is assigned its own URL, so accessing it is as simple as typing pictre.org/albumname. Because privacy is very important when making albums, all albums are considered private.</p>'
@@ -1624,8 +1635,6 @@
 					style:false
 				});
 			});
-			var spacer = document.createElement("div");
-				spacer.className = "Pictre-spacer";
 			var about = document.createElement("p");
 				about.innerHTML = "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
 				about.innerHTML += "<span>To get started, simply type an album name above.</span>";
