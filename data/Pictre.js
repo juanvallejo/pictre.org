@@ -464,12 +464,24 @@
 					self.db(a,settings);
 					console.log(e);
 				}
+
 				xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 				xhr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit);
 				xhr.addEventListener('readystatechange',function() {
 					if(xhr.readyState == 4 && xhr.status == 200) {
-						self._data = JSON.parse(xhr.responseText);
-						if(typeof b == "function") b.call(Pictre,self._data);
+						try {
+							self._data = JSON.parse(xhr.responseText);
+							if(typeof b == "function") b.call(Pictre,self._data);
+						} catch(e) {
+							var message = 'Pictre is down due to server maintenance, service will resume shortly.';
+							Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
+							Pictre.get.ui.warning.put({
+								body:message,
+								header:'Will be back shortly!',
+								icon:null,
+								locked:true
+							});
+						}
 					}
 				});
 			}
@@ -1209,6 +1221,7 @@
 					var self = this;
 					var settings = {
 						body:'An error has occurred, don\'t worry though, it\'s not your fault!',
+						dropzone:false,
 						header:'Hey!',
 						icon:null,
 						locked:false,
@@ -1371,7 +1384,7 @@
 				Pictre.gallery.overlay.img = new Image();
 					Pictre.gallery.overlay.img.src = b.data.src;
 					Pictre.gallery.overlay.img.data = b.data;
-					Pictre.get.ui.imageOptions.is.disabled = Pictre.board.state > 1 ? false : true; ////--
+					Pictre.get.ui.imageOptions.is.disabled = Pictre.board.state > 1 ? false : true;
 					b.addEventListener('mouseover',function() {
 						Pictre.get.ui.imageOptions.put(this);
 					});
