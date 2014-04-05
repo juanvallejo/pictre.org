@@ -473,11 +473,11 @@
 							self._data = JSON.parse(xhr.responseText);
 							if(typeof b == "function") b.call(Pictre,self._data);
 						} catch(e) {
-							var message = 'Pictre is down due to server maintenance, service will resume shortly.';
+							var message = 'Pictre is down due to server maintenance and will resume shortly.';
 							Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
 							Pictre.get.ui.warning.put({
 								body:message,
-								header:'Will be back shortly!',
+								header:'Updates in progress!',
 								icon:null,
 								locked:true
 							});
