@@ -1,7 +1,17 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
-define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
+
+$host = getenv('OPENSHIFT_MYSQL_DB_HOST');
+$port = getenv('OPENSHIFT_MYSQL_DB_PORT');
+
+if(!$host && !$port) {
+	define('HOST','127.0.0.1');
+	define('PORT','41976');
+} else {
+	define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
+	define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
+}
+
 include("flip.php");
 class ImgResizer {
     private $originalFile = '';
@@ -381,8 +391,15 @@ class Action {
 		}
 	}
 }
-$dsn = 'mysql:dbname=static;host='.HOST.';port='.PORT;
-$pdo = new PDO($dsn,'adminHhI41YY','i4JF6GlABkqW');
+
+try {
+	$dsn = 'mysql:dbname=static;host='.HOST.';port='.PORT;
+	$pdo = new PDO($dsn,'adminHhI41YY','i4JF6GlABkqW');
+} catch(Exception $e) {
+	var_dump($e);
+	die();
+}
+
 if(isset($_FILES) && count($_FILES) > 0) {
 	$up = array();
 	$n = count($_FILES);
