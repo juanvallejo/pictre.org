@@ -31,7 +31,7 @@
 		allowUploads:true,
 		app:{
 			address:"http://"+window.location.host+"/",
-			title:'Pictre'
+			title:'Pictre [Test]'
 		},
 		cloud:{
 			datadir:'http://static-pictre.rhcloud.com/',
