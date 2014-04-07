@@ -473,6 +473,7 @@
 							self._data = JSON.parse(xhr.responseText);
 							if(typeof b == "function") b.call(Pictre,self._data);
 						} catch(e) {
+							console.log(e);
 							var message = 'Pictre is down due to server maintenance and will resume shortly.';
 							Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
 							Pictre.get.ui.warning.put({
@@ -769,7 +770,7 @@
 						this.div.type = this.type;
 						this.div.placeholder = this.placeholder || "";
 						this.div.value = this.value || "";
-						this.div.addEventListener('focus',function() {
+						this.div.addEventListener('focus',function(e) {
 							if(self.password) self.div.type = "password";
 							if(self.div.value == self.value) self.div.value = "";
 						});
@@ -781,6 +782,7 @@
 							this.addEventListener(b,function(e) {
 								c.call(self,e);
 							});
+							return this;
 						};
 						return this.div;
 					}
@@ -816,7 +818,7 @@
 								}
 							});
 						} else {
-							Pictre._storage.overlay.locked = false;
+							Pictre._storage.overlay.locked = false; ////--
 							var inp1 = new self.input();
 								inp1.placeholder = "Enter your passcode";
 								inp1.password = true;
@@ -838,6 +840,8 @@
 											}
 										});
 									}
+								}).on('click',function(e) {
+									e.stopPropagation();
 								});
 						}
 						self.div = document.createElement("div");
