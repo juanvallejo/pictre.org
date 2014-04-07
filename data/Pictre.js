@@ -30,7 +30,8 @@
 	_settings:{
 		allowUploads:true,
 		app:{
-			address:"http://"+window.location.host+"/"
+			address:"http://"+window.location.host+"/",
+			title:'Pictre [STABLE]'
 		},
 		cloud:{
 			datadir:'http://static-pictre.rhcloud.com/',
@@ -140,7 +141,7 @@
 	board:{
 		detect:function() {
 			if(window.location.pathname.split("/")[1]) this.is.set = true,document.title = "Pictre - "+this.get();
-			else this.is.set = false,document.title = "Pictre";
+			else this.is.set = false,document.title = Pictre._settings.app.title;
 		},
 		exists:false,
 		get:function() {
@@ -736,7 +737,7 @@
 					this._div.id = "top";
 					var brand = document.createElement("div");
 						brand.id = "brand";
-						brand.innerHTML = "Pictre";
+						brand.innerHTML = Pictre._settings.app.title;
 						brand.addEventListener('click',function() {
 							window.location.href = Pictre._settings.app.address;
 						});
