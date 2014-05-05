@@ -141,11 +141,19 @@ class Upload {
 	}
 }
 class Get {
-	public $pdo;
+	public $pdo,$ieSimulation;
 	public function __construct($pdo) {
 		$this->pdo = $pdo;
 	}
 	public function data($data) {
+		if($this->ieSimulation) {
+			$temp_arr = array();
+			foreach($data as $key=>$value) {
+				$res = explode("&".$key."=",$value);
+				$temp_arr[$key] = count($res) > 1 ? urldecode($res[1]) : urldecode($res[0]);
+			}
+			$data = $temp_arr;
+		}
 		$name = $data["album"];
 		$request = $data["request"];
 		$anchor = $data["anchor"];
@@ -449,6 +457,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$do->unlockBoard($_POST);
 	} elseif($_POST["type"] == "get_data") {
 		$get = new Get($pdo);
+		$get->ieSimulation = $_POST['ie'] == 'true';
 		$get->data($_POST);
 	} else {
 		$POST = array();
