@@ -387,6 +387,19 @@
 			return pic;
 		}
 	},
+	extend:function(dom) {
+		return {
+			on:function(type,callback) {
+				try {
+					dom.addEventListener(type,function() {
+						callback.call(dom);
+					});
+				} catch(e) {
+					console.log("fucking IE");
+				}
+			}
+		};
+	},
 	get:{
 		_data:null,
 		all:function() {
@@ -414,7 +427,7 @@
 				if(window.XDomainRequest) {
 					var xdr = new XDomainRequest();
 					xdr.open("post",Pictre._settings.cloud.address+'data.php');
-					xdr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit+"&ie=true");
+					xdr.send("ie=true&type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit+"&ie=true");
 					xdr.onload = function() {
 						if(xdr.responseText == "NO_DATA") {
 							Pictre.get.ui.notice("No image data was returned by the server.");
@@ -440,7 +453,8 @@
 							anchor:settings.anchor,
 							limit:settings.limit,
 							album:album,
-							where:where
+							where:where,
+							ie:Pictre.client.id > 5
 						},
 						success:function(data) {
 							self._data = JSON.parse(data);
@@ -455,15 +469,16 @@
 						}
 					});
 				}
-			} else { 
-				var xhr = new XMLHttpRequest();
+			} else {
+				var xhr = new XMLHttpRequest(); ////--
 				try {
 					xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
 				} catch(e) {
+					console.log("made it this far");
+					console.log(e);
 					Pictre.get.ui.notice("Reverting to compatibility mode for older browsers.");
 					Pictre.client.compatible = false;
-					self.db(a,settings);
-					console.log(e);
+					self.db(settings,b);
 				}
 
 				xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
@@ -475,6 +490,7 @@
 							if(typeof b == "function") b.call(Pictre,self._data);
 						} catch(e) {
 							console.log(e);
+							console.log(xhr.responseText);
 							var message = 'Pictre is down due to server maintenance and will resume shortly.';
 							Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
 							Pictre.get.ui.warning.put({
@@ -738,7 +754,7 @@
 					var brand = document.createElement("div");
 						brand.id = "brand";
 						brand.innerHTML = Pictre._settings.app.title;
-						brand.addEventListener('click',function() {
+						Pictre.extend(brand).on('click',function() {
 							window.location.href = Pictre._settings.app.address;
 						});
 					this._div.appendChild(brand);
@@ -819,7 +835,7 @@
 								}
 							});
 						} else {
-							Pictre._storage.overlay.locked = false; ////--
+							Pictre._storage.overlay.locked = false;
 							var inp1 = new self.input();
 								inp1.placeholder = "Enter your passcode";
 								inp1.password = true;
@@ -904,6 +920,85 @@
 						});
 					} else this.div.contentWrapper.children[0].innerHTML = "Your passcodes do not match, please try again.";
 					this.position();
+				}
+			},
+			request:function(a,b) { ////--
+				if(Pictre.client.id > 5 || !Pictre.client.compatible) {
+					if(window.XDomainRequest) {
+						var xdr = new XDomainRequest();
+						xdr.open("post",Pictre._settings.cloud.address+'data.php');
+						xdr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit+"&ie=true");
+						xdr.onload = function() {
+							if(xdr.responseText == "NO_DATA") {
+								Pictre.get.ui.notice("Pictre is unable to perform requests at this time.");
+							} else {
+								self._data = JSON.parse(xdr.responseText);
+								if(typeof b == "function") b.call(Pictre,self._data);
+							}
+						};
+						xdr.onerror = function(error) {
+							Pictre.get.ui.notice("Server error; please try again later.");
+							console.log(error);
+						};
+					} else {
+						$.support.cors = true;
+						$.ajax({
+							type:'POST',
+							url:Pictre._settings.cloud.address+'data.php',
+							async:true,
+							crossDomain:true,
+							data:{
+								type:'get_data',
+								request:settings.from,
+								anchor:settings.anchor,
+								limit:settings.limit,
+								album:album,
+								where:where
+							},
+							success:function(data) {
+								self._data = JSON.parse(data);
+								if(typeof b == "function") b.call(Pictre,self._data);
+							},
+							error:function(error) {
+								for(var i in error) {
+									console.log(i+":"+error[i]);
+								}
+								Pictre.get.ui.notice("Error processing data.");
+								console.log(error);
+							}
+						});
+					}
+				} else { 
+					var xhr = new XMLHttpRequest(); ////--
+					try {
+						xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
+					} catch(e) {
+						Pictre.get.ui.notice("Reverting to compatibility mode for older browsers.");
+						Pictre.client.compatible = false;
+						self.db(a,settings);
+						console.log(e);
+					}
+
+					xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+					xhr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit);
+					xhr.addEventListener('readystatechange',function() {
+						if(xhr.readyState == 4 && xhr.status == 200) {
+							try {
+								self._data = JSON.parse(xhr.responseText);
+								if(typeof b == "function") b.call(Pictre,self._data);
+							} catch(e) {
+								console.log(e);
+								var message = 'Pictre is down due to server maintenance and will resume shortly.';
+								Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
+								Pictre.get.ui.warning.put({
+									body:message,
+									header:'Updates in progress!',
+									icon:null,
+									locked:true
+								});
+							}
+						}
+					});
 				}
 			},
 			notice:function(a,b) {

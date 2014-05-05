@@ -27,7 +27,7 @@
 			"file": "data/Pictre.js",
 			"settings":
 			{
-				"buffer_size": 79305,
+				"buffer_size": 79378,
 				"line_ending": "Unix"
 			}
 		},
@@ -222,7 +222,7 @@
 	],
 	"find":
 	{
-		"height": 24.0
+		"height": 38.0
 	},
 	"find_in_files":
 	{
@@ -236,6 +236,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"////--",
+			"XMLHTTPRequest()",
 			"playing",
 			"self.out",
 			"http:",
@@ -361,9 +363,7 @@
 			"tab",
 			"//",
 			"/*",
-			"speed",
-			".speed",
-			"entities.chars"
+			"speed"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -385,7 +385,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -438,6 +438,7 @@
 						],
 						"settings":
 						{
+							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
 							"syntax": "Packages/HTML/HTML.tmLanguage"
@@ -455,29 +456,30 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 79305,
+						"buffer_size": 79378,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								31079,
+								31079
 							]
 						],
 						"settings":
 						{
+							"incomplete_sync": null,
 							"remote_loading": false,
 							"synced": false,
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 14146.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -509,7 +511,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
