@@ -395,7 +395,9 @@
 						callback.call(dom);
 					});
 				} catch(e) {
-					console.log("fucking IE");
+					dom.attachEvent(type,function() {
+						callback.call(dom);
+					});
 				}
 			}
 		};
