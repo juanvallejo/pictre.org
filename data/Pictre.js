@@ -454,9 +454,7 @@
 							console.log("no data");
 							Pictre.get.ui.notice("No image data was returned by the server.");
 						} else {
-							console.log("you've got quite a hefty load there fucker.");
 							self._data = JSON.parse(xdr.responseText);
-							console.log(self._data);
 							if(typeof b == "function") b.call(Pictre,self._data);
 						}
 					};
@@ -1670,6 +1668,7 @@
 				Pictre.get.ui.notice("Loading, please wait...");
 				Pictre._settings.data.condition = "album = \'"+escape(Pictre.board.get().toLowerCase())+"\'";
 				Pictre.get.db({album:true,from:'all',where:Pictre._settings.data.condition,limit:Pictre._settings.data.limit.pageload},function(data) {
+					console.log(data[0]);
 					Pictre.load(data);
 				});
 				Pictre.events.on('dragover',function() {
