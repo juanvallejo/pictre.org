@@ -10,7 +10,7 @@
 			this.exists = true;
 			Pictre._settings.wrapper.appendChild(this.div);
 			this.position();
-			window.addEventListener('resize',function() {
+			Pictre.events.on('resize',function() {
 				if(self.exists) {
 					self.position();
 				}
@@ -69,7 +69,7 @@
 			var self = this;
 			this.gallery.onready.call(this.gallery);
 			Pictre._storage.window.width = window.innerWidth;
-			window.addEventListener('resize',function() {
+			Pictre.events.on('resize',function() {
 				if(Pictre.client.id == 3) {
 					if(Pictre._storage.window.innerWidth) {
 						if(Pictre._storage.window.innerWidth != window.innerWidth) Pictre.chisel(),Pictre._storage.window.innerWidth = window.innerWidth;
@@ -83,7 +83,7 @@
 					}
 				}
 			});
-			window.addEventListener('scroll',function() {
+			Pictre.events.on('scroll',function() {
 				if($(document).scrollTop()-Pictre._storage.data.lastScrollTop >= 0) Pictre.is.scrollingDown = true;
 				else Pictre.is.scrollingDown = false;
 				Pictre._storage.data.lastScrollTop = $(document).scrollTop();
@@ -338,12 +338,12 @@
 						}
 					}
 				};
-				img.addEventListener('load',function() {
+				Pictre.extend(img).on('load',function() {
 					pic.innerHTML = "";
 					pic.appendChild(img);
 					this._onload();
 				});
-				img.addEventListener('error',function() {
+				Pictre.extend(img).on('error',function() {
 					var height = 137;
                     var paddingTop = parseInt(window.getComputedStyle(pic).getPropertyValue('padding-top').split("px")[0])+1;
                     var paddingBottom = parseInt(window.getComputedStyle(pic).getPropertyValue('padding-bottom').split("px")[0]);
@@ -355,7 +355,7 @@
                     pic.appendChild(errImg);
 					this._onload();
 				});
-				pic.addEventListener('click',function() {
+				Pictre.extend(pic).on('click',function() {
 					if(window.location.hash.split("#")[1] == this.data.dbid) {
 						if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
 						else Pictre.gallery.feature(this);
@@ -387,16 +387,35 @@
 			return pic;
 		}
 	},
+	events:{
+		_type:{},
+		on:function(type,callback) {
+			if(this._type.hasOwnProperty(type)) {
+				this._type[type].push(callback);
+			} else {
+				var self = this;
+				this._type[type] = [];
+				Pictre.extend(window).on(type,function() {
+					for(var i=0;i<self._type[type].length;i++) {
+						if(typeof self._type[type][i] == 'function') {
+							self._type[type][i].call(this);
+						}
+					}
+				});
+				this.on(type,callback);
+			}
+		}
+	},
 	extend:function(dom) {
 		return {
 			on:function(type,callback) {
 				try {
-					dom.addEventListener(type,function() {
-						callback.call(dom);
+					dom.addEventListener(type,function(e) {
+						if(typeof callback == 'function') callback.call(dom,e);
 					});
 				} catch(e) {
-					dom.attachEvent(type,function() {
-						callback.call(dom);
+					dom.attachEvent(type,function(e) {
+						if(typeof callback == 'function') callback.call(dom,e);
 					});
 				}
 			}
@@ -485,7 +504,7 @@
 
 				xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 				xhr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit);
-				xhr.addEventListener('readystatechange',function() {
+				Pictre.extend(xhr).on('readystatechange',function() {
 					if(xhr.readyState == 4 && xhr.status == 200) {
 						try {
 							self._data = JSON.parse(xhr.responseText);
@@ -556,7 +575,7 @@
 						input.placeholder = "Enter an album's name";
 						input.autofocus = true;
 						input.id = "Pictre-album-input";
-						input.addEventListener("keydown",function(e) {
+						Pictre.extend(input).on("keydown",function(e) {
 							if(e.keyCode == 13) {
 								var val = this.value.toLowerCase().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 								if(Pictre._settings.pages.restricted.indexOf(this.value.toLowerCase()) == -1) {
@@ -579,10 +598,10 @@
 						var val = "Enter an album's name";
 						input.value = val;
 						input.removeAttribute('autofocus');
-						input.addEventListener('focus',function() {
+						Pictre.extend(input).on('focus',function() {
 							if(this.value == val) this.value = '';
 						});
-						input.addEventListener('blur',function() {
+						Pictre.extend(input).on('blur',function() {
 							if(this.value == '') this.value = val;
 						});
 					}
@@ -592,7 +611,7 @@
 						container.appendChild(p);
 						this.wrapper.appendChild(container);
 						if(a) a.appendChild(this.wrapper);
-						window.addEventListener('resize',function() {
+						Pictre.events.on('resize',function() {
 							self.position();
 						});
 					this.wrapper.appendTo = function(b) {
@@ -652,15 +671,15 @@
 									li.innerHTML = i;
 								this.div.optionsWrapper.innerWrapper.appendChild(li);
 								if(this.options[i]) {
-									li.addEventListener('click',function() {
+									Pictre.extend(li).on('click',function() {
 										self.options[this.key].call(self);
 									});
 								}
 							}
-							this.div.optionsWrapper.addEventListener('click',function(e) {
+							Pictre.extend(this.div.optionsWrapper).on('click',function(e) {
 								e.stopPropagation();
 							});
-							this.div.addEventListener('click',function(e) {
+							Pictre.extend(this.div).on('click',function(e) {
 								e.stopPropagation();
 								if(self.is.active) {
 									self.is.active = false;
@@ -676,7 +695,7 @@
 							a.appendChild(this.div.optionsWrapper);
 							this.div.optionsWrapper.style.top = this.div.clientHeight+"px";
 							this.position(a);
-							window.addEventListener('resize',function() {
+							Pictre.events.on('resize',function() {
 								self.position(a);
 							});
 						}
@@ -704,7 +723,7 @@
 						self.div.appendChild(self.div.progress);
 						document.body.appendChild(self.div);
 						self.position();
-						window.addEventListener('resize',function() {
+						Pictre.events.on('resize',function() {
 							self.position();
 						});
 					}
@@ -731,7 +750,7 @@
 					this._div.appendChild(this.buttons[a.name]);
 					this.buttons[a.name].style.top = (this.buttons[a.name].parentNode.clientHeight / 2 - this.buttons[a.name].clientHeight / 2)+"px";
 					this.buttons[a.name].on = function(a,b) {
-						this.addEventListener(a,function(e) {
+						Pictre.extend(this).on(a,function(e) {
 							b.call(this,e);
 						});
 						return this;
@@ -789,16 +808,16 @@
 						this.div.type = this.type;
 						this.div.placeholder = this.placeholder || "";
 						this.div.value = this.value || "";
-						this.div.addEventListener('focus',function(e) {
+						Pictre.extend(this.div).on('focus',function(e) {
 							if(self.password) self.div.type = "password";
 							if(self.div.value == self.value) self.div.value = "";
 						});
-						this.div.addEventListener('blur',function() {
+						Pictre.extend(this.div).on('blur',function() {
 							if(self.password) self.div.type = "text";
 							if(self.div.value == "") self.div.value = self.value;
 						});
 						this.div.on = function(b,c) {
-							this.addEventListener(b,function(e) {
+							Pictre.extend(this).on(b,function(e) {
 								c.call(self,e);
 							});
 							return this;
@@ -873,7 +892,7 @@
 						self.div.appendChild(self.div.contentWrapper);
 						if(Pictre.gallery.is.featuring) Pictre.gallery.overlay.div.appendChild(self.div);
 						else Pictre.gallery.overlay.put().appendChild(self.div);
-						window.addEventListener('resize',function() {
+						Pictre.events.on('resize',function() {
 							self.position();
 						});
 						function _onsubmit(a) {
@@ -915,92 +934,13 @@
 						xhr.open('POST',Pictre._settings.cloud.address+"data.php",true);
 						xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 						xhr.send("type="+b+"&passcode="+a[0].value+"&album="+Pictre.board.get().toLowerCase());
-						xhr.addEventListener('readystatechange',function() {
+						Pictre.extend(xhr).on('readystatechange',function() {
 							if(xhr.readyState == 4 && xhr.status == 200) {
 								if(typeof c == "function") c.call(this,xhr.responseText);
 							}
 						});
 					} else this.div.contentWrapper.children[0].innerHTML = "Your passcodes do not match, please try again.";
 					this.position();
-				}
-			},
-			request:function(a,b) { ////--
-				if(Pictre.client.id > 5 || !Pictre.client.compatible) {
-					if(window.XDomainRequest) {
-						var xdr = new XDomainRequest();
-						xdr.open("post",Pictre._settings.cloud.address+'data.php');
-						xdr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit+"&ie=true");
-						xdr.onload = function() {
-							if(xdr.responseText == "NO_DATA") {
-								Pictre.get.ui.notice("Pictre is unable to perform requests at this time.");
-							} else {
-								self._data = JSON.parse(xdr.responseText);
-								if(typeof b == "function") b.call(Pictre,self._data);
-							}
-						};
-						xdr.onerror = function(error) {
-							Pictre.get.ui.notice("Server error; please try again later.");
-							console.log(error);
-						};
-					} else {
-						$.support.cors = true;
-						$.ajax({
-							type:'POST',
-							url:Pictre._settings.cloud.address+'data.php',
-							async:true,
-							crossDomain:true,
-							data:{
-								type:'get_data',
-								request:settings.from,
-								anchor:settings.anchor,
-								limit:settings.limit,
-								album:album,
-								where:where
-							},
-							success:function(data) {
-								self._data = JSON.parse(data);
-								if(typeof b == "function") b.call(Pictre,self._data);
-							},
-							error:function(error) {
-								for(var i in error) {
-									console.log(i+":"+error[i]);
-								}
-								Pictre.get.ui.notice("Error processing data.");
-								console.log(error);
-							}
-						});
-					}
-				} else { 
-					var xhr = new XMLHttpRequest(); ////--
-					try {
-						xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
-					} catch(e) {
-						Pictre.get.ui.notice("Reverting to compatibility mode for older browsers.");
-						Pictre.client.compatible = false;
-						self.db(a,settings);
-						console.log(e);
-					}
-
-					xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-					xhr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit);
-					xhr.addEventListener('readystatechange',function() {
-						if(xhr.readyState == 4 && xhr.status == 200) {
-							try {
-								self._data = JSON.parse(xhr.responseText);
-								if(typeof b == "function") b.call(Pictre,self._data);
-							} catch(e) {
-								console.log(e);
-								var message = 'Pictre is down due to server maintenance and will resume shortly.';
-								Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
-								Pictre.get.ui.warning.put({
-									body:message,
-									header:'Updates in progress!',
-									icon:null,
-									locked:true
-								});
-							}
-						}
-					});
 				}
 			},
 			notice:function(a,b) {
@@ -1027,12 +967,12 @@
 					var self = this;
 					this.div = document.createElement("div");
 					this.div.className = "Pictre-upload";
-					Pictre.gallery.overlay.put().appendChild(this.div).addEventListener('click',function(e) {
+					Pictre.extend(Pictre.gallery.overlay.put().appendChild(this.div)).on('click',function(e) {
 						if(window.innerWidth > Pictre._settings.minWidth) e.stopPropagation();
 					});
 					this.position();
-					window.addEventListener('resize',function() {
-						self.position();
+					Pictre.events.on('resize',function() {
+							self.position();
 					});
 					var header = document.createElement("div");
 						header.className = "Pictre-upload-header";
@@ -1063,27 +1003,27 @@
 						this.div.appendChild(input);
 						area.style.marginLeft = (-area.clientWidth / 2)+"px";
 						area.style.marginTop = (-area.clientHeight / 2 + 20)+"px";
-						area.addEventListener('dragover',function(e) {
+						Pictre.extend(area).on('dragover',function(e) {
 							e.preventDefault();
 							if(!area.locked) area.style.background = "rgb(52,56,55)";
 						});
-						input.addEventListener('click',function(e) {
+						Pictre.extend(input).on('click',function(e) {
 							e.stopPropagation();
 						});
-						area.addEventListener('click',function(e) {
+						Pictre.extend(area).on('click',function(e) {
 							e.stopPropagation();
 							if(!area.locked) {
 								input.click();
 							}
 						});
-						area.addEventListener('drop',function(e) {
+						Pictre.extend(area).on('drop',function(e) {
 							e.preventDefault();
 							render(e.dataTransfer.files,upload);
 						});
 						if(Pictre.client.id == 5) {
 							area.ondrop = function() {};
 						}
-						input.addEventListener('change',function() {
+						Pictre.extend(input).on('change',function() {
 							if(input.files.length) render(input.files,upload);
 						});
 						function render(f,b) {
@@ -1232,18 +1172,18 @@
 									area.locked = false;
 								});
 								if(post) {
-									post.upload.addEventListener('progress',function(e) {
+									Pictre.extend(post.upload).on('progress',function(e) {
 										area.locked = true;
 										if(e.lengthComputable) {
 											var percent = parseInt(e.loaded / e.total * 100);
 											progress.style.width = percent+"%";
 										}
 									});
-									post.upload.addEventListener('load',function() {
+									Pictre.extend(post.upload).on('load',function() {
 										area.locked = true;
 										p.innerHTML = "Moving images into place...";
 									});
-									post.upload.addEventListener('error',function() {
+									Pictre.extend(post.upload).on('error',function() {
 										area.locked = false;
 										Pictre._storage.overlay.locked = false;
 										Pictre._storage.upload.overflow = null;
@@ -1293,9 +1233,9 @@
 						this.response = Files;
 						var xhr = new XMLHttpRequest();
 							xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
-							xhr.upload.addEventListener("progress",function(){});
+							Pictre.extend(xhr.upload).on("progress",function(){});
 							xhr.send(data);
-							xhr.addEventListener('readystatechange',function() {
+							Pictre.extend(xhr).on('readystatechange',function() {
 								var call = false;
 								if(xhr.status == 200 && xhr.readyState == 4) {
 									Files.response = xhr.responseText;
@@ -1336,12 +1276,12 @@
 					}
 					this.div = document.createElement("div");
 					this.div.className = "Pictre-upload Pictre-warning";
-					Pictre.gallery.overlay.put().appendChild(this.div).addEventListener('click',function(e) {
+					Pictre.extend(Pictre.gallery.overlay.put().appendChild(this.div)).on('click',function(e) {
 						e.stopPropagation();
 					});
 					this.position();
-					window.addEventListener('resize',function() {
-						self.position();
+					Pictre.events.on('resize',function() {
+							self.position();
 					});
 					var header = document.createElement("div");
 						header.className = "Pictre-upload-header";
@@ -1377,11 +1317,11 @@
 					}
 					if(typeof this.onclick == 'function') {
 						if(settings.dropzone) {
-							area.addEventListener('click',function() {
+							Pictre.extend(area).on('click',function() {
 								self.onclick();
 							});
 						} else {
-							this.div.addEventListener('click',function() {
+							Pictre.extend(this.div).on('click',function() {
 								self.onclick();
 							});
 						}
@@ -1457,10 +1397,10 @@
 					Pictre.gallery.overlay.div.tabIndex = "1";
 				}
 				Pictre.gallery.is.featuring = true;
-				Pictre.gallery.overlay.div.addEventListener('click',function() {
+				Pictre.extend(Pictre.gallery.overlay.div).on('click',function() {
 					Pictre.gallery.overlay.exit();
 				});
-				Pictre.gallery.overlay.div.addEventListener('keydown',function(e) {
+				Pictre.extend(Pictre.gallery.overlay.div).on('keydown',function(e) {
 					if(e.keyCode == 27) Pictre.gallery.overlay.exit();
 				});
 				document.body.appendChild(Pictre.gallery.overlay.div);
@@ -1487,13 +1427,13 @@
 					Pictre.gallery.overlay.img.src = b.data.src;
 					Pictre.gallery.overlay.img.data = b.data;
 					Pictre.get.ui.imageOptions.is.disabled = Pictre.board.state > 1 ? false : true;
-					b.addEventListener('mouseover',function() {
+					Pictre.extend(b).on('mouseover',function() {
 						Pictre.get.ui.imageOptions.put(this);
 					});
-					b.addEventListener('mouseout',function() {
+					Pictre.extend(b).on('mouseout',function() {
 						if(!Pictre.get.ui.imageOptions.is.active) Pictre.get.ui.imageOptions.hide();
 					});
-					Pictre.gallery.overlay.img.addEventListener('click',function(e) {
+					Pictre.extend(Pictre.gallery.overlay.img).on('click',function(e) {
 						e.stopPropagation();
 						if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
 							Pictre.gallery.overlay.replaceImage();
@@ -1501,7 +1441,7 @@
 							Pictre.gallery.overlay.exit();
 						}
 					});
-					Pictre.gallery.overlay.div.addEventListener('keydown',function(e) {
+					Pictre.extend(Pictre.gallery.overlay.div).on('keydown',function(e) {
 						if(e.keyCode == 39 || e.keyCode == 32 || e.keyCode == 38) {
 							e.stopPropagation();
 							e.preventDefault();
@@ -1516,7 +1456,7 @@
 							}
 						}
 					});
-					Pictre.gallery.overlay.img.addEventListener('load',function() {
+					Pictre.extend(Pictre.gallery.overlay.img).on('load',function() {
 						var offset = Pictre.gallery.overlay.img.width > 350 ? ((Pictre._settings.picture.maxWidth-Pictre.gallery.overlay.img.width)/2) : 200;
 						b.innerHTML = "";
 						Pictre.gallery.overlay.comments.innerHTML = "";
@@ -1526,7 +1466,7 @@
 						Pictre.gallery.overlay.comments.appended = true;
 						Pictre.gallery.overlay.image.position(b);
 						Pictre.gallery.overlay.comments.style.bottom = (-Pictre.gallery.overlay.comments.clientHeight)+"px";
-						Pictre.gallery.overlay.comments.addEventListener('click',function(e) {
+						Pictre.extend(Pictre.gallery.overlay.comments).on('click',function(e) {
 							e.stopPropagation();
 						});
 						Pictre.get.ui.imageOptions.div = null;
@@ -1555,24 +1495,24 @@
 							if(Pictre.client.id >= 3 || (Pictre.client.id == 2 && Pictre.client.version.indexOf("5.1.") != -1)) {
 								add.children[0].value = author;
 								add.children[0].placeholder = "";
-								add.children[0].addEventListener('focus',function() {
+								Pictre.extend(add.children[0]).on('focus',function() {
 									if(this.value == author) this.value = '';
 								});
-								add.children[0].addEventListener('blur',function() {
+								Pictre.extend(add.children[0]).on('blur',function() {
 									if(this.value == '') this.value = author;
 								});
 								add.children[1].value = ct;
 								add.children[1].placeholder = "";
-								add.children[1].addEventListener('focus',function() {
+								Pictre.extend(add.children[1]).on('focus',function() {
 									if(this.value == ct) this.value = '';
 								});
-								add.children[1].addEventListener('blur',function() {
+								Pictre.extend(add.children[1]).on('blur',function() {
 									if(this.value == '') this.value = ct;
 								});
 							}
 							add.children[0].style.right = offset+"px";
 							add.style.borderBottom = "0";
-							add.addEventListener('keydown',function(e) {
+							Pictre.extend(add).on('keydown',function(e) {
 								e.stopPropagation();
 								if(e.keyCode == 13) {
 									var name = add.children[0];
@@ -1613,7 +1553,7 @@
 											xhr.open('POST',Pictre._settings.cloud.address+'data.php',true);
 											xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 											xhr.send("type=store_comment&id="+object.data.dbid+"&author="+object.data.comments[object.data.comments.length-1].author+"&body="+object.data.comments[object.data.comments.length-1].body);
-											xhr.addEventListener('readystatechange',function() {
+											Pictre.extend(xhr).on('readystatechange',function() {
 												if(xhr.status == 200 && xhr.readyState == 4) {
 													if(xhr.responseText == "success") {
 														addComments(Pictre.gallery.overlay.img);
@@ -1729,10 +1669,10 @@
 				Pictre.get.db({album:true,from:'all',where:Pictre._settings.data.condition,limit:Pictre._settings.data.limit.pageload},function(data) {
 					Pictre.load(data);
 				});
-				window.addEventListener("dragover",function() {
+				Pictre.events.on('dragover',function() {
 					if(!Pictre.gallery.is.featuring && !Pictre.is.spotlight && Pictre._settings.allowUploads) Pictre.get.ui.upload.put();
 				});
-				window.addEventListener('hashchange',function() {
+				Pictre.events.on('hashchange',function() {
 					Pictre.get.hash();
 				});
 			}
@@ -1902,7 +1842,7 @@
 				pic.innerHTML = "<p>Loading, please wait...</p>";
 			var img = new Image();
 				img.src = a.data.src;
-				img.addEventListener('load',function() {
+				Pictre.extend(img).on('load',function() {
 					var b = img.data ? img : a;
 					pic.innerHTML = "";
 					comments.innerHTML = "";
@@ -1925,7 +1865,7 @@
 							addComment.innerHTML = "<p><input type='text' placeholder='Add a comment...'/></p>";
 							addComment.innerHTML += "<div class='author' style='border-bottom:1px solid rgb(0,0,0);'><input type='text' placeholder='"+placeholder+"'/></div>";
 							var val = addComment.children[0].children[0];
-							addComment.addEventListener('keydown',function(e) {
+							Pictre.extend(addComment).on('keydown',function(e) {
 								if(e.keyCode == 13 && val.value != "") {
 									var name = addComment.children[1].children[0];
 									if(Pictre.terminal.isCommand(val.value)) {
@@ -1957,7 +1897,7 @@
 											xhr.open('POST',Pictre._settings.cloud.address+'data.php',true);
 											xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 											xhr.send("type=store_comment&id="+b.data.dbid+"&author="+b.data.comments[b.data.comments.length-1].author+"&body="+b.data.comments[b.data.comments.length-1].body);
-											xhr.addEventListener('readystatechange',function() {
+											Pictre.extend(xhr).on('readystatechange',function() {
 												if(xhr.readyState == 4 && xhr.status == 200) {
 													if(xhr.responseText == "success") {
 														val.value = "";
@@ -1991,7 +1931,7 @@
 						comments.appendChild(spacer);
 					}
 				});
-				img.addEventListener('click',function(e) {
+				Pictre.extend(img).on('click',function(e) {
 					if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
 						Pictre._storage.overlay.iterator++;
 						this.data = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data;
@@ -2008,7 +1948,7 @@
 			slideWrapper();
 			clientWidth = pic.clientWidth;
 			pic.padding = parseInt(window.getComputedStyle(pic).getPropertyValue('padding-left').split("px")[0])*2+4;
-			window.addEventListener('resize',function() {
+			Pictre.events.on('resize',function() {
 				position();
 			});
 			function slideWrapper() {
@@ -2115,7 +2055,7 @@
 						xhr.open('POST',Pictre._settings.cloud.address+'data.php',true);
 						xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 						xhr.send("type=command&command=delete&id="+settings.id+"&source="+encodeURIComponent(settings.src)+"&thumb="+encodeURIComponent(settings.thumb));
-						xhr.addEventListener('readystatechange',function() {
+						Pictre.extend(xhr).on('readystatechange',function() {
 							if(xhr.readyState == 4 && xhr.status == 200) {
 								if(xhr.responseText == "success") {
 									self.log.success = true;
@@ -2163,12 +2103,12 @@
 							img[i].src = Pictre._storage.pictures[i].data.src;
 							img[i].data = Pictre._storage.pictures[i].data;
 							img[i].style.display = "none";
-							img[i].addEventListener('load',function() {
+							Pictre.extend(img[i]).on('load',function() {
 								loaded++;
 								console.log("image "+loaded+" loaded");
 								if(loaded == Pictre._storage.data.total) _runonload();
 							});
-							img[i].addEventListener('error',function() {
+							Pictre.extend(img[i]).on('error',function() {
 								loaded++;
 								errors.push(this);
 								if(loaded == Pictre._storage.data.total) _runonload();
