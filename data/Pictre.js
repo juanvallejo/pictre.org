@@ -312,7 +312,6 @@
 				if(!self.is.loaded && !b && Pictre._settings.wrapper.style.display != "none") Pictre._settings.wrapper.style.display = "none";
 				img.src = Pictre._settings.cloud.datadir+a.thumb;
 				img._onload = function(a) {
-					console.log("cool");
 					if(b == "prepend" || b == "append") {
 						if(b == "prepend") Pictre.chisel();
 						else {
@@ -340,6 +339,7 @@
 					}
 				};
 				Pictre.extend(img).on('load',function() {
+					console.log("is this shit working?");
 					pic.innerHTML = "";
 					pic.appendChild(img);
 					this._onload();
