@@ -446,16 +446,17 @@
 			var where = settings.where ? "&where="+encodeURIComponent(settings.where) : "";
 			if(Pictre.client.id > 5 || !Pictre.client.compatible) {
 				if(window.XDomainRequest) {
-					console.log("xdomain request accessed");
 					var xdr = new XDomainRequest();
 					xdr.open("post",Pictre._settings.cloud.address+'data.php');
 					xdr.send("ie=true&type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit+"&ie=true");
 					xdr.onload = function() {
-						console.log("success");
 						if(xdr.responseText == "NO_DATA") {
+							console.log("no data");
 							Pictre.get.ui.notice("No image data was returned by the server.");
 						} else {
+							console.log("you've got quite a hefty load there fucker.");
 							self._data = JSON.parse(xdr.responseText);
+							console.log(self._data);
 							if(typeof b == "function") b.call(Pictre,self._data);
 						}
 					};
