@@ -23,8 +23,8 @@
 			}
 		},
 		position:function() {
-			this.div.style.left = (window.innerWidth/2 - (this.div.clientWidth/2))+"px";
-			this.div.style.top = ((window.innerHeight-Pictre.get.ui.menu._div.offsetHeight)/2 - (this.div.clientHeight/2))+"px";
+			this.div.style.left = ($(window).width()/2 - (this.div.clientWidth/2))+"px";
+			this.div.style.top = (($(window).height()-Pictre.get.ui.menu._div.offsetHeight)/2 - (this.div.clientHeight/2))+"px";
 		}
 	},
 	_settings:{
@@ -339,7 +339,6 @@
 					}
 				};
 				Pictre.extend(img).on('load',function() {
-					console.log("good on you");
 					pic.innerHTML = "";
 					pic.appendChild(img);
 					this._onload();
@@ -735,8 +734,8 @@
 				position:function() {
 					var self = this;
 					var offset = Pictre.get.ui.menu._div.clientHeight+Pictre._storage.data.totalDiv.parentNode.clientHeight;
-					self.div.style.top = ((window.innerHeight+offset) / 2 + self.div.clientHeight / 2)+"px";
-					self.div.style.left = (window.innerWidth / 2 - self.div.clientWidth / 2)+"px";
+					self.div.style.top = (($(window).height()+offset) / 2 + self.div.clientHeight / 2)+"px";
+					self.div.style.left = ($(window).width() / 2 - self.div.clientWidth / 2)+"px";
 				},
 				remove:function() {
 					if(this.div) document.body.removeChild(this.div);
@@ -919,8 +918,8 @@
 				position:function() {
 					var self = this;
 					if(self.div) {
-						self.div.style.left = (window.innerWidth / 2 - self.div.clientWidth / 2)+"px";
-						self.div.style.top = (window.innerHeight / 2 - self.div.offsetHeight / 2)+"px";
+						self.div.style.left = ($(window).width() / 2 - self.div.clientWidth / 2)+"px";
+						self.div.style.top = ($(window).height() / 2 - self.div.offsetHeight / 2)+"px";
 						self.div.contentWrapper.style.left = (self.div.clientWidth / 2 - self.div.contentWrapper.clientWidth / 2)+"px";
 						self.div.contentWrapper.style.top = (self.div.clientHeight / 2 - self.div.contentWrapper.offsetHeight / 2)+"px";
 					}
@@ -1204,8 +1203,8 @@
 				},
 				position:function() {
 					if(this.div) {
-						this.div.style.left = (window.innerWidth/2 - (this.div.clientWidth/2))+"px";
-						this.div.style.top = (window.innerHeight/2 - (this.div.clientHeight/2))+"px";
+						this.div.style.left = ($(window).width()/2 - (this.div.clientWidth/2))+"px";
+						this.div.style.top = ($(window).height()/2 - (this.div.clientHeight/2))+"px";
 					}
 				},
 				post:function(a,b) {
@@ -1356,7 +1355,7 @@
 				pic.innerHTML = "<div class='Pictre-loader'></div>";
 				self._storage.overlay.image = pic;
 				self._storage.overlay.iterator = a.data.id;
-				document.body.style.height = window.innerHeight+"px";
+				document.body.style.height = $(window).height()+"px";
 				document.body.style.overflow = "hidden";
 				a.style.opacity = "0.1";
 				Pictre.gallery.overlay.showImage(pic);
@@ -1582,7 +1581,7 @@
 				},
 				position:function(a) {
 					if(Pictre.gallery.is.featuring) {
-						if(Pictre.gallery.overlay.div) Pictre.gallery.overlay.div.style.height = window.innerHeight+"px";
+						if(Pictre.gallery.overlay.div) Pictre.gallery.overlay.div.style.height = $(window).height()+"px";
 						var img = a.childNodes[0];
 						var width = img.width;
 						var height = img.height;
@@ -1594,7 +1593,7 @@
 						}
 						a.style.width = width+"px";
 						if(img.height <= Pictre.gallery.overlay.div.clientHeight) {
-							var offset = window.innerHeight - height;
+							var offset = $(window).height() - height;
 							a.style.marginTop = (offset/2)+"px";
 						} else {
 							a.style.marginTop = "5px";
@@ -1922,7 +1921,7 @@
 									comment.innerHTML = "<p>"+b.data.comments[i].body+"</p>";
 									comment.innerHTML += "<div class='author'>"+b.data.comments[i].author+"</div>";
 								comments.appendChild(comment);
-								if(self._wrapper) self._wrapper.style.height = window.innerHeight+"px";
+								if(self._wrapper) self._wrapper.style.height = $(window).height()+"px";
 							}
 						} else {
 							comments.style.borderBottomColor = "transparent";
