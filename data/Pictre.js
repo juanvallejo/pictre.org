@@ -944,8 +944,8 @@
 				}
 			},
 			notice:function(a,b) {
-				var oldNote = document.getElementsByClassName("Pictre-notice");
-				if(oldNote.length) document.body.removeChild(oldNote[0]);
+				var oldnote = $('.Pictre-notice');
+				if(oldnote.length) document.body.removeChild(oldnote[0]);
 				var a = a || "Untitled notice";
 				var note = document.createElement("div");
 					note.className = "Pictre-notice";
