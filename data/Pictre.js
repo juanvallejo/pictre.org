@@ -1330,8 +1330,8 @@
 				onclick:null,
 				position:function() {
 					if(this.div) {
-						this.div.style.left = Math.max(window.innerWidth/2 - (this.div.clientWidth/2),0)+"px";
-						this.div.style.top = Math.max((window.innerHeight/2 - (this.div.clientHeight/2)),0)+"px";
+						this.div.style.left = Math.max($(window).width()/2 - (this.div.clientWidth/2),0)+"px";
+						this.div.style.top = Math.max(($(window).height()/2 - (this.div.clientHeight/2)),0)+"px";
 					}
 				},
 				remove:function() {
