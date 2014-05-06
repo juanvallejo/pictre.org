@@ -1668,7 +1668,6 @@
 				Pictre.get.ui.notice("Loading, please wait...");
 				Pictre._settings.data.condition = "album = \'"+escape(Pictre.board.get().toLowerCase())+"\'";
 				Pictre.get.db({album:true,from:'all',where:Pictre._settings.data.condition,limit:Pictre._settings.data.limit.pageload},function(data) {
-					console.log(data[0]);
 					Pictre.load(data);
 				});
 				Pictre.events.on('dragover',function() {
@@ -1723,6 +1722,7 @@
 			}
 		}
 		if(a) {
+			console.log("loading data");
 			if(settings.method == "append") {
 				for(var i=0;i<a.length;i++) {
 					Pictre.create.picture(a[i],settings.method);
