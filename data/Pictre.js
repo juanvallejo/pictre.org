@@ -1722,7 +1722,6 @@
 			}
 		}
 		if(a) {
-			console.log("loading data");
 			if(settings.method == "append") {
 				for(var i=0;i<a.length;i++) {
 					Pictre.create.picture(a[i],settings.method);
@@ -1741,12 +1740,14 @@
 				var n = parseInt(Pictre._storage.data.totalDiv.innerHTML)
 				Pictre._storage.data.totalDiv.innerHTML = n+a.length;
 			} else if(settings.method == 'replace') {
+				console.log("replacing...");
 				this._storage.iterator = 0;
 				this._storage.pictures = [];
 				while(Pictre._settings.wrapper.hasChildNodes()) {
 					Pictre._settings.wrapper.removeChild(Pictre._settings.wrapper.lastChild);
 				}
 				for(var i=0;i<a.length;i++) {
+					console.log("creating picture");
 					Pictre.create.picture(a[i]);
 				}
 				if(!Pictre._storage.pictures.length) {
