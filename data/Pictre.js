@@ -339,7 +339,7 @@
 					}
 				};
 				Pictre.extend(img).on('load',function() {
-					console.log("is this shit working?");
+					console.log("good on you");
 					pic.innerHTML = "";
 					pic.appendChild(img);
 					this._onload();
@@ -415,7 +415,7 @@
 						if(typeof callback == 'function') callback.call(dom,e);
 					});
 				} catch(e) {
-					dom.attachEvent(type,function(e) {
+					dom.attachEvent('on'+type,function(e) {
 						if(typeof callback == 'function') callback.call(dom,e);
 					});
 				}
@@ -1741,7 +1741,6 @@
 				var n = parseInt(Pictre._storage.data.totalDiv.innerHTML)
 				Pictre._storage.data.totalDiv.innerHTML = n+a.length;
 			} else if(settings.method == 'replace') {
-				console.log("replacing...");
 				this._storage.iterator = 0;
 				this._storage.pictures = [];
 				while(Pictre._settings.wrapper.hasChildNodes()) {
