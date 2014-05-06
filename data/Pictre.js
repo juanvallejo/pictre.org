@@ -1738,7 +1738,7 @@
 				}
 				var n = parseInt(Pictre._storage.data.totalDiv.innerHTML)
 				Pictre._storage.data.totalDiv.innerHTML = n+a.length;
-			} else if(settings.method == "replace") {
+			} else if(settings.method == 'replace') {
 				this._storage.iterator = 0;
 				this._storage.pictures = [];
 				while(Pictre._settings.wrapper.hasChildNodes()) {
