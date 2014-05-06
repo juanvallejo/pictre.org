@@ -304,6 +304,8 @@
 	},
 	create:{
 		picture:function(a,b) {
+			console.log("creating, ");
+			console.log(a);
 			var self = Pictre;
 			if(b) Pictre._storage.upload.method = b;
 			var img = new Image();
@@ -1747,7 +1749,6 @@
 					Pictre._settings.wrapper.removeChild(Pictre._settings.wrapper.lastChild);
 				}
 				for(var i=0;i<a.length;i++) {
-					console.log("creating picture");
 					Pictre.create.picture(a[i]);
 				}
 				if(!Pictre._storage.pictures.length) {
