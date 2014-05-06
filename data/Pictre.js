@@ -279,7 +279,7 @@
 					}
 				}
 			}
-			if(this.id >= 9) {
+			if(this.id >= 7) {
 				var warning;
 				var lock = false;
 				if(this.id == 7 || this.id == 8) {
