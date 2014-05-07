@@ -500,7 +500,7 @@
 					});
 				}
 			} else {
-				var xhr = new XMLHttpRequest(); ////--
+				var xhr = new XMLHttpRequest();
 				try {
 					xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
 				} catch(e) {
@@ -628,10 +628,27 @@
 						self.position();
 						return this;
 					};
-						return this.wrapper;
+					return this.wrapper;
 				},
 				remove:function() {
 					if(this.wrapper) document.body.removeChild(this.wrapper);
+				}
+			},
+			splash:{
+				div:{
+					_init:false,
+					wrapper:null
+				},
+				put:function(a) {
+					if(!this.div._init) {
+						this.div._init = true;
+						this.div.wrapper = document.createElement('div');
+						this.div.wrapper.className = 'Pictre-splash-wrapper';
+						this.div.wrapper.style.zIndex = "999";
+						document.body.appendChild(this.div.wrapper);
+					}
+					document.body.style.overflow = "hidden";
+					Pictre.get.ui.passcode.put('splash',a);////--
 				}
 			},
 			imageOptions:{
@@ -834,7 +851,7 @@
 						return this.div;
 					}
 				},
-				put:function(a) {
+				put:function(a,b) {
 					var self = this;
 					self.div = null;
 					if(Pictre.gallery.is.featuring) {
@@ -864,6 +881,40 @@
 									else inp1.div.focus();
 								}
 							});
+						} else if(a == 'splash') { ////--
+							var c = document.createElement('div');
+								c.className = 'Pictre-passcode-p';
+								c.style.fontSize = "0.85em";
+								c.style.display = "none";
+							Pictre._storage.overlay.locked = true;
+							p.style.fontSize = "0.85em";
+							p.innerHTML = "<b class='brand' style='width:100%;text-align:center;font-size:2.2em;display:block;margin-bottom:10px;'>Pictre</b>";
+							p.innerHTML += "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
+							p.innerHTML += "<span>To get started, simply type an album name below.</span>";
+							if(b) Pictre.get.ui.notice(b,'splash',c);
+							var inp1 = new self.input();
+								inp1.div.style.color = "white";
+								inp1.placeholder = "Enter an album name";
+								inp1.create().on('keydown',function(e) {
+									if(e.keyCode == 13) {
+										if(this.div.value != "" && this.value != this.div.value){
+											var val = this.div.value.toLowerCase().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+											if(Pictre._settings.pages.restricted.indexOf(val) == -1) {
+												if(this.div.value.match(/[^a-z0-9\-\.\+\_\ ]/gi)) {
+													Pictre.get.ui.notice("Your album name contains invalid characters.",'splash',c);
+												} else {
+													if(this.div.value.match(/[\ ]/g)) Pictre.get.ui.notice("Your album name cannot contain spaces.",'splash',c);
+													else window.location.assign(Pictre._settings.app.address+val);
+												}
+											} else {
+												this.div.value = "";
+												Pictre.get.ui.notice("That album is restricted, please try another.",'splash',c);
+											}
+										}
+									}
+								}).on('click',function(e) {
+									e.stopPropagation();
+								});
 						} else {
 							Pictre._storage.overlay.locked = false;
 							var inp1 = new self.input();
@@ -896,6 +947,7 @@
 						self.div.contentWrapper = document.createElement("div");
 						self.div.contentWrapper.className = "Pictre-passcode-input-wrapper";
 						self.div.contentWrapper.appendChild(p);
+						self.div.contentWrapper.appendChild(c);
 						self.div.contentWrapper.appendChild(inp1.div);
 						if(a == 'create') self.div.contentWrapper.appendChild(inp2.div);
 						self.div.appendChild(self.div.contentWrapper);
@@ -956,22 +1008,31 @@
 					this.position();
 				}
 			},
-			notice:function(a,b) {
-				var oldnote = $('.Pictre-notice');
-				if(oldnote.length) document.body.removeChild(oldnote[0]);
-				var a = a || "Untitled notice";
-				var note = document.createElement("div");
-					note.className = "Pictre-notice";
-					note.innerHTML = a;
-				 	Pictre._storage.data.totalDiv = document.createElement("div");
-					Pictre._storage.data.totalDiv.className = "Pictre-notice-extra";
-					if(Pictre.board.exists) {
-						Pictre._storage.data.totalDiv.innerHTML = b || 0;
-						Pictre._storage.data.totalDiv.title = "There are "+Pictre._storage.data.totalDiv.innerHTML+" pictures in this album";
-					}
-				note.appendChild(Pictre._storage.data.totalDiv);
-				document.body.appendChild(note);
-				if(Pictre._settings.wrapper) Pictre._settings.wrapper.style.marginTop = "52px";
+			notice:function(a,b,c) {
+				if(b == 'splash' && c) {
+					c.style.display = 'block';
+					c.innerHTML = a;
+					if(c.timeout) clearTimeout(c.timeout);
+					c.timeout = setTimeout(function() {
+						c.style.display = 'none';
+					},10000);
+				} else {
+					var oldnote = $('.Pictre-notice');
+					if(oldnote.length) document.body.removeChild(oldnote[0]);
+					var a = a || "Untitled notice";
+					var note = document.createElement("div");
+						note.className = "Pictre-notice";
+						note.innerHTML = a;
+					 	Pictre._storage.data.totalDiv = document.createElement("div");
+						Pictre._storage.data.totalDiv.className = "Pictre-notice-extra";
+						if(Pictre.board.exists) {
+							Pictre._storage.data.totalDiv.innerHTML = b || 0;
+							Pictre._storage.data.totalDiv.title = "There are "+Pictre._storage.data.totalDiv.innerHTML+" pictures in this album";
+						}
+					note.appendChild(Pictre._storage.data.totalDiv);
+					document.body.appendChild(note);
+					if(Pictre._settings.wrapper) Pictre._settings.wrapper.style.marginTop = "52px";
+				}
 			},
 			upload:{
 				div:null,
@@ -1669,14 +1730,16 @@
 				err.className = "Pictre-home-wrapper-about";
 				Pictre.get.ui.notice("This album does not exist as it contains invalid characters in its name.");
 				err.appendChild(spacer);
-				Pictre.get.ui.home.put().appendTo(a).appendChild(err);
+				// Pictre.get.ui.home.put().appendTo(a).appendChild(err);
+				Pictre.get.ui.splash.put("This album does not exist as it contains invalid characters in its name.");
 			} else if(Pictre._settings.pages.restricted.indexOf(Pictre.board.get().toLowerCase()) != -1) {
 				var err = document.createElement("p");
 				err.innerHTML = "403. The album you are looking for is restricted. Try another one by typing it above or type another album address.";
 				err.className = "Pictre-home-wrapper-about";
 				Pictre.get.ui.notice("This album is private or restricted. Please try another one.");
 				err.appendChild(spacer);
-				Pictre.get.ui.home.put().appendTo(a).appendChild(err);
+				// Pictre.get.ui.home.put().appendTo(a).appendChild(err);
+				Pictre.get.ui.splash.put("This album is private or restricted."); ////--
 			} else {
 				Pictre.board.exists = true;
 				var wrapper = document.createElement("div");
@@ -1717,7 +1780,8 @@
 				about.innerHTML += "<span>To get started, simply type an album name above.</span>";
 				about.className = "Pictre-home-wrapper-about";
 				about.appendChild(spacer);
-			Pictre.get.ui.home.put().appendTo(a).appendChild(about);
+			// Pictre.get.ui.home.put().appendTo(a).appendChild(about);
+				Pictre.get.ui.splash.put();
 		}
 	},
 	is:{
