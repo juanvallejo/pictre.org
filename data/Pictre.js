@@ -363,10 +363,11 @@
 				});
 				img.src = Pictre._settings.cloud.datadir+a.thumb;
 				Pictre.extend(pic).on('click',function() {
-					if(window.location.hash.split("#")[1] == this.data.dbid) {
-						if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
-						else Pictre.gallery.feature(this);
-					} else window.location.assign("#"+a.id);
+					Pictre.gallery.feature(this);
+					// if(window.location.hash.split("#")[1] == this.data.dbid) {
+					// 	if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
+					// 	else Pictre.gallery.feature(this);
+					// } else window.location.assign("#"+a.id);
 				});
 				pic.className = self.properties.className;
 				pic.innerHTML = "loading...";
