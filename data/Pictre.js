@@ -282,15 +282,22 @@
 			if(this.id >= 7) {
 				var warning;
 				var lock = false;
-				if(this.id == 7 || this.id == 8) {
+				var header = 'Sorry about that!';
+				if(this.id > 7) {
 					warning = "Unfortunately Pictre is not supported in your browser, please consider upgrading to Google Chrome, by clicking here, for an optimal browsing experience.";
 					lock = true;
+					Pictre.get.ui.warning.onclick = function() {
+						window.open("http://chrome.google.com","_blank");
+					};
+				} else {
+					header = 'Notice!';
+					warning = "Some of Pictre's features may not be fully supported in your browser.";
+					Pictre.get.ui.warning.onclick = function() {
+						this.remove(); ////--
+					};
 				}
-				Pictre.get.ui.warning.onclick = function() {
-					window.open("http://chrome.google.com","_blank");
-				};
 				Pictre.get.ui.warning.put({
-					header:'Sorry about that!',
+					header:header,
 					body:warning,
 					locked:lock
 				});
@@ -310,7 +317,6 @@
 			var pic = document.createElement("div");
 				pic.id = "pic"+a.id;
 				if(!self.is.loaded && !b && Pictre._settings.wrapper.style.display != "none") Pictre._settings.wrapper.style.display = "none";
-				img.src = Pictre._settings.cloud.datadir+a.thumb;
 				img._onload = function(a) {
 					if(b == "prepend" || b == "append") {
 						if(b == "prepend") Pictre.chisel();
@@ -355,6 +361,7 @@
                     pic.appendChild(errImg);
 					this._onload();
 				});
+				img.src = Pictre._settings.cloud.datadir+a.thumb;
 				Pictre.extend(pic).on('click',function() {
 					if(window.location.hash.split("#")[1] == this.data.dbid) {
 						if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
@@ -1336,7 +1343,8 @@
 					}
 				},
 				remove:function() {
-					document.body.removeChild(this.div);
+					Pictre.gallery.overlay.exit();
+					this.div.parentNode.removeChild(this.div);
 					this.div = null;
 				}
 			}
@@ -1622,16 +1630,18 @@
 					if(settings.previous) Pictre._storage.overlay.iterator--;
 					else Pictre._storage.overlay.iterator++;
 				}
-				var src = Pictre.gallery.overlay.img.src.split("/");
-					src = src[src.length-1];
-				var newSrc = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src.split("/");
-					newSrc = newSrc[newSrc.length-1];
-				if(src != newSrc) Pictre.gallery.overlay.wrapper.innerHTML = "<div class='Pictre-loader'></div>";
-				Pictre.gallery.overlay.img.src = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src;
-				Pictre.gallery.overlay.img.data = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data;
-				if(Pictre.gallery.overlay.img.data.comments.length) Pictre.gallery.overlay.comments.appended = true;
-				else Pictre.gallery.overlay.comments.appended = false;
-				Pictre._storage.pictures[Pictre._storage.overlay.iterator].style.opacity = Pictre._settings.data.visited;
+				if(Pictre.gallery.overlay.img) {
+					var src = Pictre.gallery.overlay.img ? Pictre.gallery.overlay.img.src.split("/") : null;
+						src = src[src.length-1];
+					var newSrc = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src.split("/");
+						newSrc = newSrc[newSrc.length-1];
+					if(src != newSrc) Pictre.gallery.overlay.wrapper.innerHTML = "<div class='Pictre-loader'></div>";
+					Pictre.gallery.overlay.img.src = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src;
+					Pictre.gallery.overlay.img.data = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data;
+					if(Pictre.gallery.overlay.img.data.comments.length) Pictre.gallery.overlay.comments.appended = true;
+					else Pictre.gallery.overlay.comments.appended = false;
+					Pictre._storage.pictures[Pictre._storage.overlay.iterator].style.opacity = Pictre._settings.data.visited;
+				}
 			},
 			wrapper:null
 		}
