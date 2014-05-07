@@ -24,7 +24,7 @@
 		},
 		position:function() {
 			this.div.style.left = ($(window).width()/2 - (this.div.clientWidth/2))+"px";
-			this.div.style.top = (($(window).height()-Pictre.get.ui.menu._div.offsetHeight)/2 - (this.div.clientHeight/2))+"px";
+			this.div.style.top = (($(window).height()-(Pictre.get.ui.menu._div.offsetHeight*2))/2 - (this.div.clientHeight/2))+"px";
 		}
 	},
 	_settings:{
@@ -363,11 +363,10 @@
 				});
 				img.src = Pictre._settings.cloud.datadir+a.thumb;
 				Pictre.extend(pic).on('click',function() {
-					Pictre.gallery.feature(this);
-					// if(window.location.hash.split("#")[1] == this.data.dbid) {
-					// 	if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
-					// 	else Pictre.gallery.feature(this);
-					// } else window.location.assign("#"+a.id);
+					if(window.location.hash.split("#")[1] == this.data.dbid) {
+						if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
+						else Pictre.gallery.feature(this);
+					} else window.location.assign("#"+a.id);
 				});
 				pic.className = self.properties.className;
 				pic.innerHTML = "loading...";
@@ -648,7 +647,7 @@
 						document.body.appendChild(this.div.wrapper);
 					}
 					document.body.style.overflow = "hidden";
-					Pictre.get.ui.passcode.put('splash',a);////--
+					Pictre.get.ui.passcode.put('splash',a);
 				}
 			},
 			imageOptions:{
@@ -827,20 +826,20 @@
 					this.className = "Pictre-passcode-input";
 					this.placeholder = "Create a passcode";
 					this.value = a;
-					this.create = function() {
+					this.create = function(b) {
 						if(!this.value) this.value = this.placeholder;
 						this.div.maxLength = 10;
 						this.div.className = this.className;
 						this.div.type = this.type;
 						this.div.placeholder = this.placeholder || "";
-						this.div.value = this.value || "";
+						this.div.value = b || this.value || "";
 						Pictre.extend(this.div).on('focus',function(e) {
 							if(self.password) self.div.type = "password";
 							if(self.div.value == self.value) self.div.value = "";
 						});
 						Pictre.extend(this.div).on('blur',function() {
 							if(self.password) self.div.type = "text";
-							if(self.div.value == "") self.div.value = self.value;
+							if(self.div.value == "" && b != '') self.div.value = self.value;
 						});
 						this.div.on = function(b,c) {
 							Pictre.extend(this).on(b,function(e) {
@@ -894,8 +893,7 @@
 							if(b) Pictre.get.ui.notice(b,'splash',c);
 							var inp1 = new self.input();
 								inp1.div.style.color = "white";
-								inp1.placeholder = "Enter an album name";
-								inp1.create().on('keydown',function(e) {
+								inp1.create('').on('keydown',function(e) {
 									if(e.keyCode == 13) {
 										if(this.div.value != "" && this.value != this.div.value){
 											var val = this.div.value.toLowerCase().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
@@ -915,6 +913,21 @@
 								}).on('click',function(e) {
 									e.stopPropagation();
 								});
+								inp1.div.setAttribute('maxlength',100);
+								if(Pictre.client.name == "Internet Explorer" || Pictre.client.id == 3 || (Pictre.client.id == 2 && Pictre.client.version.indexOf("5.1.") != -1)) {
+									var val = "Enter an album's name";
+									inp1.div.placeholder = "";
+									inp1.div.value = val;
+									inp1.div.nofocus = true;
+									Pictre.extend(inp1.div).on('focus',function() {
+										if(this.value == val) this.value = '';
+									});
+									Pictre.extend(inp1.div).on('blur',function() {
+										if(this.value == '') this.value = val;
+									});
+								} else {
+									inp1.div.placeholder = "Enter an album name";
+								}
 						} else {
 							Pictre._storage.overlay.locked = false;
 							var inp1 = new self.input();
@@ -976,7 +989,7 @@
 							}
 						};
 					}
-					inp1.div.focus();
+					if(!inp1.div.nofocus) inp1.div.focus();
 					self.position();
 				},
 				position:function() {
