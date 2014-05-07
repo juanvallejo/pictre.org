@@ -947,7 +947,7 @@
 						self.div.contentWrapper = document.createElement("div");
 						self.div.contentWrapper.className = "Pictre-passcode-input-wrapper";
 						self.div.contentWrapper.appendChild(p);
-						self.div.contentWrapper.appendChild(c);
+						if(c) self.div.contentWrapper.appendChild(c);
 						self.div.contentWrapper.appendChild(inp1.div);
 						if(a == 'create') self.div.contentWrapper.appendChild(inp2.div);
 						self.div.appendChild(self.div.contentWrapper);
@@ -1739,7 +1739,7 @@
 				Pictre.get.ui.notice("This album is private or restricted. Please try another one.");
 				err.appendChild(spacer);
 				// Pictre.get.ui.home.put().appendTo(a).appendChild(err);
-				Pictre.get.ui.splash.put("This album is private or restricted."); ////--
+				Pictre.get.ui.splash.put("This album is private or restricted.");
 			} else {
 				Pictre.board.exists = true;
 				var wrapper = document.createElement("div");
@@ -1860,7 +1860,7 @@
 					}
 					if(Pictre._settings.allowUploads) Pictre.get.ui.upload.put();
 					else Pictre.get.ui.notice("Uploads have been disabled for this album.");
-				});	
+				});
 				if(a.hasOwnProperty('kind')) {
 					Pictre.board.set.state(a.kind);
 				}
