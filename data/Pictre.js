@@ -846,7 +846,7 @@
 						var p = document.createElement("div");
 							p.className = "Pictre-passcode-p";
 							if(a == 'create') p.innerHTML = "Congratulations! You have found a new album, create a passcode below to claim it as your own!";
-							else p.innerHTML = "To proceed, enter the passcode for this album.";
+							else p.innerHTML = "To proceed, enter the passcode for this album below.";
 						if(a == 'create') {
 							Pictre._storage.overlay.locked = true;
 							var inp1 = new self.input("Create a passcode");
@@ -901,6 +901,9 @@
 						self.div.appendChild(self.div.contentWrapper);
 						if(Pictre.gallery.is.featuring) Pictre.gallery.overlay.div.appendChild(self.div);
 						else Pictre.gallery.overlay.put().appendChild(self.div);
+						Pictre.extend(self.div.contentWrapper).on('click',function(e) {
+							e.stopPropagation();
+						});
 						Pictre.events.on('resize',function() {
 							self.position();
 						});
@@ -921,6 +924,7 @@
 							}
 						};
 					}
+					inp1.div.focus();
 					self.position();
 				},
 				position:function() {
