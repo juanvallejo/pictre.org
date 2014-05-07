@@ -293,7 +293,7 @@
 					header = 'Notice!';
 					warning = "Some of Pictre's features may not be fully supported in your browser.";
 					Pictre.get.ui.warning.onclick = function() {
-						this.remove(); ////--
+						this.remove();
 					};
 				}
 				Pictre.get.ui.warning.put({
@@ -551,7 +551,7 @@
 				}
 			} else {
 				if(Pictre.is.spotlight) Pictre.spotlight.remove(),Pictre.get.ui.menu.removeButton('back');
-				else if(Pictre.gallery.is.featuring) Pictre.gallery.overlay.exit();
+				else if(Pictre.gallery.is.featuring && !Pictre.gallery.is.warning) Pictre.gallery.overlay.exit();
 			}
 		},
 		picture:function(a) {
@@ -736,7 +736,6 @@
 						});
 					}
 					$(self.div.progress).width(Math.max(p,0)+'%');
-					// self.div.progress.style.width = Math.max(parseInt(p),0)+"%";
 					if(a == 1) self.remove();
 				},
 				position:function() {
@@ -1285,6 +1284,7 @@
 					}
 					this.div = document.createElement("div");
 					this.div.className = "Pictre-upload Pictre-warning";
+					Pictre.gallery.is.warning = true;
 					Pictre.extend(Pictre.gallery.overlay.put().appendChild(this.div)).on('click',function(e) {
 						e.stopPropagation();
 					});
@@ -1344,6 +1344,7 @@
 					}
 				},
 				remove:function() {
+					Pictre.gallery.is.warning = false;
 					Pictre.gallery.overlay.exit();
 					this.div.parentNode.removeChild(this.div);
 					this.div = null;
@@ -1381,7 +1382,8 @@
 			}
 		},
 		is:{
-			featuring:false
+			featuring:false,
+			warning:false
 		},
 		images:[],
 		onready:function(){},
