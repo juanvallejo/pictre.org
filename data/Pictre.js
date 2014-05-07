@@ -735,7 +735,7 @@
 							self.position();
 						});
 					}
-					self.div.progress.style.width = p+"%";
+					self.div.progress.style.width = Math.max(p,0)+"%";
 					if(a == 1) self.remove();
 				},
 				position:function() {
