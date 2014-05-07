@@ -721,8 +721,8 @@
 			loader:{
 				div:null,
 				put:function(a) {
-					var self=this;
-					var p=a*100;
+					var self = this;
+					var p = a*100;
 					if(!self.div) {
 						self.div = document.createElement("div");
 						self.div.progress = document.createElement("div");
@@ -735,7 +735,8 @@
 							self.position();
 						});
 					}
-					self.div.progress.style.width = Math.max(parseInt(p),0)+"%";
+					$(self.div.progress).width(Math.max(p,0)+'%');
+					// self.div.progress.style.width = Math.max(parseInt(p),0)+"%";
 					if(a == 1) self.remove();
 				},
 				position:function() {
