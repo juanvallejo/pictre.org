@@ -225,18 +225,24 @@ background:/*rgba(28,30,29,0.9)*/; border-width:/*3px 1px 1px */1px; border-styl
 		.Pictre-upload-area-progress {
 		position:absolute; left:0; top:-1px; width:0; border-top-width:1px; border-bottom-width:1px; border-style:solid; border-color:rgb(66,29,77); z-index:999;
 		}
-.Pictre-warning p {
-padding:0 11% 0 11%; text-align:center; color:rgb(145,159,159); text-shadow:0 -1px 0 rgb(0,0,0);
+.Pictre-warning {
+height:135px;
 }
-	.Pictre-warning p a:hover {
-	color:rgb(159,145,159);
+	.Pictre-warning .Pictre-upload-header {
+	color:rgb(181,181,181);
 	}
-	.Pictre-warning p p {
-	margin-top:15px;
+	.Pictre-warning p {
+	width:50%; margin:0 auto; padding:12px 0 0 0; text-align:center; color:rgb(181,181,181); text-shadow:0 -1px 0 rgb(0,0,0); font-size:0.9em; border-top:1px solid rgba(105,105,105,0.3);
 	}
-		.Pictre-warning p:first-child {
+		.Pictre-warning p a:hover {
+		color:rgb(159,145,159);
+		}
+		.Pictre-warning p p {
 		margin-top:0;
 		}
+			.Pictre-warning p:first-child {
+			margin-top:0;
+			}
 .Pictre-spacer {
 width:100%; height:100px;
 }

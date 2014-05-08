@@ -507,7 +507,6 @@
 				try {
 					xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
 				} catch(e) {
-					console.log("made it this far");
 					console.log(e);
 					Pictre.get.ui.notice("Reverting to compatibility mode for older browsers.");
 					Pictre.client.compatible = false;
