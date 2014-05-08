@@ -126,6 +126,7 @@
 		iterator:0,
 		loaded:0,
 		overlay:{
+			onexit:[],
 			image:null,
 			iterator:0,
 			locked:false
@@ -652,6 +653,10 @@
 					}
 					if(!Pictre.gallery.is.featuring) {
 						Pictre.get.ui.passcode.put('splash',a);
+					} else {
+						Pictre.gallery.overlay.onexit(function() {
+							Pictre.get.ui.splash.put(a);
+						});
 					}
 					document.body.style.overflow = "hidden";
 				}
@@ -1477,9 +1482,9 @@
 				document.body.style.overflow = "hidden";
 				a.style.opacity = "0.1";
 				Pictre.gallery.overlay.showImage(pic);
-				Pictre.gallery.overlay.onexit = function() {
+				Pictre.gallery.overlay.onclose = function() {
 					if(a) a.style.opacity = Pictre._settings.data.visited;
-				};
+				}
 		},
 		get:{
 			all:function() {
@@ -1504,11 +1509,17 @@
 					document.body.style.height = "auto";
 					Pictre.gallery.is.featuring = false;
 					this.remove();
-					this.onexit();
+					this.onclose();
+					for(var i=0;i<Pictre._storage.overlay.onexit.length;i++) {
+						if(Pictre._storage.overlay.onexit[i]) Pictre._storage.overlay.onexit[i].call(this);
+					}
 				}
 			},
 			img:null,
-			onexit:function() {},
+			onclose:function() {},
+			onexit:function(a) {
+				Pictre._storage.overlay.onexit.push(a);
+			},
 			put:function() {
 				if(!Pictre.gallery.overlay.div) {
 					Pictre.gallery.overlay.div = document.createElement("div");
