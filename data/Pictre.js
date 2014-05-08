@@ -300,6 +300,7 @@
 						this.remove();
 					};
 				}
+				Pictre.client.compatible = false;
 				Pictre.get.ui.warning.put({
 					header:header,
 					body:warning,
@@ -646,11 +647,13 @@
 						this.div._init = true;
 						this.div.wrapper = document.createElement('div');
 						this.div.wrapper.className = 'Pictre-splash-wrapper';
-						this.div.wrapper.style.zIndex = "999";
+						this.div.wrapper.style.zIndex = "998";
 						document.body.appendChild(this.div.wrapper);
 					}
+					if(!Pictre.gallery.is.featuring) {
+						Pictre.get.ui.passcode.put('splash',a);
+					}
 					document.body.style.overflow = "hidden";
-					Pictre.get.ui.passcode.put('splash',a);
 				}
 			},
 			imageOptions:{
@@ -830,7 +833,8 @@
 					this.placeholder = "Create a passcode";
 					this.value = a;
 					this.create = function(b) {
-						if(!this.value) this.value = this.placeholder;
+						if(this.value == '_blank') this.value = '';
+						else if(!this.value) this.value = this.placeholder;
 						this.div.maxLength = 10;
 						this.div.className = this.className;
 						this.div.type = this.type;
@@ -894,7 +898,7 @@
 							p.innerHTML += "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
 							p.innerHTML += "<span>To get started, simply type an album name below.</span>";
 							if(b) Pictre.get.ui.notice(b,'splash',c);
-							var inp1 = new self.input();
+							var inp1 = new self.input('_blank');
 								inp1.div.style.color = "white";
 								inp1.create('').on('keydown',function(e) {
 									if(e.keyCode == 13) {
@@ -1811,28 +1815,28 @@
 			}
 		} else {
 			if(Pictre.is.updating) Pictre.get.ui.notice("Updates are currently in progress...");
-			Pictre.get.ui.menu.addButton({
-				id:'about',
-				name:'about',
-				title:'What is Pictre?'
-			}).on('click',function() {
-				var body = '<p><span class="brand">Pictre</span> is a picture album library. It allows you to create as many albums as needed, each with a unique name assigned by you.</p>';
-				body += '<p>Each album is assigned its own URL, so accessing it is as simple as typing pictre.org/albumname. Because privacy is very important when making albums, all albums are considered private.</p>'
-				body += '<p>No one except you and the people you share your album\'s name with, will have access to your album.</p>';
-				body += '<p>Made by Juan Vallejo.</p><p style="font-size:0.8em;margin-top:1px;"><a target="_blank" href="mailto:juuanv@gmail.com">You can contact me here.</a></p>';
-				Pictre.get.ui.warning.put({
-					header:'About',
-					body:body,
-					style:false
-				});
-			});
-			var about = document.createElement("p");
-				about.innerHTML = "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
-				about.innerHTML += "<span>To get started, simply type an album name above.</span>";
-				about.className = "Pictre-home-wrapper-about";
-				about.appendChild(spacer);
+			// Pictre.get.ui.menu.addButton({
+			// 	id:'about',
+			// 	name:'about',
+			// 	title:'What is Pictre?'
+			// }).on('click',function() {
+			// 	var body = '<p><span class="brand">Pictre</span> is a picture album library. It allows you to create as many albums as needed, each with a unique name assigned by you.</p>';
+			// 	body += '<p>Each album is assigned its own URL, so accessing it is as simple as typing pictre.org/albumname. Because privacy is very important when making albums, all albums are considered private.</p>'
+			// 	body += '<p>No one except you and the people you share your album\'s name with, will have access to your album.</p>';
+			// 	body += '<p>Made by Juan Vallejo.</p><p style="font-size:0.8em;margin-top:1px;"><a target="_blank" href="mailto:juuanv@gmail.com">You can contact me here.</a></p>';
+			// 	Pictre.get.ui.warning.put({
+			// 		header:'About',
+			// 		body:body,
+			// 		style:false
+			// 	});
+			// });
+			// var about = document.createElement("p");
+			// 	about.innerHTML = "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
+			// 	about.innerHTML += "<span>To get started, simply type an album name above.</span>";
+			// 	about.className = "Pictre-home-wrapper-about";
+			// 	about.appendChild(spacer);
 			// Pictre.get.ui.home.put().appendTo(a).appendChild(about);
-				Pictre.get.ui.splash.put();
+			Pictre.get.ui.splash.put();
 		}
 	},
 	is:{
