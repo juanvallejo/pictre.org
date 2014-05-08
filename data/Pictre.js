@@ -48,6 +48,7 @@
 			kind:0,
 			visited:0.6
 		},
+		demoLoader:false,
 		minWidth:800,
 		pages:{
 			restricted:['data','restricted','404','undefined']
@@ -1762,7 +1763,19 @@
 				Pictre.get.ui.notice("Loading, please wait...");
 				Pictre._settings.data.condition = "album = \'"+escape(Pictre.board.get().toLowerCase())+"\'";
 				Pictre.get.db({album:true,from:'all',where:Pictre._settings.data.condition,limit:Pictre._settings.data.limit.pageload},function(data) {
-					Pictre.load(data);
+					if(Pictre._settings.demoLoader) {
+						(function loaderDemo(n,t) {
+							if(t) clearTimeout(t);
+							t = setTimeout(function() {
+								Pictre.get.ui.loader.put(n);
+								n+=0.002;
+								if(n >= 0.995) n = 0;
+								loaderDemo(n,t);
+							},1000/60);
+						})(0);
+					} else {
+						Pictre.load(data);
+					}
 				});
 				Pictre.events.on('dragover',function() {
 					if(!Pictre.gallery.is.featuring && !Pictre.is.spotlight && Pictre._settings.allowUploads) Pictre.get.ui.upload.put();
