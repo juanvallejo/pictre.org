@@ -48,7 +48,10 @@
 			kind:0,
 			visited:0.6
 		},
-		demoLoader:false,
+		demo:{
+			loader:false,
+			upload:false
+		},
 		minWidth:800,
 		pages:{
 			restricted:['data','restricted','404','undefined']
@@ -357,7 +360,7 @@
                     var errImg = new Image();
                         errImg.src = "data/i/Pictre-404.png";
 					pic.innerHTML = "";
-					pic.data.src = "data/i/Pictre-404.png";
+					pic.data.src = "data/i/Pictre-404.full.png";
                     pic.style.height = (height-paddingTop+paddingBottom*2)+"px";
                     pic.appendChild(errImg);
 					this._onload();
@@ -881,7 +884,7 @@
 									else inp1.div.focus();
 								}
 							});
-						} else if(a == 'splash') { ////--
+						} else if(a == 'splash') {
 							var c = document.createElement('div');
 								c.className = 'Pictre-passcode-p';
 								c.style.fontSize = "0.85em";
@@ -1062,6 +1065,13 @@
 					Pictre.events.on('resize',function() {
 							self.position();
 					});
+					var color = {
+						inactive:'rgba(105,105,105,0.3)',
+						extract:'rgb(151,125,4)',
+						pending:'rgb(222,222,222)',//'rgb(64,2,74)',
+						warning:'rgb(86,35,9)',
+						success:'rgb(23,68,20)'
+					};
 					var header = document.createElement("div");
 						header.className = "Pictre-upload-header";
 						header.innerHTML = "Upload";
@@ -1091,9 +1101,24 @@
 						this.div.appendChild(input);
 						area.style.marginLeft = (-area.clientWidth / 2)+"px";
 						area.style.marginTop = (-area.clientHeight / 2 + 20)+"px";
+						progress.style.height = (area.clientHeight)+"px";
+						if(Pictre._settings.demo.upload) {
+							console.log("Warning: upload demo active.");
+							area.locked = true;
+							progress.style.borderColor = color.pending;
+							(function demo(n,t) {
+								if(t) clearTimeout(t);
+								t = setTimeout(function() {
+									progress.style.width = (n*100)+"%";
+									n+=0.002;
+									if(n >= 0.995) n = 0;
+									demo(n,t);
+								},1000/60);
+							})(0);
+						}
 						Pictre.extend(area).on('dragover',function(e) {
 							e.preventDefault();
-							if(!area.locked) area.style.background = "rgb(52,56,55)";
+							if(!area.locked) area.style.borderColor = "rgba(222,222,222,0.34)";
 						});
 						Pictre.extend(input).on('click',function(e) {
 							e.stopPropagation();
@@ -1106,6 +1131,7 @@
 						});
 						Pictre.extend(area).on('drop',function(e) {
 							e.preventDefault();
+							area.style.borderColor = color.inactive;
 							render(e.dataTransfer.files,upload);
 						});
 						if(Pictre.client.id == 5) {
@@ -1120,7 +1146,7 @@
 								var i = 0;
 								var exif = [];
 								progress.style.width = "0";
-								progress.style.background = "rgb(151,125,4)";									
+								progress.style.borderColor = color.pending;									
 								read();
 								function read() {
 									var kind = f[i].type.split("/");
@@ -1176,8 +1202,7 @@
 									Pictre._storage.upload.offset+=num;
 								}
 								area.locked = true;
-								area.style.background = "rgb(40,43,42)";
-								progress.style.background = "rgb(64,2,74)";
+								progress.style.borderColor = color.pending;
 								progress.style.width = "0";
 								if(files.length == 1) {
 									p.innerHTML = "Uploading "+files[0].name+"...";
@@ -1209,7 +1234,7 @@
 													p.innerHTML = "None of the files were uploaded because none of them were supported images...";
 												}
 											} else {
-												progress.style.background = "rgb(86,35,9)";
+												progress.style.borderColor = color.inactve;
 												if(Pictre._storage.upload.overflow) {
 													if(Pictre._storage.upload.offset >= Pictre._storage.upload.overflow.length) {
 														Pictre._storage.upload.overflow = null;
@@ -1226,7 +1251,7 @@
 												}
 											}
 										} else {
-											progress.style.background = "rgb(23,68,20)";
+											progress.style.borderColor = color.pending;
 											if(Pictre._storage.upload.overflow) {
 												if(Pictre._storage.upload.offset >= Pictre._storage.upload.overflow.length) {
 													Pictre._storage.upload.overflow = null;
@@ -1248,10 +1273,10 @@
 											});
 										}
 									} else if(e.response == "timeout") {
-										progress.style.background = "rgb(86,35,9)";
+										progress.style.borderColor = color.inactive;
 										p.innerHTML = "Attempting to retrieve uploaded images, please wait...";
 										Pictre.get.db({from:'all',where:Pictre._settings.data.condition,anchor:0,limit:Pictre._settings.data.limit.pageload},function(data) {
-											p.innerHTML = "Hey! Pictre has encountered a problem and could not finish uploading some of your files, sorry about that!";
+											p.innerHTML = "Hey! Pictre encountered a problem and could not finish uploading some of your files, sorry about that!";
 											Pictre.load(data);
 										});
 									} else {
@@ -1763,14 +1788,15 @@
 				Pictre.get.ui.notice("Loading, please wait...");
 				Pictre._settings.data.condition = "album = \'"+escape(Pictre.board.get().toLowerCase())+"\'";
 				Pictre.get.db({album:true,from:'all',where:Pictre._settings.data.condition,limit:Pictre._settings.data.limit.pageload},function(data) {
-					if(Pictre._settings.demoLoader) {
-						(function loaderDemo(n,t) {
+					if(Pictre._settings.demo.loader) {
+						console.log("Warning: loader demo active.");
+						(function demo(n,t) {
 							if(t) clearTimeout(t);
 							t = setTimeout(function() {
 								Pictre.get.ui.loader.put(n);
 								n+=0.002;
 								if(n >= 0.995) n = 0;
-								loaderDemo(n,t);
+								demo(n,t);
 							},1000/60);
 						})(0);
 					} else {

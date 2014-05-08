@@ -199,37 +199,31 @@ border-top:0 solid rgb(130,130,130);
 		border-top:1px solid rgba(105,105,105,0.3);
 		}
 .Pictre-upload {
-margin:0 auto 0; position:absolute; left:41%; top:30%; width:700px; height:450px; text-align:center; text-shadow:0 -1px 0 rgb(0,0,0);
-background:rgb(28,30,29); border-width:3px 1px 1px 1px; border-style:solid; border-color:rgb(162,168,168) rgb(34,38,38) rgb(34,38,38) rgb(34,38,38); border-radius:2px; display:table;
+margin:0 auto 0; position:absolute; left:41%; top:30%; width:700px; height:335px; text-align:center;
+background:/*rgba(28,30,29,0.9)*/; border-width:/*3px 1px 1px */1px; border-style:hidden; border-color:/*rgb(162,168,168) rgb(34,38,38) rgb(34,38,38) */rgba(34,38,38,0.8); border-radius:3.5px; display:table;
 }
-	.Pictre-upload:before {
-	left:0; top:-19px; position:absolute; border-style:solid; border-width:8px; border-color:transparent rgb(85,91,91) rgb(85,91,91) transparent; content:' '; width:0; height:0;
-	}
-	.Pictre-upload:after {
-	right:0; top:-19px; position:absolute; border-style:solid; border-width:8px; border-color:transparent transparent rgb(85,91,91) rgb(85,91,91); content:' '; width:0; height:0;
-	}	
 	.Pictre-upload-header {
-	width:100%; min-height:10px; background:rgb(228,230,230); padding:10px 0 8px 0; border-style:solid; border-width:0 0 1px 0; border-color:rgb(160,168,168);
-	font-family:'Molle'; font-style:italic; font-size:1.7em; color:rgb(28,30,29); text-shadow:0 1px 0 white;
-	box-shadow:0 2px 1px rgb(24,28,28); -moz-box-shadow:0 2px 1px rgb(24,28,28); -ms-box-shadow:0 2px 1px rgb(24,28,28); -webkit-box-shadow:0 2px 1px rgb(24,28,28); -o-box-shadow:0 2px 1px rgb(24,28,28);
+	width:100%; min-height:10px; background:transparent/*rgb(228,230,230)*/; padding:25px 0 0 0; border-style:solid; border-width:0 0 0 0; border-color:rgb(160,168,168);
+	font-family:'Molle'; font-style:italic; font-size:1.2em; color:rgb(222,222,222)/*rgb(28,30,29)*/; text-shadow:0 1px 0 black;
+	/*box-shadow:0 2px 1px rgb(24,28,28); -moz-box-shadow:0 2px 1px rgb(24,28,28); -ms-box-shadow:0 2px 1px rgb(24,28,28); -webkit-box-shadow:0 2px 1px rgb(24,28,28); -o-box-shadow:0 2px 1px rgb(24,28,28);*/
 	}
 	.Pictre-upload-area {
-	width:250px; height:230px; border-radius:6px; border:3px dashed rgb(146,156,156); position:absolute; top:50%; left:50%; cursor:default;
-	text-align:center; background:rgb(40,43,42); overflow-x:hidden;
+	width:280px; height:230px; border-top:1px solid rgba(105,105,105,0.3); border-bottom:1px solid rgba(105,105,105,0.3); position:absolute; top:50%; left:50%; cursor:default;
+	text-align:center; background:/*rgb(40,43,42)*/; /*overflow-x:hidden;*/ z-index:998;
 	}
 		.Pictre-upload-area:active {
-		background:rgb(52,56,55);
+		color:rgb(84,90,90);
 		}
 		.Pictre-upload-area-shader {
-		position:absolute;  border:0; padding:0; left:0px; top:0; width:100%; height:100%; display:table; z-index:1;
-		box-shadow:inset 2px 2px 10px rgb(3,4,4); -moz-box-shadow:inset 2px 2px 10px rgb(3,4,4); -o-box-shadow:inset 2px 2px 10px rgb(3,4,4); -webkit-box-shadow:inset 2px 2px 10px rgb(3,4,4);
-		-ms-box-shadow:inset 2px 2px 10px rgb(3,4,4);
+		position:absolute;  border:0; padding:0; left:0px; top:0; width:100%; height:100%; display:table; z-index:1; color:rgb(222,222,222);
+		/*box-shadow:inset 2px 2px 10px rgb(3,4,4); -moz-box-shadow:inset 2px 2px 10px rgb(3,4,4); -o-box-shadow:inset 2px 2px 10px rgb(3,4,4); -webkit-box-shadow:inset 2px 2px 10px rgb(3,4,4);*/
+		/*-ms-box-shadow:inset 2px 2px 10px rgb(3,4,4);*/
 		}
 			.Pictre-upload-area p {
-			width:100%; padding:0 10px 0 10px; display:table-cell; vertical-align:middle; color:rgb(84,90,90); text-shadow:0 -1px 0 rgb(15,17,16); word-wrap:break-word; z-index:999;
+			width:100%; padding:0 10px 0 10px; display:table-cell; vertical-align:middle; font-size:0.9em; color:inherit; word-wrap:break-word; z-index:999;
 			}
 		.Pictre-upload-area-progress {
-		position:absolute; left:0; top:0; width:0; height:100%; background:rgb(66,29,77); z-index:0;
+		position:absolute; left:0; top:-1px; width:0; border-top-width:1px; border-bottom-width:1px; border-style:solid; border-color:rgb(66,29,77); z-index:999;
 		}
 .Pictre-warning p {
 padding:0 11% 0 11%; text-align:center; color:rgb(145,159,159); text-shadow:0 -1px 0 rgb(0,0,0);
