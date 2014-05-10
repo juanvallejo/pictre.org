@@ -105,7 +105,7 @@ width:65%; height:30%; margin:0 auto 0; position:absolute; left:0; top:10%; text
 	box-shadow:0 2px 0 rgba(0,0,0,0.6); /*-moz-box-shadow:inset 2px 1px 7px rgb(6,7,6); -o-box-shadow:inset 2px 1px 7px rgb(6,7,6); -ms-box-shadow:inset 2px 1px 7px rgb(6,7,6); -webkit-box-shadow:inset 2px 1px 7px rgb(6,7,6);*/
 	}
 		.Pictre-home-container p {
-		display:table-cell; vertical-align:bottom; text-align:center; padding-bottom:20px; font-size:1.5em; height:90%; width:100%; color:rgb(145,159,159); position:relative;
+		display:table-cell; vertical-align:bottom; text-align:center; paddiPictre-bottom:20px; font-size:1.5em; height:90%; width:100%; color:rgb(145,159,159); position:relative;
 		}
 			.Pictre-home-container p input {
 			border:0; padding:0; background:transparent; font:inherit; color:inherit; text-align:center; width:100%; display:inline-block;
@@ -192,14 +192,14 @@ width:55%; max-width:480px; min-width:300px; min-height:220px; background:transp
 border-top:0 solid rgb(130,130,130);
 }
 	.Pictre-passcode-p,.Pictre-passcode-wrapper p {
-	width:100%; display:block; margin:0 0 22px 0; text-align:center; color:rgb(181,181,181); text-shadow:0 -1px 0 rgb(0,0,0);
+	width:100%; display:block; margin:0 0 22px 0; text-align:center; color:rgb(181,181,181); text-shadow:0 -1px 0 rgb(0,0,0); font-size:0.9em;
 	}
 	.Pictre-passcode-input-wrapper {
 	width:62%; position:absolute;
 	}
 		.Pictre-passcode-input {
-		background:transparent; color:rgb(54,54,54); font:inherit; text-align:center; padding:10px 0 10px 0; border:0; display:block; border:0; width:100%; margin:0; border-radius:2px;
-		border-top:1px solid rgba(105,105,105,0.3);
+		background:transparent; color:rgb(181,181,181); font:inherit; text-align:center; padding:10px 0 10px 0; border:0; display:block; border:0; width:100%; margin:0; border-radius:2px;
+		border-top:1px solid rgba(105,105,105,0.3); font-size:0.9em;
 		}
 .Pictre-upload {
 margin:0 auto 0; position:absolute; left:41%; top:30%; width:700px; height:335px; text-align:center;

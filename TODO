@@ -1,0 +1,3 @@
+WARNING!
+Edit changes on data.php file to remove "encryption" of passcodes
+Also, edit javascript to account for changes in noisegate code (interface handling on new albums with a warning overlay)
