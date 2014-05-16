@@ -7,9 +7,11 @@ $port = getenv('OPENSHIFT_MYSQL_DB_PORT');
 if(!$host && !$port) {
 	define('HOST','127.0.0.1');
 	define('PORT','41976');
+	define('ROOT',$_SERVER['DOCUMENT_ROOT'].'/../../../pictre.org/');
 } else {
 	define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
 	define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
+	define('ROOT',getenv('OPENSHIFT_DATA_DIR'));
 }
 
 include("flip.php");
@@ -57,7 +59,7 @@ class Upload {
 	private $imagePath,$thumbPath,$imageFolderPath = "images/",$thumbFolderPath = "thumbs/";
 	public $id,$pdo,$root;
 	public function __construct($pdo) {
-		$this->root = getenv('OPENSHIFT_DATA_DIR')."data/";
+		$this->root = ROOT."data/";
 		$this->pdo = $pdo;
 	}
 	public function iconize() {
@@ -364,8 +366,8 @@ class Action {
 	}
 	public function setPasscode($post) {
 		$album = $post["album"];
-		$enc = $this->encrypt($post["passcode"]);
-		$passcode = $enc["hash"];
+		// $enc = $this->encrypt($post["passcode"]);
+		$passcode = $post['passcode'];//$enc["hash"];
 		$key = $enc["key"];
 		$sql = $this->pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
 		if($sql->rowCount() > 0) {
