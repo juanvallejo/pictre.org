@@ -35,7 +35,7 @@
 			"file": "data/styles.css",
 			"settings":
 			{
-				"buffer_size": 14108,
+				"buffer_size": 14149,
 				"line_ending": "Unix"
 			}
 		},
@@ -244,6 +244,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Ng-",
 			"onexit =",
 			"catch(e",
 			"create a pass",
@@ -370,8 +371,7 @@
 			"to_string(",
 			"////--",
 			"outline(",
-			"////--",
-			"///"
+			"////--"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -379,6 +379,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Pictre-",
 			"$(window).width()",
 			"Player.out.controls.play",
 			"icon.PAUSE",
@@ -498,15 +499,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 14108,
+						"buffer_size": 14149,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								9572,
-								9572
+								7872,
+								7872
 							]
 						],
 						"settings":
@@ -517,8 +518,8 @@
 							"syntax": "Packages/CSS/CSS.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 18.0,
-						"translation.y": 2395.0,
+						"translation.x": 0.0,
+						"translation.y": 1851.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,

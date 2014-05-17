@@ -169,7 +169,13 @@
 				Pictre.board.state = a;
 				if(Pictre._settings.data.kind < 1) {
 					Pictre._settings.allowUploads = false;
-					Pictre.get.ui.passcode.put('create');
+					if(!Pictre.gallery.is.featuring) {
+						Pictre.get.ui.passcode.put('create');
+					} else {
+						Pictre.gallery.overlay.onexit(function() {
+							Pictre.get.ui.passcode.put('create');
+						});
+					}
 				} else if(Pictre._settings.data.kind == 1) {
 					Pictre.get.ui.menu.removeButton('unlock');
 					var title = 'This album is locked. Click to edit or remove images and comments.';
@@ -850,7 +856,6 @@
 							if(self.div.value == self.value) self.div.value = "";
 						});
 						Pictre.extend(this.div).on('blur',function() {
-							if(self.password) self.div.type = "text";
 							if(self.div.value == "" && b != '') self.div.value = self.value;
 						});
 						this.div.on = function(b,c) {
@@ -1395,6 +1400,10 @@
 							settings[i] = a[i];
 						}
 					}
+					if(Pictre.gallery.is.featuring && settings.locked) {
+						Pictre._storage.overlay.locked = false;
+						Pictre.gallery.overlay.exit();
+					}
 					this.div = document.createElement("div");
 					this.div.className = "Pictre-upload Pictre-warning";
 					Pictre.gallery.is.warning = true;
@@ -1896,12 +1905,6 @@
 				for(var i=0;i<a.length;i++) {
 					Pictre.create.picture(a[i]);
 				}
-				if(!Pictre._storage.pictures.length) {
-					Pictre._404.put("There doesn't seem to be anything here. Be the first to add pictures to this album!");
-					if(Pictre._settings.allowUploads) Pictre.get.ui.upload.put();
-				} else {
-					Pictre.get.hash();
-				}
 				if(Pictre.is.updating) Pictre.get.ui.notice("Updates are currently in progress... Some features may not work.");
 				else Pictre.get.ui.notice(Pictre.board.get()+" Picture Board",a.total);
 				Pictre._storage.data.total = a.total;
@@ -1929,6 +1932,12 @@
 				});
 				if(a.hasOwnProperty('kind')) {
 					Pictre.board.set.state(a.kind);
+				}
+				if(!Pictre._storage.pictures.length) {
+					Pictre._404.put("There doesn't seem to be anything here. Be the first to add pictures to this album!");
+					if(Pictre._settings.allowUploads) Pictre.get.ui.upload.put();
+				} else {
+					Pictre.get.hash();
 				}
 			}
 			Pictre._settings.data.anchor+=a.length;
