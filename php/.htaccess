@@ -1,5 +1,5 @@
 Options +FollowSymLinks
 RewriteEngine on
-RewriteCond %{REQUEST_URI} ^/(data)/
+RewriteCond %{REQUEST_URI} ^/(static)/
 RewriteRule . - [S=1] #skip the next 3 rules if the RewriteCond match
 RewriteRule ([^/]*)/?$ index.html?board=$1 [NC,L,QSA]
