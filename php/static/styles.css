@@ -8,7 +8,7 @@ body,html {
 width:100%; font:normal 16px 'Marcellus'; color:#f0f0f0; z-index:998;
 }
 body {
-background:rgb(44,47,46); font:normal 16px 'Marcellus',sans-serif; position:relative; overflow-x:hidden;
+background:rgb(16,17,16)/*rgb(44,47,46)*/; font:normal 16px 'Marcellus',sans-serif; position:relative; overflow-x:hidden;
 }
 
 #top {

@@ -1,3 +1,25 @@
+/**
+* Provided under the MIT License (c) 2014
+* See LICENSE @file for details.
+*
+* @file Pictre.js
+*
+* @author juanvallejo
+* @date 01/03/15
+*
+* Album app for interfacing with stored pictures on private cloud server.
+* http://static-pictre.rhcloud.com
+*
+* Note: @callback_params refer to parameters passed to a lambda function
+* Note: Requires a PHP server to serve 'data.php' @ ../static/php/static/data.php
+* Note: Requires the following dependencies / node.js packages for local testing:
+*
+*       - node.js       -> js server framework
+*       - npm           -> node.js package manager 
+*
+* TODO: Improve cascade-image-loading algorithm
+*/
+
 (function(window,document,Pictre){Pictre={
 	_404:{
 		div:document.createElement("div"),
