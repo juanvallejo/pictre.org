@@ -8,6 +8,8 @@ $port 			= getenv('OPENSHIFT_MYSQL_DB_PORT');
 
 if(!$host && !$port) {
 
+	echo "not in prod";
+
 	$isInProduction = false;
 
 	define('HOST','127.0.0.1');
@@ -15,6 +17,8 @@ if(!$host && !$port) {
 	define('ROOT', $_SERVER['DOCUMENT_ROOT'] . '/');
 
 } else {
+
+	echo "in prod";
 
 	define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
 	define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
