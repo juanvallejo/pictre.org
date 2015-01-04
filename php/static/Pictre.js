@@ -1175,7 +1175,7 @@
 					var header 				= document.createElement("div");
 					header.className 		= "Pictre-upload-header";
 					header.innerHTML 		= "Upload";
-					header.style.zIndex 	= "999";
+					header.style.zIndex 	= "99";
 
 					var input 				= document.createElement("input");
 					input.type 				= "file";
@@ -1204,21 +1204,17 @@
 
 					area.appendChild(shader);
 					area.appendChild(progress);
+					area.appendChild(header);
 
-					// element that triggers file uploads. Changed from 'area' element to 
-					// allow the entire screen to act as the dropzone.
-					var uploadInterfaceDropzone 		= document.createElement('div');
-					uploadInterfaceDropzone.className 	= 'Pictre-upload-uploadInterfaceDropzone';
-
-					this.div.appendChild(header);
 					this.div.appendChild(area);
 					this.div.appendChild(input);
-					this.div.appendChild(uploadInterfaceDropzone);
 
-					area.style.marginLeft = (-area.clientWidth / 2)+"px";
-					area.style.marginTop = (-area.clientHeight / 2 + 20)+"px";
+					area.style.marginLeft 	= (-area.clientWidth / 2) + 'px';
+					area.style.marginTop 	= (-area.clientHeight / 2 + 20) + 'px';
 
-					progress.style.height = (area.clientHeight)+"px";
+					header.style.top 		= (-area.clientHeight / 4 - 15) + 'px';
+
+					progress.style.height 	= (area.clientHeight) + 'px';
 					
 					if(Pictre._settings.demo.upload) {
 
@@ -1249,7 +1245,7 @@
 						})(0);
 					}
 
-					Pictre.extend(area).on('dragover',function(e) {
+					Pictre.extend(this.div).on('dragover',function(e) {
 
 						e.preventDefault();
 
@@ -1266,7 +1262,6 @@
 					Pictre.extend(shader).on('click',function(e) {
 						
 						e.stopPropagation();
-						console.log('right');
 						
 						// if the upload area is not busy, trigger click
 						// event on file input element
@@ -1276,11 +1271,12 @@
 
 					});
 
-					Pictre.extend(area).on('drop',function(e) {
+					Pictre.extend(this.div).on('drop', function(e) {
 						
 						e.preventDefault();
+						render(e.dataTransfer.files, upload);
+
 						area.style.borderColor = color.inactive;
-						render(e.dataTransfer.files,upload);
 					
 					});
 

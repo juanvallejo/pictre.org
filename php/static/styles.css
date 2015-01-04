@@ -282,14 +282,46 @@ border-top:0 solid rgb(130,130,130);
 		border-top:1px solid rgba(105,105,105,0.3); font-size:0.9em;
 		}
 .Pictre-upload {
-margin:0 auto 0; position:absolute; left:41%; top:30%; width:700px; height:335px; text-align:center;
-background:/*rgba(28,30,29,0.9)*/; border-width:/*3px 1px 1px */1px; border-style:hidden; border-color:/*rgb(162,168,168) rgb(34,38,38) rgb(34,38,38) */rgba(34,38,38,0.8); border-radius:3.5px; display:table;
+	
+	width:100%/*700px*/; 
+	height:100%/*335px*/; 
+
+	margin:0 auto 0; 
+
+	border-width:/*3px 1px 1px */1px; 
+	border-style:hidden; 
+	border-color:rgba(34,38,38,0.8); 
+	border-radius:3.5px; 
+
+	display:table;
+	position:absolute; 
+	left:0; 
+	top:0;
+
+	text-align:center;
+
 }
 	.Pictre-upload-header {
-	width:100%; min-height:10px; background:transparent/*rgb(228,230,230)*/; padding:25px 0 0 0; border-style:solid; border-width:0 0 0 0; border-color:rgb(160,168,168);
-	font-family:'Molle'; font-style:italic; font-size:1.2em; color:rgb(222,222,222)/*rgb(28,30,29)*/; text-shadow:0 1px 0 black;
-	/*box-shadow:0 2px 1px rgb(24,28,28); -moz-box-shadow:0 2px 1px rgb(24,28,28); -ms-box-shadow:0 2px 1px rgb(24,28,28); -webkit-box-shadow:0 2px 1px rgb(24,28,28); -o-box-shadow:0 2px 1px rgb(24,28,28);*/
+		
+		width:100%; 
+		min-height:10px; 
+
+		padding:25px 0 0 0; 
+
+		border-style:solid; 
+		border-width:0 0 0 0; 
+		border-color:rgb(160,168,168);
+	
+		color:rgb(222,222,222); 
+		font-family:'Molle'; 
+		font-style:italic; 
+		font-size:1.25em; 
+		text-shadow:0 1px 0 black;
+
+		position:absolute;
+
 	}
+
 	.Pictre-upload-area {
 
 		width:280px; 
@@ -307,8 +339,6 @@ background:/*rgba(28,30,29,0.9)*/; border-width:/*3px 1px 1px */1px; border-styl
 		
 		font-size:0.93em;
 		text-align:center; 
-
-		background:rgb(40,43,42); 
 
 	}
 		.Pictre-upload-area:active {
