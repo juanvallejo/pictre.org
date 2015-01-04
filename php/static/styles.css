@@ -1,11 +1,12 @@
 @import url(http://fonts.googleapis.com/css?family=Marcellus);
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
 @import url(http://fonts.googleapis.com/css?family=Molle:400italic);
 
 a {
 text-decoration:none; color:inherit;
 }
 body,html {
-width:100%; font:normal 16px 'Marcellus'; color:#f0f0f0; z-index:998;
+width:100%; font:normal 16px 'Open Sans'; color:#f0f0f0; z-index:998;
 }
 body {
 background:rgb(16,17,16)/*rgb(44,47,46)*/; font:normal 16px 'Marcellus',sans-serif; position:relative; overflow-x:hidden;
@@ -26,17 +27,19 @@ width:100%; height:50px; background:transparent/*rgba(28,30,29,1)*/; border-bott
 	}
 	#brand {
 	width:250px; padding:3.4px 0 0 0; text-align:center; margin:0 auto 0 auto; font-style:italic; font-family:'Molle'; font-size:1.7em; color:rgb(222,222,222);
-	cursor:default; display:block; vertical-align:middle; text-shadow:0 -1px 0 rgb(0,0,0); position:relative;
+	cursor:default; display:block; vertical-align:middle; position:relative;
 	}
 	#lock {
-	left:10px; background-position:-33px -3px;
+	left:10px;
 	}
 	#unlock {
-	left:10px; background-position:-82px 0;
+	left:10px;
 	}
+
 	#upload {
-	right:10px; background-position:10px -2px;
+		right:10px;
 	}
+
 #wrapper {
 width:100%; margin:0 auto 0 auto; position:relative;
 }
@@ -47,33 +50,77 @@ width:100%; margin:0 auto 0 auto; position:relative;
 	width:100%; min-height:100%; margin:60px auto 0 auto; position:absolute; top:98px; display:block;
 	}
 		#Pictre-spotlight-wrapper-comments {
-		position:absolute; width:500px; min-height:10px; display:none; border-width:1px; border-style:solid;
-		border-color:transparent transparent rgb(61,65,65) transparent;
+		position:absolute; width:500px; min-height:10px; display:none; border-width:0; border-style:solid;
+		border-color:transparent transparent transparent transparent;
 		}
 			#Pictre-spotlight-wrapper-comments .comment {
-			width:100%; min-height:45px; border-top:1px solid rgb(19,19,19); border-bottom:1px solid rgb(0,0,0); position:relative; font-size:0.95em; background:rgb(34,36,36);
+			width:100%; min-height:45px; border-top:0 solid rgb(19,19,19); position:relative; font-size:0.95em; background:transparent;
 			border-left:1px solid rgb(22,23,23); border-right:1px solid rgb(22,23,23);
 			}
 				#Pictre-spotlight-wrapper-comments .comment input {
-				width:100%; padding:0; text-align:center; font:inherit; color:inherit; margin:0; background:transparent; border:0; text-shadow:inherit;
+					width:100%; padding:0; text-align:center; font:inherit; color:inherit; margin:0; background:transparent; border:0; text-shadow:inherit;
 				}
+
 				#Pictre-spotlight-wrapper-comments .comment p {
-				width:100%; height:32px; position:relative; text-align:center; padding:20px 0 8px 0; display:block; border-top:1px solid rgb(22,23,23);
-				color:rgb(152,158,158); text-shadow:0 -1px 0 rgb(0,0,0);
-				box-shadow:inset 2px -2px 6px rgb(19,19,19); -moz-box-shadow:inset 2px -2px 6px rgb(19,19,19); -webkit-box-shadow:inset 2px -2px 6px rgb(19,19,19); -o-box-shadow:inset 2px -2px 6px rgb(19,19,19); -ms-box-shadow:inset 2px -2px 6px rgb(19,19,19);
+					
+					width:100%; 
+					height:32px; 
+
+					position:relative; 
+
+					text-align:center; 
+
+					padding:20px 0 8px 0; 
+
+					display:block; 
+
+					color:rgb(152,158,158);
+
+					border-top:1px solid rgb(22,23,23);
+
 				}
+				
 				#Pictre-spotlight-wrapper-comments .comment .author {
-				width:100%; height:17px; position:relative; text-align:center; padding:6px 0 10px 0; font-size:0.95em; text-align:center; background:rgb(52,56,55);
-				border-top:1px solid rgb(69,69,69); color:rgb(126,133,133); text-shadow:0 -1px 0 rgb(3,4,4);
+					
+					width:100%; 
+					height:17px; 
+
+					position:relative; 
+
+					padding:6px 0 10px 0; 
+
+					font-size:0.95em; 
+					text-align:center; 
+					text-shadow:0 -1px 0 rgb(3,4,4);
+					text-align:center;
+
+					background:transparent;
+					color:rgb(126,133,133);
+
 				}
+
 		#Pictre-spotlight-wrapper-pic {
-		width:191px; min-height:5px; padding:12px 12px 9px 12px; background:transparent/*rgb(34,36,36)*/; position:absolute; border-radius:1px; display:table;
-		border-width:2px 1px 1px 2px; border-style:solid; border-color:transparent/*rgb(23,24,24) rgb(23,24,24) rgb(60,64,64) rgb(23,24,24)*/; text-align:center; float:left;
-		box-shadow:inset 0 -1px 0 rgb(23,24,24); -moz-box-shadow:inset 0 -1px 0 rgb(23,24,24); -o-box-shadow:inset 0 -1px 0 rgb(23,24,24); -webkit-box-shadow:inset 0 -1px 0 rgb(23,24,24);
-		-ms-box-shadow:inset 0 -1px 0 rgb(23,24,24);
+
+			width:191px; 
+			min-height:5px; 
+
+			padding:12px 12px 9px 12px; 
+
+			float:left;
+			position:absolute; 
+			display:table;
+			
+			border-radius:1px;
+			border-width:2px 1px 1px 2px; 
+			border-style:solid; 
+			border-color:transparent; 
+
+			text-align:center;
+
 		}
+
 			#Pictre-spotlight-wrapper-pic img {
-			border-radius:3.5px; box-shadow:1px 1px 6px rgb(18,18,18);
+			border-radius:3.5px; box-shadow:1px 1px 6px rgb(28,30,29);
 			}
 			#Pictre-spotlight-wrapper-pic p {
 			display:table-cell; text-align:center; vertical-align:middle;
@@ -83,12 +130,12 @@ width:100%; margin:0 auto 0 auto; position:relative;
 font-weight:normal; font-style:italic; font-family:'Molle'; margin-right:4px;
 }
 .Pictre-notice {
-width:100%; display:block; margin:0 auto 0 auto; position:absolute; min-height:18px; padding:11px 0 7px 0; text-align:center; top:55px; left:0;
-background:transparent/*rgb(6,54,92)*/; border-bottom:0px solid rgba(38,38,38,0.9)/*rgba(8,68,116,0.6)*/; font-size:0.9em; color:rgb(126,133,133); text-shadow:0 -1px 0 rgb(3,4,4);
+width:100%; display:block; margin:0 auto 0 auto; position:absolute; min-height:18px; padding:11px 0 7px 0; text-align:center; top:54px; left:0;
+background:transparent/*rgb(6,54,92)*/; border-bottom:0px solid rgba(38,38,38,0.9)/*rgba(8,68,116,0.6)*/; font:400 0.9em 'Open Sans'; color:rgb(126,133,133); 
 box-shadow:0 0 0 rgba(3,26,24,0.8); -moz-box-shadow:0 0 0 rgba(3,26,24,0.8); -o-box-shadow:0 0 0 rgba(3,26,24,0.8); -webkit-box-shadow:0 0 0 rgba(3,26,24,0.8); -ms-box-shadow:0 0 0 rgba(3,26,24,0.8);
 }
 	.Pictre-notice-extra {
-	max-width:52px; position:absolute; right:30px; text-align:right; top:12px; overflow-x:hidden;
+	max-width:52px; position:absolute; right:30px; text-align:right; top:11px; overflow-x:hidden;
 	}
 .Pictre-home-wrapper {
 width:65%; height:30%; margin:0 auto 0; position:absolute; left:0; top:10%; text-align:center; min-height:240px; z-index:997;
@@ -122,20 +169,53 @@ width:45%; height:1px; background:rgb(31,31,31)/*rgb(44,44,44)*/; position:absol
     box-shadow:inset 0 1px 5px rgb(57,57,57) -moz-box-shadow:inset 0 1px 5px rgb(57,57,57) -o-box-shadow:inset 0 1px 5px rgb(57,57,57) -ms-box-shadow:inset 0 1px 5px rgb(57,57,57) -webkit-box-shadow:inset 0 1px 5px rgb(57,57,57);
 	}
 .Pictre-pic {
-width:190px; min-height:5px; padding:12px 10px 9px 10px; background:transparent/*rgb(34,36,36)*/; margin:11px; position:absolute; border-radius:2.5px;
-border-width:2px 1px 1px 2px; border-style:solid; border-color:transparent/*rgb(23,24,24)*/; text-align:center; float:left;
-box-shadow:inset 1px 1px 10px transparent; -moz-box-shadow:inset 1px 1px 10px transparent; -o-box-shadow:inset 1px 1px 10px transparent; -webkit-box-shadow:inset 1px 1px 10px transparent/*rgba(23,24,24,0.8)*/;
--ms-box-shadow:inset 1px 1px 10px transparent;
+	
+	width:190px;
+	min-height:5px; 
+
+	padding:12px 10px 9px 10px; 
+	margin:11px; 
+	
+	background:transparent/*rgb(34,36,36)*/; 
+	
+	position:absolute;
+	
+	border-radius:2.5px;
+	border-width:2px 1px 1px 2px; 
+	border-style:solid; 
+	border-color:transparent/*rgb(23,24,24)*/; 
+
+	text-align:center; float:left;
+	
+	box-shadow:inset 1px 1px 10px transparent; 
+	-moz-box-shadow:inset 1px 1px 10px transparent; 
+	-o-box-shadow:inset 1px 1px 10px transparent; 
+	-webkit-box-shadow:inset 1px 1px 10px transparent/*rgba(23,24,24,0.8)*/;
+	-ms-box-shadow:inset 1px 1px 10px transparent;
+
 }
 	.Pictre-pic img {
-	border-radius:3.5px; box-shadow:1px 1px 6px rgb(18,18,18);
-	max-width:190px; margin:0;
+
+		border-radius:3.5px;
+		box-shadow:1px 1px 6px rgba(5,5,5,0.1);
+		max-width:190px; margin:0;
+
 	}
 		.Pictre-pic img:active {
-		border:1px solid rgba(0,0,0,0.2);
+			border:1px solid rgba(0,0,0,0.2);
 		}
 .Pictre-splash-wrapper {
-position:fixed; top:0; left:0; width:100%; height:100%; background:url(i/splash.jpg); background-size:cover;
+
+	position:fixed; 
+	top:0; 
+	left:0; 
+
+	width:100%; 
+	height:100%; 
+
+	background:url(i/splash.jpg); 
+	background-size:cover;
+
 }
 .Pictre-overlay {
 position:fixed; top:0; right:0; left:0; bottom:0; width:100%; height:100%; background:rgba(22,24,24,0.9); overflow-x:auto; overflow-y:auto; z-index:999; display:none;
@@ -211,8 +291,25 @@ background:/*rgba(28,30,29,0.9)*/; border-width:/*3px 1px 1px */1px; border-styl
 	/*box-shadow:0 2px 1px rgb(24,28,28); -moz-box-shadow:0 2px 1px rgb(24,28,28); -ms-box-shadow:0 2px 1px rgb(24,28,28); -webkit-box-shadow:0 2px 1px rgb(24,28,28); -o-box-shadow:0 2px 1px rgb(24,28,28);*/
 	}
 	.Pictre-upload-area {
-	width:280px; height:230px; border-top:1px solid rgba(105,105,105,0.3); border-bottom:1px solid rgba(105,105,105,0.3); position:absolute; top:50%; left:50%; cursor:default;
-	text-align:center; background:/*rgb(40,43,42)*/; /*overflow-x:hidden;*/ z-index:998;
+
+		width:280px; 
+		height:230px; 
+
+		border-top:1px solid rgba(105,105,105,0.3); 
+
+		position:absolute; 
+		z-index:99;
+		
+		top:50%; 
+		left:50%; 
+
+		cursor:default;
+		
+		font-size:0.93em;
+		text-align:center; 
+
+		background:rgb(40,43,42); 
+
 	}
 		.Pictre-upload-area:active {
 		border-color:rgba(222,222,222,0.3);
@@ -250,10 +347,14 @@ height:140px;
 width:100%; height:100px;
 }
 .top-button {
-width:53px; height:50px; background:url(i/Pictre-sprite.png) no-repeat 10px center; position:absolute; top:0; margin:0 7px 0 7px; opacity:0.75;
+width:53px; height:50px; /*background:url(i/Pictre-sprite.png) no-repeat 10px center;*/ position:absolute; top:0; margin:0 7px 0 7px; opacity:1.0;
 }
-	.top-button:hover {
-	opacity:1.0;
+	.top-button:active {
+	opacity:0.8;
+	}
+
+	.top-button span {
+		padding-top:10px; width:100%; height:100%; text-align:center;
 	}
 .vert-shader-1,.vert-shader-2 {
 width:1px; height:100%; position:absolute; background:rgb(47,52,50); top:0;
