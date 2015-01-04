@@ -690,7 +690,9 @@
 				}
 			},
 			imageOptions:{
+
 				div:null,
+				
 				hide:function() {
 					if(this.div) {
 						this.is.hidden = true;
@@ -703,57 +705,103 @@
 					hidden:false
 				},
 				options:{
-					Delete:function() {
-						Pictre.terminal.parse({
-							id:Pictre.gallery.overlay.img.data.dbid,
-							src:Pictre.gallery.overlay.img.data.src,
-							thumb:Pictre.gallery.overlay.img.data.thumb,
-							command:"/Pictre delete"
-						},function(log) {
-							if(log.error) {
-								//what to do after deletion...
-							}
-						});
+
+					delete: {
+
+						optionIcon 	: 'fa-trash',
+						optionColor	: 'rgb(135,0,0)',
+
+						onclick: function() {
+
+							Pictre.terminal.parse({
+
+								id 		: Pictre.gallery.overlay.img.data.dbid,
+								src 	: Pictre.gallery.overlay.img.data.src,
+								thumb 	: Pictre.gallery.overlay.img.data.thumb,
+								command : "/Pictre delete"
+
+							}, function(data) {
+
+								if(data.error) {
+									//what to do after deletion...
+								}
+
+							});
+						}
+
 					}
+
 				},
+
 				put:function(a) {
+
 					if(!this.is.disabled) {
+
 						var self = this;
+
 						if(this.div) {
+
 							this.is.hidden = false;
 							this.div.style.display = "block";
+
 						} else {
-							this.is.active = false;
-							this.div = document.createElement("div");
-							this.div.className = "Pictre-overlay-pic-options";
-							this.div.optionsWrapper = document.createElement("div");
-							this.div.optionsWrapper.className = "Pictre-overlay-pic-options-wrapper";
-							this.div.optionsWrapper.innerWrapper = document.createElement("ul");
+
+							this.is.active 							= false;
+
+							this.div 								= document.createElement("div");
+							this.div.className 						= "Pictre-overlay-pic-options";
+							this.div.innerHTML 						= '<span class="fa fa-bars fa-2x"></span>';
+
+							this.div.optionsWrapper 				= document.createElement("div");
+							this.div.optionsWrapper.className 		= "Pictre-overlay-pic-options-wrapper";
+
+							this.div.optionsWrapper.innerWrapper 	= document.createElement("ul");
+
 							for(var i in this.options) {
-								var li = document.createElement("li");
-									li.key = i;
-									li.innerHTML = i;
-								this.div.optionsWrapper.innerWrapper.appendChild(li);
-								if(this.options[i]) {
-									Pictre.extend(li).on('click',function() {
-										self.options[this.key].call(self);
-									});
+
+								var li 				= document.createElement("li");
+								li.key 				= i;
+								li.innerHTML 		= '<span class="fa ' + (self.options[i].optionIcon || 'fa-wrench') + '"></span> ' + i;
+
+								if(self.options[i].optionColor) {
+									li.style.color 	= self.options[i].optionColor;
 								}
+
+								this.div.optionsWrapper.innerWrapper.appendChild(li);
+								
+								if(this.options[i]) {
+									
+									Pictre.extend(li).on('click', function() {
+										self.options[this.key].onclick.call(self);
+									});
+								
+								}
+							
 							}
+							
 							Pictre.extend(this.div.optionsWrapper).on('click',function(e) {
 								e.stopPropagation();
 							});
-							Pictre.extend(this.div).on('click',function(e) {
+
+							Pictre.extend(this.div).on('click', function(e) {
+
 								e.stopPropagation();
+
 								if(self.is.active) {
-									self.is.active = false;
-									this.optionsWrapper.style.display = "none";
+
+									self.is.active			 			= false;
+									this.optionsWrapper.style.display 	= "none";
+
 								} else {
-									self.is.active = true;
-									this.optionsWrapper.style.display = "block";
+
+									self.is.active 						= true;
+									this.optionsWrapper.style.display 	= "block";
+
 									self.position(a);
+
 								}
 							});
+
 							this.div.optionsWrapper.appendChild(this.div.optionsWrapper.innerWrapper);
 							a.appendChild(this.div);
 							a.appendChild(this.div.optionsWrapper);
@@ -1736,53 +1784,76 @@
 				return Pictre.gallery.overlay.div;
 			},
 			showImage:function(b) {
-				if(b) Pictre.gallery.overlay.wrapper = b;
-				if(Pictre.gallery.overlay.div) return false;
-				else {
-					Pictre.gallery.overlay.div = document.createElement("div");
-					Pictre.gallery.overlay.div.className = "Pictre-overlay";
-					Pictre.gallery.overlay.div.style.display = "none";
-					Pictre.gallery.overlay.div.tabIndex = "1";
+
+				// cancel action if there is already an interface currently
+				// using the gallery overlay
+				if(Pictre.gallery.overlay.div) {
+					return false;
 				}
-				var loader = document.createElement("div");
-					loader.className = "Pictre-loader";
-					loader.appended = false;
-				Pictre.gallery.overlay.comments = document.createElement("div");
-					Pictre.gallery.overlay.comments.appended = false;
-					Pictre.gallery.overlay.comments.className = "Pictre-comments-wrapper";
-				Pictre.gallery.overlay.img = new Image();
-					Pictre.gallery.overlay.img.src = b.data.src;
-					Pictre.gallery.overlay.img.data = b.data;
-					Pictre.get.ui.imageOptions.is.disabled = Pictre.board.state > 1 ? false : true;
-					Pictre.extend(b).on('mouseover',function() {
-						Pictre.get.ui.imageOptions.put(this);
-					});
-					Pictre.extend(b).on('mouseout',function() {
-						if(!Pictre.get.ui.imageOptions.is.active) Pictre.get.ui.imageOptions.hide();
-					});
-					Pictre.extend(Pictre.gallery.overlay.img).on('click',function(e) {
+
+				if(b) {
+					Pictre.gallery.overlay.wrapper = b;
+				}
+
+				Pictre.gallery.overlay.div 					= document.createElement("div");
+				Pictre.gallery.overlay.div.className 		= "Pictre-overlay";
+				Pictre.gallery.overlay.div.style.display 	= "none";
+				Pictre.gallery.overlay.div.tabIndex 		= "1";
+
+				var loader 			= document.createElement("div");
+				loader.className 	= "Pictre-loader";
+				loader.appended 	= false;
+				
+				Pictre.gallery.overlay.comments 			= document.createElement("div");
+				Pictre.gallery.overlay.comments.appended 	= false;
+				Pictre.gallery.overlay.comments.className 	= "Pictre-comments-wrapper";
+			
+				Pictre.gallery.overlay.img 				= new Image();
+				Pictre.gallery.overlay.img.src 			= b.data.src;
+				Pictre.gallery.overlay.img.data 		= b.data;
+				Pictre.get.ui.imageOptions.is.disabled 	= Pictre.board.state > 1 ? false : true;
+
+				Pictre.get.ui.imageOptions.put(b);
+					
+				Pictre.extend(Pictre.gallery.overlay.img).on('click',function(e) {
+
+					e.stopPropagation();
+					
+					if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
+						Pictre.gallery.overlay.replaceImage();
+					} else {
+						Pictre.gallery.overlay.exit();
+					}
+
+				});
+
+				Pictre.extend(Pictre.gallery.overlay.div).on('keydown',function(e) {
+					
+					if(e.keyCode == 39 || e.keyCode == 32 || e.keyCode == 38) {
+
 						e.stopPropagation();
+						e.preventDefault();
+						
 						if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
 							Pictre.gallery.overlay.replaceImage();
-						} else {
-							Pictre.gallery.overlay.exit();
 						}
-					});
-					Pictre.extend(Pictre.gallery.overlay.div).on('keydown',function(e) {
-						if(e.keyCode == 39 || e.keyCode == 32 || e.keyCode == 38) {
-							e.stopPropagation();
-							e.preventDefault();
-							if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
-								Pictre.gallery.overlay.replaceImage();
-							}
-						} else if(e.keyCode == 37 || e.keyCode == 40) {
-							e.stopPropagation();
-							e.preventDefault();
-							if(Pictre._storage.pictures[Pictre._storage.overlay.iterator-1]) {
-								Pictre.gallery.overlay.replaceImage({previous:true});
-							}
+
+					} else if(e.keyCode == 37 || e.keyCode == 40) {
+						
+						e.stopPropagation();
+						e.preventDefault();
+						
+						if(Pictre._storage.pictures[Pictre._storage.overlay.iterator-1]) {
+							
+							Pictre.gallery.overlay.replaceImage({
+								previous:true
+							});
+
 						}
-					});
+
+					}
+
+				});
 
 					Pictre.extend(Pictre.gallery.overlay.img).on('load',function() {
 						var offset = Pictre.gallery.overlay.img.width > 350 ? ((Pictre._settings.picture.maxWidth-Pictre.gallery.overlay.img.width)/2) : 200;
