@@ -1,20 +1,29 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
-$host = getenv('OPENSHIFT_MYSQL_DB_HOST');
-$port = getenv('OPENSHIFT_MYSQL_DB_PORT');
+$isInProduction = true;
+
+$host 			= getenv('OPENSHIFT_MYSQL_DB_HOST');
+$port 			= getenv('OPENSHIFT_MYSQL_DB_PORT');
 
 if(!$host && !$port) {
+
+	$isInProduction = false;
+
 	define('HOST','127.0.0.1');
 	define('PORT','41976');
-	define('ROOT',$_SERVER['DOCUMENT_ROOT'].'/../../../pictre.org/');
+	define('ROOT', $_SERVER['DOCUMENT_ROOT'] . '/');
+
 } else {
+
 	define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
 	define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
 	define('ROOT',getenv('OPENSHIFT_DATA_DIR'));
+
 }
 
 include("flip.php");
+
 class ImgResizer {
     private $originalFile = '';
     public function __construct($originalFile = '') {
@@ -55,19 +64,48 @@ class ImgResizer {
     }
 }
 class Upload {
-	private $completed,$error,$maxWidth=800,$file,$exif,$album,$name,$json = "No exif data found";
-	private $imagePath,$thumbPath,$imageFolderPath = "images/",$thumbFolderPath = "thumbs/";
-	public $id,$pdo,$root;
+
+	private $completed;
+	private $error;
+	private $file;
+	private $exif;
+	private $album;
+	private $name;
+	private $imagePath;
+	private $thumbPath;
+
+	private $maxWidth 			= 800;
+
+	private $json 				= "No exif data found";
+	private $imageFolderPath 	= "images/";
+	private $thumbFolderPath 	= "thumbs/";
+
+	public $root 				= ROOT;
+
+	public $id;
+	public $pdo;
+	
 	public function __construct($pdo) {
-		$this->root = ROOT."data/";
+
 		$this->pdo = $pdo;
+
+		if($isInProduction) {
+			$this->root = ROOT."data/";
+		}
+
 	}
+
 	public function iconize() {
 		$size = getimagesize($this->imagePath);
 		$width = $size[0] >= 191 ? 191 : $size[0];
 		$img = new ImgResizer($this->imagePath);
-		$img->resize($width,$this->thumbPath);
-		$this->store();
+
+		$img->resize($width, $this->thumbPath);
+
+		// only store image data in database if we are in production environment
+		if($isInProduction) {
+			$this->store();
+		}
 	}
 	public function flip() {
 		if($data = json_decode(stripslashes($this->exif),true)) {	
@@ -85,37 +123,58 @@ class Upload {
 			return true;
 		}
 	}
-	public function load($file,$exf,$album) {
-		$this->file = $file;
-		$this->exif = $exf;
-		$this->album = $album;
-		$this->imagePath = $this->root.$this->imageFolderPath.$this->file["name"];
-		$this->thumbPath = $this->root.$this->thumbFolderPath.$this->file["name"];
+
+	public function load($file, $exf, $album) {
+
+		$this->file 		= $file;
+		$this->exif 		= $exf;
+		$this->album 		= $album;
+		$this->imagePath 	= $this->root . $this->imageFolderPath.$this->file["name"];
+		$this->thumbPath 	= $this->root . $this->thumbFolderPath.$this->file["name"];
+
 		if($this->move()) {
+
 			if($this->flip()) {
-				$size = getimagesize($this->imagePath);
-				$this->album = $album;
+
+				$size 			= getimagesize($this->imagePath);
+				$this->album 	= $album;
+
 				if($size[0] > $this->maxWidth) {
 					$this->resize();
 				} else {
 					$this->iconize();
 				}
-			} else return false;
-		} else return false;
-	}
-	public function move() {
-		$this->name = $this->file["name"];
-		if(file_exists($this->imagePath) || preg_match("/[^a-z0-9\ \-\_\+]/",$this->name)) {
-			$ext = explode(".",$this->name);
-			$ext = $ext[count($ext)-1];
-			$this->name = time().$this->id.".".$ext;
-			$this->imagePath = $this->root.$this->imageFolderPath.$this->name;
-			$this->thumbPath = $this->root.$this->thumbFolderPath.$this->name;
+
+			} else {
+				return false;
+			}
+
+		} else {
+			return false;
 		}
-		if(move_uploaded_file($this->file["tmp_name"],$this->imagePath)) {
+
+	}
+
+	public function move() {
+
+		$this->name = $this->file["name"];
+
+		if(file_exists($this->imagePath) || preg_match("/[^a-z0-9\ \-\_\+]/", $this->name)) {
+
+			$ext 				= explode(".",$this->name);
+			$ext 				= $ext[count($ext)-1];
+
+			$this->name = time() . $this->id . '.' . $ext;
+
+			$this->imagePath 	= $this->root.$this->imageFolderPath . $this->name;
+			$this->thumbPath 	= $this->root.$this->thumbFolderPath . $this->name;
+
+		}
+
+		if(move_uploaded_file($this->file["tmp_name"], $this->imagePath)) {
 			return true;
 		} else {
-			die("Unable to move file ".$this->file["name"]);
+			die("Unable to move file " . $this->file["name"]);
 		}
 	}
 	public function resize() {
@@ -411,16 +470,26 @@ try {
 }
 
 if(isset($_FILES) && count($_FILES) > 0) {
+
 	$up = array();
 	$n = count($_FILES);
+
 	for($i=0;$i<$n;$i++) {
 		$up[$i] = new Upload($pdo);
 		$up[$i]->id = $i;
 		$up[$i]->load($_FILES[$i],$_POST["exif".$i],$_POST["album".$i]);
 	}
+
+	if(!$isInProduction) {
+
+		echo "success";
+		return false;
+	}
+
 	$album = $_POST["board"];
 	$time = time();
 	$query = $pdo->query("SELECT id FROM `albums` WHERE name = '$album'");
+
 	if($query->rowCount() > 0) {
 		try {
 			$query = $pdo->query("UPDATE `albums` SET timestamp = '$time' WHERE name = '$album'");
@@ -435,11 +504,13 @@ if(isset($_FILES) && count($_FILES) > 0) {
 			$q = false;
 		}
 	}
+
 	if($q) {
 		echo "success";
 	} else {
 		die("There was an error processing your request.");
 	}
+
 } elseif(isset($_POST)) {
 	//use $HTTP_RAW_POST_DATA for IE
 	if($_POST["type"] == "store_comment") {
@@ -481,7 +552,9 @@ if(isset($_FILES) && count($_FILES) > 0) {
 			echo "username -> ".getenv('OPENSHIFT_MYSQL_DB_USERNAME')."</ br>";
 			echo "port -> ".getenv('OPENSHIFT_MYSQL_DB_PORT')."<br />";
 			die("host -> ".getenv('OPENSHIFT_MYSQL_DB_HOST'));
-		} else die("NO_DATA");
+		} else {
+			die("NO_DATA");
+		}
 	}
 } else {
 	die("NO_DATA_SENT");
