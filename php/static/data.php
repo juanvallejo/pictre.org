@@ -485,8 +485,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 
 	if(!$isInProduction) {
 
-		echo "success";
-		return false;
+		die("success");
 	}
 
 	$album = $_POST["board"];
