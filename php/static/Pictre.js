@@ -533,7 +533,9 @@
 					});
 				}
 			} else {
+
 				var xhr = new XMLHttpRequest();
+
 				try {
 					xhr.open("POST",Pictre._settings.cloud.address+'data.php',true);
 				} catch(e) {
@@ -546,22 +548,31 @@
 				xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
 				xhr.send("type=get_data&request="+settings.from+where+"&anchor="+settings.anchor+album+"&limit="+settings.limit);
 				Pictre.extend(xhr).on('readystatechange',function() {
+
 					if(xhr.readyState == 4 && xhr.status == 200) {
+
 						try {
 							self._data = JSON.parse(xhr.responseText);
 							if(typeof b == "function") b.call(Pictre,self._data);
 						} catch(e) {
+
 							console.log(e);
 							console.log(xhr.responseText);
-							var message = 'Pictre is down due to server maintenance and will resume shortly.';
+
+							var message = 'Pictre is down for server maintenance. Service will resume shortly.';
+
 							Pictre.get.ui.notice('Pictre is unable to load album data at this moment.');
 							Pictre.get.ui.warning.put({
-								body:message,
-								header:'Updates in progress!',
-								icon:null,
-								locked:true
+
+								body 	: message,
+								header 	: 'Updates in progress!',
+								icon 	: null,
+								locked 	: true
+
 							});
+
 						}
+
 					}
 				});
 			}
@@ -1617,46 +1628,65 @@
 					this.div = null;
 				}
 			},
+
 			warning:{
+
 				div:null,
 				response:null,
-				put:function(a) {
+
+				put: function(a) {
+
 					var self = this;
 					var settings = {
+
 						body:'An error has occurred, don\'t worry though, it\'s not your fault!',
 						dropzone:false,
 						header:'Hey!',
 						icon:null,
 						locked:false,
 						style:true
+
 					};
+
 					if(a) {
+
 						for(var i in a) {
 							settings[i] = a[i];
 						}
+
 					}
+
 					if(Pictre.gallery.is.featuring && settings.locked) {
 						Pictre._storage.overlay.locked = false;
 						Pictre.gallery.overlay.exit();
 					}
+
 					this.div = document.createElement("div");
 					this.div.className = "Pictre-upload Pictre-warning";
+
 					Pictre.gallery.is.warning = true;
+
 					Pictre.extend(Pictre.gallery.overlay.put().appendChild(this.div)).on('click',function(e) {
 						e.stopPropagation();
 					});
+
 					this.position();
+
 					Pictre.events.on('resize',function() {
-							self.position();
+						self.position();
 					});
+
 					var header = document.createElement("div");
-						header.className = "Pictre-upload-header";
-						header.innerHTML = settings.header;
-						header.style.zIndex = "999";
+					header.className = "Pictre-upload-header";
+					header.innerHTML = settings.header;
+					header.style.zIndex = "999";
+
 					var p = document.createElement("p");
-						p.className = "Pictre-warning-p";
-						p.innerHTML = settings.body || "Untitled text";
+					p.className = "Pictre-warning-p";
+					p.innerHTML = settings.body || "Untitled text";
+
 					this.div.appendChild(header);
+					
 					if(settings.dropzone) {
 						var shader = document.createElement("div");
 							shader.className = "Pictre-upload-area-shader";
@@ -1668,47 +1698,67 @@
 							area.style.marginLeft = (-area.clientWidth / 2)+"px";
 							area.style.marginTop = (-area.clientHeight / 2 + 20)+"px";
 					} else {
+						// not upload interface, warning ui instead
 						this.div.appendChild(p);
-						p.style.marginTop = ((this.div.clientHeight-header.clientHeight) / 2 - (p.clientHeight/2))+"px";
+						p.style.marginTop = ((this.div.clientHeight-header.clientHeight) / 2 - (p.clientHeight/2)) + "px";
+
+						header.style.top = (-p.clientHeight) + 'px';
 					}
+
 					if(settings.icon) {
+
 						var icon = document.createElement("img");
-							icon.src = settings.icon;
-							icon.style.display = "block";
-							icon.style.margin = "20px auto 0 auto";
-							p.appendChild(icon);
+						icon.src = settings.icon;
+						icon.style.display = "block";
+						icon.style.margin = "20px auto 0 auto";
+						
+						p.appendChild(icon);
+
 					}
+
 					if(settings.locked) {
 						Pictre._storage.overlay.locked = true;
 					}
+
 					if(typeof this.onclick == 'function') {
+
 						if(settings.dropzone) {
+
 							Pictre.extend(area).on('click',function() {
 								self.onclick();
 							});
+
 						} else {
+
 							Pictre.extend(this.div).on('click',function() {
 								self.onclick();
 							});
+
 						}
+
 					}
 				},
+
 				onclick:null,
+
 				position:function() {
 					if(this.div) {
 						this.div.style.left = Math.max($(window).width()/2 - (this.div.clientWidth/2),0)+"px";
 						this.div.style.top = Math.max(($(window).height()/2 - (this.div.clientHeight/2)),0)+"px";
 					}
 				},
+
 				remove:function() {
 					Pictre.gallery.is.warning = false;
 					Pictre.gallery.overlay.exit();
 					this.div.parentNode.removeChild(this.div);
 					this.div = null;
 				}
+
 			}
 		}
 	},
+
 	gallery:{
 		feature:function(a) {
 			Pictre.gallery.is.featuring = true;
