@@ -161,7 +161,7 @@ class Upload {
 
 		if(file_exists($this->imagePath) || preg_match("/[^a-z0-9\ \-\_\+]/", $this->name)) {
 
-			$ext 				= explode(".",$this->name);
+			$ext 				= explode(".", $this->name);
 			$ext 				= $ext[count($ext)-1];
 
 			$this->name = time() . $this->id . '.' . $ext;
@@ -174,6 +174,8 @@ class Upload {
 		if(move_uploaded_file($this->file["tmp_name"], $this->imagePath)) {
 			return true;
 		} else {
+			if($isInProduction) echo "environment in production";
+			echo "ROOT -> " . $this->root;
 			die("Unable to move file " . $this->file["name"]);
 		}
 	}
