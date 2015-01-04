@@ -174,9 +174,8 @@ class Upload {
 		if(move_uploaded_file($this->file["tmp_name"], $this->imagePath)) {
 			return true;
 		} else {
-			if($isInProduction) echo "environment in production";
-			else echo "Not in production";
-			echo "ROOT -> " . $this->root;
+			
+			echo "ROOT -> " . $this->imagePath;
 			die("Unable to move file " . $this->file["name"]);
 		}
 	}
@@ -480,7 +479,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 	for($i=0;$i<$n;$i++) {
 		$up[$i] = new Upload($pdo);
 		$up[$i]->id = $i;
-		$up[$i]->load($_FILES[$i],$_POST["exif".$i],$_POST["album".$i]);
+		$up[$i]->load($_FILES[$i], $_POST["exif" . $i], $_POST["album" . $i]);
 	}
 
 	if(!$isInProduction) {
