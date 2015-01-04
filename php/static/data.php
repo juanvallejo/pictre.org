@@ -90,7 +90,7 @@ class Upload {
 		$this->pdo = $pdo;
 
 		if($isInProduction) {
-			$this->root = ROOT."data/";
+			$this->root = ROOT . "data/data/";
 		}
 
 	}
@@ -108,20 +108,29 @@ class Upload {
 		}
 	}
 	public function flip() {
-		if($data = json_decode(stripslashes($this->exif),true)) {	
+
+		if($data = json_decode(stripslashes($this->exif), true)) {
+
 			if(array_key_exists('Orientation',$data)) {
+
 				if(fix_orientation($this->imagePath,$data,$this->imagePath)) {
+
 					$this->json = json_encode($this->exif,JSON_FORCE_OBJECT);
+
 					return true;
+
 				} else {
 					die("An error occurred adjusting an image's orientation.");
 				}
+
 			} else {
 				return true;
 			}
+
 		} else {
 			return true;
 		}
+
 	}
 
 	public function load($file, $exf, $album) {
@@ -129,8 +138,8 @@ class Upload {
 		$this->file 		= $file;
 		$this->exif 		= $exf;
 		$this->album 		= $album;
-		$this->imagePath 	= $this->root . $this->imageFolderPath.$this->file["name"];
-		$this->thumbPath 	= $this->root . $this->thumbFolderPath.$this->file["name"];
+		$this->imagePath 	= $this->root . $this->imageFolderPath . $this->file["name"];
+		$this->thumbPath 	= $this->root . $this->thumbFolderPath . $this->file["name"];
 
 		if($this->move()) {
 
@@ -174,7 +183,7 @@ class Upload {
 		if(move_uploaded_file($this->file["tmp_name"], $this->imagePath)) {
 			return true;
 		} else {
-			
+
 			echo "ROOT -> " . $this->imagePath;
 			die("Unable to move file " . $this->file["name"]);
 		}
