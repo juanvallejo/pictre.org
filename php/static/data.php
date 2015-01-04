@@ -1,24 +1,22 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
-$isInProduction = true;
-
 $host 			= getenv('OPENSHIFT_MYSQL_DB_HOST');
 $port 			= getenv('OPENSHIFT_MYSQL_DB_PORT');
 
 if(!$host && !$port) {
 
-	$isInProduction = false;
-
-	define('HOST', '127.0.0.1');
-	define('PORT', '41976');
-	define('ROOT', $_SERVER['DOCUMENT_ROOT'] . '/');
+	define('HOST'			, '127.0.0.1');
+	define('PORT'			, '41976');
+	define('ROOT'			, $_SERVER['DOCUMENT_ROOT'] . '/');
+	define('IN_PRODUCTION'	, false);
 
 } else {
 
-	define('HOST',getenv('OPENSHIFT_MYSQL_DB_HOST'));
-	define('PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));
-	define('ROOT',getenv('OPENSHIFT_DATA_DIR'));
+	define('HOST'			, getenv('OPENSHIFT_MYSQL_DB_HOST'));
+	define('PORT'			, getenv('OPENSHIFT_MYSQL_DB_PORT'));
+	define('ROOT'			, getenv('OPENSHIFT_DATA_DIR'));
+	define('IN_PRODUCTION'	, true);
 
 }
 
@@ -63,6 +61,7 @@ class ImgResizer {
     	}
     }
 }
+
 class Upload {
 
 	private $completed;
@@ -89,8 +88,8 @@ class Upload {
 
 		$this->pdo = $pdo;
 
-		if($isInProduction) {
-			$this->root = ROOT . "data/data/";
+		if(IN_PRODUCTION) {
+			$this->root = ROOT . "data/";
 		}
 
 	}
@@ -103,7 +102,7 @@ class Upload {
 		$img->resize($width, $this->thumbPath);
 
 		// only store image data in database if we are in production environment
-		if($isInProduction) {
+		if(IN_PRODUCTION) {
 			$this->store();
 		}
 	}
@@ -491,7 +490,7 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$up[$i]->load($_FILES[$i], $_POST["exif" . $i], $_POST["album" . $i]);
 	}
 
-	if(!$isInProduction) {
+	if(!IN_PRODUCTION) {
 
 		die("success");
 	}
