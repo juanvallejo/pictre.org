@@ -175,6 +175,7 @@ class Upload {
 			return true;
 		} else {
 			if($isInProduction) echo "environment in production";
+			else echo "Not in production";
 			echo "ROOT -> " . $this->root;
 			die("Unable to move file " . $this->file["name"]);
 		}
