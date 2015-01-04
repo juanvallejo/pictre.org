@@ -353,7 +353,7 @@ border-top:0 solid rgb(130,130,130);
 			width:100%; padding:0 10px 0 10px; display:table-cell; vertical-align:middle; font-size:0.9em; color:inherit; word-wrap:break-word; z-index:999;
 			}
 		.Pictre-upload-area-progress {
-		position:absolute; left:0; top:-1px; width:0; border-top-width:1px; border-bottom-width:1px; border-style:solid; border-color:rgb(66,29,77); z-index:999;
+		position:absolute; left:0; top:-1px; width:0; border-top-width:1px; border-bottom-width:0; border-style:solid; border-color:rgb(66,29,77); z-index:999;
 		}
 .Pictre-warning {
 height:140px;
