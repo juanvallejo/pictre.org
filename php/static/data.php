@@ -183,7 +183,6 @@ class Upload {
 			return true;
 		} else {
 
-			echo "ROOT -> " . $this->imagePath;
 			die("Unable to move file " . $this->file["name"]);
 		}
 	}
@@ -384,6 +383,7 @@ class Action {
 		}
 	}
 	public function encrypt($a) {
+
 		$menu = "aerstuvfawxygzABCDElfgmhijklmnehzbxoapqxFGHsgIrJWdlXkYZk1j2i34567KLMNOcPQRSTUV89bcd";
 		$menuArr = str_split($menu);
 		$arr = str_split($a);
@@ -472,11 +472,15 @@ class Action {
 }
 
 try {
-	$dsn = 'mysql:dbname=static;host='.HOST.';port='.PORT;
+
+	$dsn = 'mysql:dbname=static;host=' . HOST . ';port=' . PORT;
 	$pdo = new PDO($dsn,'adminHhI41YY','i4JF6GlABkqW');
+
 } catch(Exception $e) {
+	
 	var_dump($e);
 	die();
+
 }
 
 if(isset($_FILES) && count($_FILES) > 0) {
