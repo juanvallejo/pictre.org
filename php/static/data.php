@@ -22,7 +22,7 @@ if(!$host && !$port) {
 
 }
 
-echo $isInProduction ? "IS IN PRODUCTION" ? "IS NOT IN PRODUCTION";
+echo $isInProduction ? "IS IN PRODUCTION" : "IS NOT IN PRODUCTION";
 
 include("flip.php");
 
