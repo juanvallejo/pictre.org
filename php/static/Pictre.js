@@ -1769,7 +1769,7 @@
 				pic.style.minWidth = Pictre._settings.picture.maxWidth+"px";
 				pic.style.maxWidth = Pictre._settings.picture.maxWidth+"px";
 				pic.style.width = Pictre._settings.picture.maxWidth+"px";
-				pic.innerHTML = "<div class='Pictre-loader'></div>";
+				pic.innerHTML = "<div class='Pictre-loader'><span class='fa fa-circle-o-notch fa-spin fa-3x'></span></div>";
 				self._storage.overlay.image = pic;
 				self._storage.overlay.iterator = a.data.id;
 				document.body.style.height = $(window).height()+"px";
@@ -1780,59 +1780,88 @@
 					if(a) a.style.opacity = Pictre._settings.data.visited;
 				}
 		},
+
 		get:{
 			all:function() {
 				return this.images;
 			},
+
 			total:function() {
 				return this.images.length;
 			}
 		},
+
 		is:{
 			featuring:false,
 			warning:false
 		},
+
 		images:[],
-		onready:function(){},
+		onready:function() {},
+
 		overlay:{
+
 			comments:null,
 			div:null,
+
 			exit:function() {
+
 				if(!Pictre._storage.overlay.locked) {
-					document.body.style.overflow = "auto";
-					document.body.style.height = "auto";
-					Pictre.gallery.is.featuring = false;
+
+					document.body.style.overflow 	= "auto";
+					document.body.style.height 		= "auto";
+					Pictre.gallery.is.featuring 	= false;
+
 					this.remove();
 					this.onclose();
+
 					for(var i=0;i<Pictre._storage.overlay.onexit.length;i++) {
 						if(Pictre._storage.overlay.onexit[i]) Pictre._storage.overlay.onexit[i].call(this);
 					}
+
 				}
+
 			},
+
 			img:null,
+
 			onclose:function() {},
 			onexit:function(a) {
 				Pictre._storage.overlay.onexit.push(a);
 			},
+
 			put:function() {
+
 				if(!Pictre.gallery.overlay.div) {
 					Pictre.gallery.overlay.div = document.createElement("div");
 					Pictre.gallery.overlay.div.className = "Pictre-overlay";
 					Pictre.gallery.overlay.div.style.display = "none";
 					Pictre.gallery.overlay.div.tabIndex = "1";
 				}
+
 				Pictre.gallery.is.featuring = true;
+
 				Pictre.extend(Pictre.gallery.overlay.div).on('click',function() {
 					Pictre.gallery.overlay.exit();
 				});
+
 				Pictre.extend(Pictre.gallery.overlay.div).on('keydown',function(e) {
-					if(e.keyCode == 27) Pictre.gallery.overlay.exit();
+					// check for 'esc' key press
+					if(e.keyCode == 27) {
+						Pictre.gallery.overlay.exit();
+					}
+
 				});
+
 				document.body.appendChild(Pictre.gallery.overlay.div);
+
 				$(Pictre.gallery.overlay.div).fadeIn(Pictre._settings.speed);
 				Pictre.gallery.overlay.div.focus();
+
 				return Pictre.gallery.overlay.div;
+
 			},
+
 			showImage:function(b) {
 
 				// cancel action if there is already an interface currently
@@ -1869,7 +1898,7 @@
 
 					e.stopPropagation();
 					
-					if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
+					if(Pictre._storage.pictures[Pictre._storage.overlay.iterator + 1]) {
 						Pictre.gallery.overlay.replaceImage();
 					} else {
 						Pictre.gallery.overlay.exit();
@@ -1884,7 +1913,7 @@
 						e.stopPropagation();
 						e.preventDefault();
 						
-						if(Pictre._storage.pictures[Pictre._storage.overlay.iterator+1]) {
+						if(Pictre._storage.pictures[Pictre._storage.overlay.iterator + 1]) {
 							Pictre.gallery.overlay.replaceImage();
 						}
 
@@ -1905,233 +1934,247 @@
 
 				});
 
-					Pictre.extend(Pictre.gallery.overlay.img).on('load',function() {
-						var offset = Pictre.gallery.overlay.img.width > 350 ? ((Pictre._settings.picture.maxWidth-Pictre.gallery.overlay.img.width)/2) : 200;
-						b.innerHTML = "";
-						Pictre.gallery.overlay.comments.innerHTML = "";
-						b.appendChild(Pictre.gallery.overlay.img);
-						addComments(Pictre.gallery.overlay.img);
-						b.appendChild(Pictre.gallery.overlay.comments);
-						Pictre.gallery.overlay.comments.appended = true;
-						Pictre.gallery.overlay.image.position(b);
-						Pictre.gallery.overlay.comments.style.bottom = (-Pictre.gallery.overlay.comments.clientHeight)+"px";
-						Pictre.extend(Pictre.gallery.overlay.comments).on('click',function(e) {
-							e.stopPropagation();
-						});
-						Pictre.get.ui.imageOptions.div = null;
-						Pictre.get.ui.imageOptions.put(this.parentNode);
-						function addComments(scope) {
-							
-							if(scope.data.comments.length) {
+				Pictre.extend(Pictre.gallery.overlay.img).on('load', function() {
 
-								Pictre.gallery.overlay.comments.innerHTML = '';
+					var offset = Pictre.gallery.overlay.img.width > 350 ? ((Pictre._settings.picture.maxWidth-Pictre.gallery.overlay.img.width)/2) : 200;
 
-								var e = 0;
-								var comments = [];
-								
-								for(var i = scope.data.comments.length - 1; i >= 0; i--) {
-								
-									comments.push(document.createElement('div'));
+					// clear overlay image and comments area
+					b.innerHTML 								= '';
+					Pictre.gallery.overlay.comments.innerHTML 	= '';
 
-									if(i == scope.data.comments.length - 1) {
-										comments[e].style.borderTop = '0';
-									}
+					b.appendChild(Pictre.gallery.overlay.img);
 
-									comments[e].className 				= "Pictre-comment";
-									comments[e].innerHTML 				= "<span class='Pictre-comment-author'>"+scope.data.comments[i].author+"</span><p>"+scope.data.comments[i].body+"</p>";
-									comments[e].children[0].style.right = offset + "px";
+					addComments(Pictre.gallery.overlay.img);
 
-									Pictre.gallery.overlay.comments.appendChild(comments[e]);
+					b.appendChild(Pictre.gallery.overlay.comments);
 
-									e++;
-								
-								}
-							
-							}
-							
-							var defaultPlaceholder 	= 'Enter your name...';
-							var add 				= document.createElement("div");
-							var author 				= Pictre._storage.comments.author || defaultPlaceholder;
-							var ct 					= "Add a comment...";
-							
-							add.className 	= "Pictre-comment";
-							add.disabled 	= false;
-							
-							var addCommentInputElement 			= document.createElement('input');
-							addCommentInputElement.type 		= 'text';
-							addCommentInputElement.className 	= 'Pictre-comment-input';
-							addCommentInputElement.placeholder	= ct;
-							addCommentInputElement.maxLength 	= 200;
+					Pictre.gallery.overlay.comments.appended = true;
 
-							var addAuthorInputElement 			= document.createElement('input');
-							addAuthorInputElement.type 			= 'hidden';
-							addAuthorInputElement.className 	= 'Pictre-comment-input Pictre-comment-input-name-overlay';
-							addAuthorInputElement.placeholder 	= author;
-							addAuthorInputElement.maxLength 	= 20;
+					Pictre.gallery.overlay.image.position(b);
 
-							add.appendChild(addAuthorInputElement);
-							add.appendChild(addCommentInputElement);
-
-							// handle ui placement for IE
-							if(Pictre.client.id >= 3 || (Pictre.client.id == 2 && Pictre.client.version.indexOf("5.1.") != -1)) {
-								
-								add.children[0].value 		= author;
-								add.children[0].placeholder = '';
-
-								Pictre.extend(add.children[0]).on('focus', function() {
-									if(this.value == author) this.value = '';
-								});
-
-								Pictre.extend(add.children[0]).on('blur',function() {
-									if(this.value == '') this.value = author;
-								});
-
-								add.children[1].value = ct;
-								add.children[1].placeholder = '';
-
-								Pictre.extend(add.children[1]).on('focus',function() {
-									
-									if(this.value == ct) {
-										this.value = '';
-									}
-
-								});
-
-								Pictre.extend(add.children[1]).on('blur',function() {
-									
-									if(this.value == '') {
-										this.value = ct;
-									}
-								
-								});
-
-							}
-
-							add.children[0].style.right = offset+"px";
-							add.style.borderBottom 		= "0";
-
-							Pictre.extend(addCommentInputElement).on('keydown', function(e) {
-
-								e.stopPropagation();
-
-								// check to see if 'enter' key was pressed
-								if(e.keyCode != 13) {
-									return false;
-								}
-
-								// check to see if a value was entered
-								if(addCommentInputElement.value == '') {
-									return false;
-								}
-
-								if(Pictre.terminal.isCommand(addCommentInputElement.value)) {
-
-									var command = addCommentInputElement.value;
-
-									add.disabled = true;
-									addAuthorInputElement.disabled = true;
-									addCommentInputElement.disabled = true;
-									
-									addCommentInputElement.value = 'loading, please wait...';
-									
-									Pictre.terminal.parse({
-
-										id 		: Pictre.gallery.overlay.img.data.dbid,
-										src 	: Pictre.gallery.overlay.img.data.src,
-										thumb 	: Pictre.gallery.overlay.img.data.thumb,
-										command : command
-
-									}, function(data) {
-
-										if(data.error) {
-
-											add.disabled 					= false;
-											addCommentInputElement.value 	= data.error;
-
-											addCommentInputElement.removeAttribute('disabled');
-											addAuthorInputElement.removeAttribute('disabled');
-
-										}
-
-									});
-
-									return false;
-
-								}
-
-								// hide comment input
-								addCommentInputElement.type = 'hidden';
-
-								// display the author input field
-								addAuthorInputElement.type 	= 'text';
-								addAuthorInputElement.focus();
-
-							});
-
-							Pictre.extend(addAuthorInputElement).on('keydown',function(e) {
-
-								e.stopPropagation();
-								
-								// check to see if 'enter' key was pressed
-								if(e.keyCode != 13) {
-									return false;
-								}
-
-								// check to see if an author's name was entered
-								if(addAuthorInputElement.value == '' && addAuthorInputElement.placeholder == defaultPlaceholder) {
-									return false;
-								}
-
-								if(addCommentInputElement.value != "" && addCommentInputElement.value != addCommentInputElement.placeholder && !add.disabled) {
-
-									add.disabled 					= true;
-									addAuthorInputElement.disabled 	= true;
-									addCommentInputElement.disabled = true;
-
-									var object = Pictre._storage.pictures[Pictre._storage.overlay.iterator];
-									
-									object.data.comments[object.data.comments.length] = {};
-									object.data.comments[object.data.comments.length].author = addAuthorInputElement.value || addAuthorInputElement.placeholder;
-									object.data.comments[object.data.comments.length].body = addCommentInputElement.value;
-									
-									object.data.comments.length++;
-									
-									Pictre.gallery.overlay.img.data = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data;
-									Pictre._storage.comments.author = object.data.comments[object.data.comments.length-1].author;
-									
-									addAuthorInputElement.value = "loading, please wait...";
-									
-									var xhr = new XMLHttpRequest();
-									xhr.open('POST', Pictre._settings.cloud.address + 'data.php',true);
-									xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-									xhr.send("type=store_comment&id="+object.data.dbid+"&author=" + object.data.comments[object.data.comments.length-1].author+"&body="+object.data.comments[object.data.comments.length-1].body);
-									
-									Pictre.extend(xhr).on('readystatechange',function() {
-										
-										if(xhr.status == 200 && xhr.readyState == 4) {
-											
-											if(xhr.responseText == "success") {
-												
-												addComments(Pictre.gallery.overlay.img);
-												Pictre.gallery.overlay.comments.style.bottom = (-Pictre.gallery.overlay.comments.clientHeight) + 'px';
-											
-											} else {
-												addAuthorInputElement.value = "There was an error adding your comment, sorry about that!";
-											}
-
-										}
-
-									});
-								}
-							});
-
-							if(!scope.data.comments.length) {
-								add.style.borderTop = "0";
-							}
-
-							Pictre.gallery.overlay.comments.appendChild(add);
-						}
+					Pictre.gallery.overlay.comments.style.bottom = (-Pictre.gallery.overlay.comments.clientHeight)+"px";
+					
+					Pictre.extend(Pictre.gallery.overlay.comments).on('click',function(e) {
+						e.stopPropagation();
 					});
+
+					Pictre.get.ui.imageOptions.div = null;
+					Pictre.get.ui.imageOptions.put(this.parentNode);
+
+					function addComments(scope) {
+						
+						if(scope.data.comments.length) {
+
+							Pictre.gallery.overlay.comments.innerHTML = '';
+
+							var e = 0;
+							var comments = [];
+							
+							for(var i = scope.data.comments.length - 1; i >= 0; i--) {
+							
+								comments.push(document.createElement('div'));
+
+								if(i == scope.data.comments.length - 1) {
+									comments[e].style.borderTop = '0';
+								}
+
+								comments[e].className 				= "Pictre-comment";
+								comments[e].innerHTML 				= "<span class='Pictre-comment-author'>"+scope.data.comments[i].author+"</span><p>"+scope.data.comments[i].body+"</p>";
+								comments[e].children[0].style.right = offset + "px";
+
+								Pictre.gallery.overlay.comments.appendChild(comments[e]);
+
+								e++;
+							
+							}
+						
+						}
+						
+						var defaultPlaceholder 	= 'Enter your name...';
+						var add 				= document.createElement("div");
+						var author 				= Pictre._storage.comments.author || defaultPlaceholder;
+						var ct 					= "Add a comment...";
+						
+						add.className 	= "Pictre-comment";
+						add.disabled 	= false;
+						
+						var addCommentInputElement 			= document.createElement('input');
+						addCommentInputElement.type 		= 'text';
+						addCommentInputElement.className 	= 'Pictre-comment-input';
+						addCommentInputElement.placeholder	= ct;
+						addCommentInputElement.maxLength 	= 200;
+
+						var addAuthorInputElement 			= document.createElement('input');
+						addAuthorInputElement.type 			= 'hidden';
+						addAuthorInputElement.className 	= 'Pictre-comment-input Pictre-comment-input-name-overlay';
+						addAuthorInputElement.placeholder 	= author;
+						addAuthorInputElement.maxLength 	= 20;
+
+						add.appendChild(addAuthorInputElement);
+						add.appendChild(addCommentInputElement);
+
+						// handle ui placement for IE
+						if(Pictre.client.id >= 3 || (Pictre.client.id == 2 && Pictre.client.version.indexOf("5.1.") != -1)) {
+							
+							add.children[0].value 		= author;
+							add.children[0].placeholder = '';
+
+							Pictre.extend(add.children[0]).on('focus', function() {
+								if(this.value == author) this.value = '';
+							});
+
+							Pictre.extend(add.children[0]).on('blur',function() {
+								if(this.value == '') this.value = author;
+							});
+
+							add.children[1].value = ct;
+							add.children[1].placeholder = '';
+
+							Pictre.extend(add.children[1]).on('focus',function() {
+								
+								if(this.value == ct) {
+									this.value = '';
+								}
+
+							});
+
+							Pictre.extend(add.children[1]).on('blur',function() {
+								
+								if(this.value == '') {
+									this.value = ct;
+								}
+							
+							});
+
+						}
+
+						add.children[0].style.right = offset+"px";
+						add.style.borderBottom 		= "0";
+
+						Pictre.extend(addCommentInputElement).on('keydown', function(e) {
+
+							e.stopPropagation();
+
+							// check to see if 'enter' key was pressed
+							if(e.keyCode != 13) {
+								return false;
+							}
+
+							// check to see if a value was entered
+							if(addCommentInputElement.value == '') {
+								return false;
+							}
+
+							if(Pictre.terminal.isCommand(addCommentInputElement.value)) {
+
+								var command = addCommentInputElement.value;
+
+								add.disabled = true;
+								addAuthorInputElement.disabled = true;
+								addCommentInputElement.disabled = true;
+								
+								addCommentInputElement.value = 'loading, please wait...';
+								
+								Pictre.terminal.parse({
+
+									id 		: Pictre.gallery.overlay.img.data.dbid,
+									src 	: Pictre.gallery.overlay.img.data.src,
+									thumb 	: Pictre.gallery.overlay.img.data.thumb,
+									command : command
+
+								}, function(data) {
+
+									if(data.error) {
+
+										add.disabled 					= false;
+										addCommentInputElement.value 	= data.error;
+
+										addCommentInputElement.removeAttribute('disabled');
+										addAuthorInputElement.removeAttribute('disabled');
+
+									}
+
+								});
+
+								return false;
+
+							}
+
+							// hide comment input
+							addCommentInputElement.type = 'hidden';
+
+							// display the author input field
+							addAuthorInputElement.type 	= 'text';
+							addAuthorInputElement.focus();
+
+						});
+
+						Pictre.extend(addAuthorInputElement).on('keydown',function(e) {
+
+							e.stopPropagation();
+							
+							// check to see if 'enter' key was pressed
+							if(e.keyCode != 13) {
+								return false;
+							}
+
+							// check to see if an author's name was entered
+							if(addAuthorInputElement.value == '' && addAuthorInputElement.placeholder == defaultPlaceholder) {
+								return false;
+							}
+
+							if(addCommentInputElement.value != "" && addCommentInputElement.value != addCommentInputElement.placeholder && !add.disabled) {
+
+								add.disabled 					= true;
+								addAuthorInputElement.disabled 	= true;
+								addCommentInputElement.disabled = true;
+
+								var object = Pictre._storage.pictures[Pictre._storage.overlay.iterator];
+								
+								object.data.comments[object.data.comments.length] = {};
+								object.data.comments[object.data.comments.length].author = addAuthorInputElement.value || addAuthorInputElement.placeholder;
+								object.data.comments[object.data.comments.length].body = addCommentInputElement.value;
+								
+								object.data.comments.length++;
+								
+								Pictre.gallery.overlay.img.data = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data;
+								Pictre._storage.comments.author = object.data.comments[object.data.comments.length-1].author;
+								
+								addAuthorInputElement.value = "loading, please wait...";
+								
+								var xhr = new XMLHttpRequest();
+								xhr.open('POST', Pictre._settings.cloud.address + 'data.php',true);
+								xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+								xhr.send("type=store_comment&id="+object.data.dbid+"&author=" + object.data.comments[object.data.comments.length-1].author+"&body="+object.data.comments[object.data.comments.length-1].body);
+								
+								Pictre.extend(xhr).on('readystatechange',function() {
+									
+									if(xhr.status == 200 && xhr.readyState == 4) {
+										
+										if(xhr.responseText == "success") {
+											
+											addComments(Pictre.gallery.overlay.img);
+											Pictre.gallery.overlay.comments.style.bottom = (-Pictre.gallery.overlay.comments.clientHeight) + 'px';
+										
+										} else {
+											addAuthorInputElement.value = "There was an error adding your comment, sorry about that!";
+										}
+
+									}
+
+								});
+							}
+						});
+
+						if(!scope.data.comments.length) {
+							add.style.borderTop = '0';
+						}
+
+						Pictre.gallery.overlay.comments.appendChild(add);
+					}
+
+				});
+
 				Pictre.gallery.overlay.div.appendChild(b);
 				Pictre.gallery.overlay.put();
 			},
@@ -2165,16 +2208,23 @@
 				if(this.div) document.body.removeChild(this.div),this.div = null;
 			},
 			replaceImage:function(a) {
+
 				var settings = {
-					previous:false,
-					id:null,
-					object:null
+
+					previous 	:false,
+					id 			:null,
+					object 		:null
+
 				};
+
 				if(typeof a == 'object') {
+
 					for(var i in a) {
 						settings[i] = a[i];
 					}
+
 				}
+
 				if(settings.id || settings.object) {
 					var object = document.getElementById("pic"+settings.id) || settings.object;
 					Pictre._storage.overlay.iterator = Pictre._storage.pictures.indexOf(object);
@@ -2182,19 +2232,36 @@
 					if(settings.previous) Pictre._storage.overlay.iterator--;
 					else Pictre._storage.overlay.iterator++;
 				}
+
 				if(Pictre.gallery.overlay.img) {
-					var src = Pictre.gallery.overlay.img ? Pictre.gallery.overlay.img.src.split("/") : null;
-						src = src[src.length-1];
-					var newSrc = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src.split("/");
-						newSrc = newSrc[newSrc.length-1];
-					if(src != newSrc) Pictre.gallery.overlay.wrapper.innerHTML = "<div class='Pictre-loader'></div>";
+
+					var src = Pictre.gallery.overlay.img ? Pictre.gallery.overlay.img.src.split('/') : null;
+					src 	= src[src.length - 1];
+					
+					var newSrc 	= Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src.split('/');
+					newSrc 		= newSrc[newSrc.length-1];
+
+					// if new image does not have the same source as the one being replaced,
+					// show the loader and fetch the new image
+					if(src != newSrc) {
+						Pictre.gallery.overlay.wrapper.innerHTML = "<div class='Pictre-loader'><span class='fa fa-circle-o-notch fa-spin fa-3x'></span></div>";
+					}
+
 					Pictre.gallery.overlay.img.src = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data.src;
 					Pictre.gallery.overlay.img.data = Pictre._storage.pictures[Pictre._storage.overlay.iterator].data;
-					if(Pictre.gallery.overlay.img.data.comments.length) Pictre.gallery.overlay.comments.appended = true;
-					else Pictre.gallery.overlay.comments.appended = false;
+
+					if(Pictre.gallery.overlay.img.data.comments.length) {
+						Pictre.gallery.overlay.comments.appended = true;
+					} else {
+						Pictre.gallery.overlay.comments.appended = false;
+					}
+
 					Pictre._storage.pictures[Pictre._storage.overlay.iterator].style.opacity = Pictre._settings.data.visited;
+
 				}
+
 			},
+
 			wrapper:null
 		}
 	},
@@ -2347,15 +2414,21 @@
 				}).on('click',function() {
 
 					if(Pictre.is.spotlight) {
+						// remove existing spotlight overlay
 						Pictre.spotlight.remove();
+
 						if(Pictre.get.ui.menu.hasButton('back')) {
+							// remove 'back' button if on mobile
 							Pictre.get.ui.menu.removeButton('back');
+
 							if(Pictre.board.state > 0) {
+
 								if(Pictre.board.state == 1) {
 									Pictre.get.ui.menu.showButton('lock');
 								} else {
 									Pictre.get.ui.menu.showButton('unlock');
 								}
+
 							}
 						}
 					}
@@ -2502,7 +2575,7 @@
 				var b = img.data ? img : a;
 
 				pic.innerHTML 		= '';
-				pic.style.width 	= img.width + "px";
+				pic.style.width 	= img.width + 'px';
 				comments.innerHTML 	= '';
 
 				pic.appendChild(img);
