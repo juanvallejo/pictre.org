@@ -20,34 +20,50 @@
 * TODO: Improve cascade-image-loading algorithm
 */
 
-(function(window,document,Pictre){Pictre={
+(function(window,document,Pictre){
+
+Pictre = {
+
 	_404:{
+
 		div:document.createElement("div"),
 		exists:false,
+
 		put:function(a) {
-			var self = this;
-			var a = a || "There seems to be nothing here.";
-			this.div.className = "Pictre-empty";
-			this.div.innerHTML = a;
-			this.exists = true;
+
+			var self 			= this;
+			var a 				= a || "There seems to be nothing here.";
+
+			this.div.className 	= "Pictre-empty";
+			this.div.innerHTML 	= a;
+			this.exists 		= true;
+
 			Pictre._settings.wrapper.appendChild(this.div);
+
 			this.position();
+
 			Pictre.events.on('resize',function() {
+
 				if(self.exists) {
 					self.position();
 				}
+
 			});
+
 		},
+
 		remove:function() {
 			if(this.exists) {
 				this.exists = false;
 				Pictre._settings.wrapper.removeChild(this.div);
 			}
 		},
+
 		position:function() {
 			this.div.style.left = ($(window).width()/2 - (this.div.clientWidth/2))+"px";
 			this.div.style.top = (($(window).height()-(Pictre.get.ui.menu._div.offsetHeight*2))/2 - (this.div.clientHeight/2))+"px";
 		}
+
 	},
 	_settings:{
 		allowUploads:true,
@@ -344,51 +360,83 @@
 		version:null
 	},
 	create:{
+
 		picture:function(a,b) {
+
 			var self = Pictre;
-			if(b) Pictre._storage.upload.method = b;
+
+			if(b) {
+				Pictre._storage.upload.method = b;
+			}
+
 			var img = new Image();
+
 			var pic = document.createElement("div");
-				pic.id = "pic"+a.id;
+			pic.id = "pic"+a.id;
+
 				if(!self.is.loaded && !b && Pictre._settings.wrapper.style.display != "none") Pictre._settings.wrapper.style.display = "none";
+				
 				img._onload = function(a) {
 					if(b == "prepend" || b == "append") {
-						if(b == "prepend") Pictre.chisel();
-						else {
+
+						if(b == "prepend") {
+							Pictre.chisel();
+						} else {
+
 							Pictre._storage.data.loaded++;
-							Pictre.chisel(Pictre._settings.data.anchor-Pictre._settings.data.limit.request-Pictre._storage.data.deleted-1);
+							Pictre.chisel(Pictre._settings.data.anchor - Pictre._settings.data.limit.request-Pictre._storage.data.deleted - 1);
+							
 							if(Pictre._storage.data.loaded == Pictre._settings.data.limit.request) {
+								// reset count for images that have loaded and indicate
+								// that images have finished / are no longer loading
 								Pictre._storage.data.loaded = 0;
-								Pictre.is.loading = false;
+								Pictre.is.loading 			= false;
 							}
+
 						}
+
 					} else {
+
 						self._storage.loaded++;
+
 						if(self._storage.loaded == self._storage.pictures.length) {
+
 							Pictre.get.ui.loader.put(1);
-							Pictre._settings.wrapper.style.display = "block";
-							self._storage.loaded = 0;
+
+							Pictre._settings.wrapper.style.display 	= 'block';
+							self._storage.loaded 					= 0;
+
 							self.chisel();
+
 							if(!self.is.loaded) {
 								self.is.loaded = true;
 								self._storage._loadonready.call(self);
 							}
+
 						} else {
-							Pictre.get.ui.loader.put(self._storage.loaded/self._storage.pictures.length); 
+							Pictre.get.ui.loader.put(self._storage.loaded / self._storage.pictures.length); 
 						}
 					}
 				};
-				Pictre.extend(img).on('load',function() {
-					pic.innerHTML = "";
+
+				Pictre.extend(img).on('load', function() {
+					
+					pic.innerHTML = '';
 					pic.appendChild(img);
+
 					this._onload();
+				
 				});
-				Pictre.extend(img).on('error',function() {
-					var height = 137;
-                    var paddingTop = parseInt(window.getComputedStyle(pic).getPropertyValue('padding-top').split("px")[0])+1;
-                    var paddingBottom = parseInt(window.getComputedStyle(pic).getPropertyValue('padding-bottom').split("px")[0]);
-                    var errImg = new Image();
-                        errImg.src = "data/i/Pictre-404.png";
+
+				Pictre.extend(img).on('error', function() {
+
+					var height 			= 137;
+                    var paddingTop 		= parseInt(window.getComputedStyle(pic).getPropertyValue('padding-top').split("px")[0])+1;
+                    var paddingBottom 	= parseInt(window.getComputedStyle(pic).getPropertyValue('padding-bottom').split("px")[0]);
+                    
+                    var errImg 			= new Image();
+                    errImg.src 			= 'data/i/Pictre-404.png';
+					
 					pic.innerHTML = "";
 					pic.data.src = "data/i/Pictre-404.full.png";
                     pic.style.height = (height-paddingTop+paddingBottom*2)+"px";
@@ -989,60 +1037,103 @@
 						}
 					}
 					if(!self.div) {
+						
 						var p = document.createElement("div");
-							p.className = "Pictre-passcode-p";
-							if(a == 'create') p.innerHTML = "Congratulations! You have found a new album, create a passcode below to claim it as your own!";
-							else p.innerHTML = "To proceed, enter the passcode for this album below.";
+						p.className = "Pictre-passcode-p";
+						
 						if(a == 'create') {
+							p.innerHTML = "Congratulations! You have found a new album, create a passcode below to claim it as your own!";
+						} else {
+							p.innerHTML = "To proceed, enter the passcode for this album below.";
+						}
+
+						if(a == 'create') {
+
 							Pictre._storage.overlay.locked = true;
+
 							var inp1 = new self.input("Create a passcode");
 							var inp2 = new self.input("Verify passcode");
-								inp2.placeholder = "Confirm your passcode";
+							inp2.placeholder = "Confirm your passcode";
+
 							inp1.create().on('keydown',function(e) {
+
 								if(e.keyCode == 13) {
-									if(inp2.div.value != "" && inp2.div.value != inp2.value) self.submit([inp2.div,inp1.div],"passcode_set",_onsubmit);
-									else inp2.div.focus();
+
+									if(inp2.div.value != "" && inp2.div.value != inp2.value) {
+										self.submit([inp2.div,inp1.div],"passcode_set",_onsubmit);
+									} else {
+										inp2.div.focus();
+									}
+
 								}
+
 							});
+
 							inp2.create().on('keydown',function(e) {
+
 								if(e.keyCode == 13) {
-									if(inp1.div.value != "" && inp1.div.value != inp1.value) self.submit([inp2.div,inp1.div],"passcode_set",_onsubmit);
-									else inp1.div.focus();
+									
+									if(inp1.div.value != "" && inp1.div.value != inp1.value) {
+										self.submit([inp2.div,inp1.div],"passcode_set",_onsubmit);
+									} else {
+										inp1.div.focus();
+									}
+
 								}
+
 							});
+
 						} else if(a == 'splash') {
+
 							var c = document.createElement('div');
-								c.className = 'Pictre-passcode-p';
-								c.style.fontSize = "0.85em";
-								c.style.display = "none";
+							c.className = 'Pictre-passcode-p Pictre-passcode-formal-font';
+							c.style.fontSize = "0.85em";
+							c.style.display = "none";
+							
 							Pictre._storage.overlay.locked = true;
+							
 							p.style.fontSize = "0.85em";
 							p.innerHTML = "<b class='brand' style='width:100%;text-align:center;font-size:2.2em;display:block;margin-bottom:10px;'>Pictre</b>";
 							p.innerHTML += "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
 							p.innerHTML += "<span>To get started, simply type an album name below.</span>";
-							if(b) Pictre.get.ui.notice(b,'splash',c);
+							
+							if(b) {
+								Pictre.get.ui.notice(b,'splash',c);
+							}
+
 							var inp1 = new self.input('_blank');
-								inp1.div.style.color = "white";
-								inp1.create('').on('keydown',function(e) {
-									if(e.keyCode == 13) {
-										if(this.div.value != "" && this.value != this.div.value){
-											var val = this.div.value.toLowerCase().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-											if(Pictre._settings.pages.restricted.indexOf(val) == -1) {
-												if(this.div.value.match(/[^a-z0-9\-\.\+\_\ ]/gi)) {
-													Pictre.get.ui.notice("Your album name contains invalid characters.",'splash',c);
-												} else {
-													if(this.div.value.match(/[\ ]/g)) Pictre.get.ui.notice("Your album name cannot contain spaces.",'splash',c);
-													else window.location.assign(Pictre._settings.app.address+val);
-												}
+							inp1.div.style.color = "white";
+							
+							inp1.create('').on('keydown',function(e) {
+
+								if(e.keyCode == 13) {
+
+									if(this.div.value != "" && this.value != this.div.value) {
+
+										var val = this.div.value.toLowerCase().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+										
+										if(Pictre._settings.pages.restricted.indexOf(val) == -1) {
+											
+											if(this.div.value.match(/[^a-z0-9\-\.\+\_\ ]/gi)) {
+												Pictre.get.ui.notice("Your album name contains invalid characters.",'splash',c);
 											} else {
-												this.div.value = "";
-												Pictre.get.ui.notice("That album is restricted, please try another.",'splash',c);
+												if(this.div.value.match(/[\ ]/g)) Pictre.get.ui.notice("Your album name cannot contain spaces.",'splash',c);
+												else window.location.assign(Pictre._settings.app.address+val);
 											}
+
+										} else {
+											this.div.value = '';
+											Pictre.get.ui.notice("That album is restricted, please try another.",'splash',c);
 										}
+
 									}
-								}).on('click',function(e) {
-									e.stopPropagation();
-								});
+
+								}
+
+							}).on('click',function(e) {
+								e.stopPropagation();
+							});
+
 								inp1.div.setAttribute('maxlength',100);
 								if(Pictre.client.name == "Internet Explorer" || Pictre.client.id == 3 || (Pictre.client.id == 2 && Pictre.client.version.indexOf("5.1.") != -1)) {
 									var val = "Enter an album's name";
@@ -1540,7 +1631,7 @@
 								Pictre.extend(post.upload).on('load',function() {
 
 									area.locked = true;
-									p.innerHTML = "Moving images into place...";
+									p.innerHTML = 'Moving images into place...';
 
 								});
 
