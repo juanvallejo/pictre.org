@@ -9,7 +9,7 @@ body,html {
 width:100%; font:normal 16px 'Open Sans'; color:#f0f0f0; z-index:998;
 }
 body {
-background:rgb(4,13,20)/*rgb(16,17,16)*/; font:normal 16px 'Open Sans',sans-serif; position:relative; overflow-x:hidden;
+background:rgb(4,13,20); font:normal 16px 'Open Sans',sans-serif; position:relative; overflow-x:hidden;
 }
 
 #top {
@@ -399,16 +399,16 @@ border-top:0 solid rgb(130,130,130);
 	width:100%; display:block; margin:0 0 22px 0; text-align:center; color:rgb(181,181,181); font-size:0.9em;
 	}
 
-	.Pictre-passcode-formal-font {
-		font-family:'Marcellus';
-	}
+		.Pictre-passcode-p,.Pictre-passcode-wrapper p span {
+			font-family:'Marcellus';
+		}
 
 	.Pictre-passcode-input-wrapper {
 	width:62%; position:absolute;
 	}
 		.Pictre-passcode-input {
 		background:transparent; color:rgb(181,181,181); font:inherit; text-align:center; padding:10px 0 10px 0; border:0; display:block; border:0; width:100%; margin:0; border-radius:2px;
-		border-top:1px solid rgba(105,105,105,0.3); font-size:0.9em;
+		border-top:1px solid rgba(105,105,105,0.3); font-size:0.9em; font-family:'Marcellus';
 		}
 .Pictre-upload {
 	
@@ -467,7 +467,8 @@ border-top:0 solid rgb(130,130,130);
 		cursor:default;
 		
 		font-size:0.93em;
-		text-align:center; 
+		font-family:'Marcellus';
+		text-align:center;
 
 	}
 		.Pictre-upload-area:active {

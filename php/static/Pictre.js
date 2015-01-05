@@ -1094,7 +1094,7 @@ Pictre = {
 							
 							p.style.fontSize = "0.85em";
 							p.innerHTML = "<b class='brand' style='width:100%;text-align:center;font-size:2.2em;display:block;margin-bottom:10px;'>Pictre</b>";
-							p.innerHTML += "<b class='brand'>Pictre</b> is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. ";
+							p.innerHTML += "<b class='brand'>Pictre</b> <span>is a collection of cloud photo albums. You can view or create picture albums based on interests, people, or families. </span>";
 							p.innerHTML += "<span>To get started, simply type an album name below.</span>";
 							
 							if(b) {
