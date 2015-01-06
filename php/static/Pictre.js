@@ -361,7 +361,7 @@ Pictre = {
 	},
 	create:{
 
-		picture:function(a,b) {
+		picture:function(a, b) {
 
 			var self = Pictre;
 
@@ -372,7 +372,7 @@ Pictre = {
 			var img = new Image();
 
 			var pic = document.createElement("div");
-			pic.id = "pic"+a.id;
+			pic.id = 'pic' + a.id;
 
 				if(!self.is.loaded && !b && Pictre._settings.wrapper.style.display != "none") Pictre._settings.wrapper.style.display = "none";
 				
@@ -435,15 +435,20 @@ Pictre = {
                     var paddingBottom 	= parseInt(window.getComputedStyle(pic).getPropertyValue('padding-bottom').split("px")[0]);
                     
                     var errImg 			= new Image();
-                    errImg.src 			= 'data/i/Pictre-404.png';
+                    errImg.src 			= '/static/i/Pictre-404.png';
 					
-					pic.innerHTML = "";
-					pic.data.src = "data/i/Pictre-404.full.png";
-                    pic.style.height = (height-paddingTop+paddingBottom*2)+"px";
+					pic.innerHTML 		= '';
+					pic.data.src 		= '/static/i/Pictre-404.full.png';
+                    pic.style.height 	= (height - paddingTop + paddingBottom * 2) + 'px';
+
                     pic.appendChild(errImg);
+
 					this._onload();
+
 				});
-				img.src = Pictre._settings.cloud.datadir+a.thumb;
+
+				img.src = Pictre._settings.cloud.datadir + a.thumb;
+
 				Pictre.extend(pic).on('click',function() {
 					if(window.location.hash.split("#")[1] == this.data.dbid) {
 						if(Pictre.client.id == 3 || window.innerWidth < Pictre._settings.minWidth) Pictre.spotlight.feature(this);
@@ -467,12 +472,23 @@ Pictre = {
 					pic.data.id = self._storage.iterator;
 					self._storage.iterator++;
 				}
-			if(b == "prepend") self._storage.pictures.unshift(pic);
-			else self._storage.pictures.push(pic);
-			if(self._settings.wrapper) {
-				if(b == "prepend") self._settings.wrapper.insertBefore(pic,self._settings.wrapper.children[0]);
-				else self._settings.wrapper.appendChild(pic);
+
+			if(b == 'prepend') {
+				self._storage.pictures.unshift(pic);
+			} else {
+				self._storage.pictures.push(pic);
 			}
+
+			if(self._settings.wrapper) {
+
+				if(b == 'prepend') {
+					self._settings.wrapper.insertBefore(pic, self._settings.wrapper.children[0]);
+				} else {
+					self._settings.wrapper.appendChild(pic);
+				}
+
+			}
+
 			return pic;
 		}
 	},
@@ -1543,74 +1559,135 @@ Pictre = {
 									p.innerHTML = "Uploading "+files.length+" images...";
 								}
 							}
-							var post = self.post(files,function(e) {
-								if(e.response == "success") {	
+
+							var post = self.post(files, function(e) {
+								
+								if(e.response == 'success') {
+
 									Pictre._storage.overlay.locked = false;
+
 									if(e.ignored.length > 0) {
+
 										if(!e.pending.length) {
+
 											if(Pictre._storage.upload.overflow) {
+
 												if(Pictre._storage.upload.offset >= Pictre._storage.upload.overflow.length) {
+
 													Pictre._storage.upload.overflow = null;
-													Pictre._storage.upload.offset = 0;
-													p.innerHTML = "Your last "+Pictre._settings.uploadLimit+" images could not be uploaded because none of them are supported...";
+													Pictre._storage.upload.offset 	= 0;
+													p.innerHTML 					= 'Your last ' + Pictre._settings.uploadLimit + ' images could not be uploaded because none of their file types are supported.';
+												
 												} else {
-													area.locked = false;
-													Pictre._storage.overlay.locked = true;
-													p.innerHTML = "Images "+(Pictre._storage.upload.offset-Pictre._settings.uploadLimit)+" through "+Pictre._storage.upload.offset+" could not be uploaded because none of them were supported files... Preparing next batch of images for upload...";
+												
+													area.locked 					= false;
+													Pictre._storage.overlay.locked 	= true;
+													p.innerHTML 					= 'Images ' + (Pictre._storage.upload.offset - Pictre._settings.uploadLimit) + ' through ' + Pictre._storage.upload.offset + ' could not be uploaded because none of them were supported files... Preparing next batch of images for upload...';
+												
 													upload();
+
 												}
+
 											} else {
-												p.innerHTML = "None of the files were uploaded because none of them were supported images...";
+												p.innerHTML = 'None of the files were uploaded because none of them were supported images...';
 											}
+
 										} else {
+
 											progress.style.borderColor = color.inactve;
+
 											if(Pictre._storage.upload.overflow) {
+
 												if(Pictre._storage.upload.offset >= Pictre._storage.upload.overflow.length) {
+
 													Pictre._storage.upload.overflow = null;
-													Pictre._storage.upload.offset = 0;
-													p.innerHTML = "Hey! only "+e.pending.length+" of your last "+Pictre._settings.uploadLimit+" images were uploaded because "+e.ignored.length+" of them are not supported...";
+													Pictre._storage.upload.offset 	= 0;
+													p.innerHTML 					= "Hey! only "+e.pending.length+" of your last "+Pictre._settings.uploadLimit+" images were uploaded because "+e.ignored.length+" of them are not supported...";
+												
 												} else {
-													area.locked = false;
-													Pictre._storage.overlay.locked = true;
-													p.innerHTML = "Hey! only "+e.pending.length+" of your images were uploaded because "+e.ignored.length+" of them are not supported... Preparing next batch of images for upload";
+
+													area.locked 					= false;
+													Pictre._storage.overlay.locked 	= true;
+													p.innerHTML		 				= "Hey! only "+e.pending.length+" of your images were uploaded because "+e.ignored.length+" of them are not supported... Preparing next batch of images for upload";
+													
 													upload();
+
 												}
+
 											} else {
 												p.innerHTML = "Hey! "+e.ignored.length+" of your images could not be uploaded because they are not supported! Don't worry though, the rest were uploaded just fine.";
 											}
 										}
 									} else {
+
 										progress.style.borderColor = color.pending;
+
 										if(Pictre._storage.upload.overflow) {
+
 											if(Pictre._storage.upload.offset >= Pictre._storage.upload.overflow.length) {
+
 												Pictre._storage.upload.overflow = null;
-												Pictre._storage.upload.offset = 0;
+												Pictre._storage.upload.offset 	= 0;
+
 												p.innerHTML = "Yay! All of your images have been uploaded!";
+
 											} else {
-												area.locked = false;
-												Pictre._storage.overlay.locked = true;
-												p.innerHTML = "Preparing next set of images for upload...";
+
+												area.locked 					= false;
+												Pictre._storage.overlay.locked 	= true;
+												p.innerHTML 					= "Preparing next set of images for upload...";
+												
 												upload();
+											
 											}
+
 										} else {
 											p.innerHTML = "Yay! All of your images have been uploaded!";
 										}
 									}
+
 									if(e.pending.length) {
-										Pictre.get.db({limit:e.pending.length,anchor:0},function(data) {
-											Pictre.load(data,{method:'prepend'});
+
+										Pictre.get.db({
+											
+											limit 	: e.pending.length,
+											anchor	: 0
+										
+										}, function(data) {
+											
+											// if we are in developing mode, do not
+											// attach 'uploaded' images to the board
+											if(!Pictre.is.production) {
+												return false;
+											}
+
+											Pictre.load(data, {
+												method: 'prepend'
+											});
+
 										});
+
 									}
+
 								} else if(e.response == "timeout") {
+
 									progress.style.borderColor = color.inactive;
 									p.innerHTML = "Attempting to retrieve uploaded images, please wait...";
 									Pictre.get.db({from:'all',where:Pictre._settings.data.condition,anchor:0,limit:Pictre._settings.data.limit.pageload},function(data) {
-										p.innerHTML = "Hey! Pictre encountered a problem and could not finish uploading some of your files, sorry about that!";
+										
+										Pictre._storage.overlay.locked 	= false;
+										p.innerHTML 					= "Hey! Pictre encountered a problem and could not finish uploading some of your files, sorry about that!";
 										Pictre.load(data);
+								
 									});
+
+								} else if(e.response == 'NO_DATA') {
+									p.innerHTML 					= 'Pictre encountered a problem uploading one or more images. Make sure all of the files you are trying to upload are under 10M and try again.';
+									Pictre._storage.overlay.locked 	= false;
 								} else {
 									p.innerHTML = e.response;
 								}
+
 								area.locked = false;
 							});
 
@@ -1670,6 +1747,7 @@ Pictre = {
 					}
 				},
 				post:function(a,b) {
+
 					var Files = {
 						allowed:['jpeg','png','gif'],
 						ignored:[],
@@ -1677,6 +1755,7 @@ Pictre = {
 						response:null,
 						total:a
 					};
+
 					for(var i=0;i<a.length;i++) {
 						var kind = a[i].type.split("/");
 						if(kind[0] == "image" && Files.allowed.indexOf(kind[1]) != -1) {
@@ -1685,6 +1764,7 @@ Pictre = {
 							Files.ignored.push(a[i]);
 						}
 					}
+
 					if(Files.pending.length) {
 						var data = new FormData();
 						for(var i=0;i<Files.pending.length;i++) {
@@ -1707,6 +1787,7 @@ Pictre = {
 									Files.response = "timeout";
 									call = true;
 								}
+
 								if(typeof b == "function" && call) b.call(this,Files);
 							});
 						return xhr;
@@ -2356,11 +2437,23 @@ Pictre = {
 			wrapper:null
 		}
 	},
-	init:function(a,b,c) {
+	init:function(a, b, c, developerMode) {
+
 		var spacer = document.createElement("div");
-			spacer.className = "Pictre-spacer";
-		if(b) Pictre._settings.cloud.datadir=b;
-		if(c) Pictre._settings.cloud.address=c;
+		spacer.className = "Pictre-spacer";
+		
+		if(b) {
+			Pictre._settings.cloud.datadir = b;
+		}
+
+		if(c) {
+			Pictre._settings.cloud.address = c;
+		}
+
+		if(developerMode) {
+			Pictre.is.production = false;
+		}
+		
 		Pictre.get.ui.menu.put(document.body,a);
 		Pictre.client.detect();
 		Pictre.board.detect();
@@ -2421,15 +2514,20 @@ Pictre = {
 			Pictre.get.ui.splash.put();
 		}
 	},
+
 	is:{
-		busy:false,
-		done:false,
-		loading:false,
-		loaded:false,
-		scrollingDown:false,
-		spotlight:false,
-		updating:false
+
+		busy 			:false,
+		done 			:false,
+		loading 		:false,
+		loaded 			:false,
+		production 		:true,
+		scrollingDown 	:false,
+		spotlight 		:false,
+		updating 		:false
+
 	},
+
 	load:function(a, b, c) {
 
 		var self = this;
@@ -2450,21 +2548,21 @@ Pictre = {
 			if(settings.method == "append") {
 				
 				for(var i=0;i<a.length;i++) {
-					Pictre.create.picture(a[i],settings.method);
+					Pictre.create.picture(a[i], settings.method);
 				}
 
 				if(typeof c == 'function') {
 					c.call(Pictre);
 				}
 
-			} else if(settings.method == "prepend") {
+			} else if(settings.method == 'prepend') {
 
 				if(!Pictre._storage.pictures.length) {
 					Pictre._404.remove();				
 				}
 
 				for(var i=a.length-1;i>=0;i--) {
-					Pictre.create.picture(a[i],settings.method);
+					Pictre.create.picture(a[i], settings.method);
 				}
 
 				for(var i=0;i<Pictre._storage.pictures.length;i++) {
@@ -2655,8 +2753,8 @@ Pictre = {
 			comments.width 			= parseInt(comments.style.width.split("px")[0]);
 
 			var pic 		= document.createElement("div");
-			pic.id 			= "Pictre-spotlight-wrapper-pic";
-			pic.innerHTML 	= "<p>Loading, please wait...</p>";
+			pic.id 			= 'Pictre-spotlight-wrapper-pic';
+			pic.innerHTML 	= '<p>Loading, please wait...</p>';
 			
 			var img = new Image();
 			img.src = a.data.src;
@@ -2692,89 +2790,108 @@ Pictre = {
 
 					comments.innerHTML 				= '';
 
-					var placeholder 				= Pictre._storage.comments.author || "Enter your name";
+					var placeholder 				= Pictre._storage.comments.author || 'Enter your name...';
 
-					var addComment 					= document.createElement("div");
-					addComment.className 			= "comment";
+					var addComment 					= document.createElement('div');
+					addComment.className 			= 'comment';
 					addComment.style.marginBottom 	= "33px";
 
-					addComment.innerHTML 			= "<p><input type='text' placeholder='Add a comment...'/></p>";
-					addComment.innerHTML 			+= "<div class='author'><input type='text' placeholder='" + placeholder + "'/></div>";
-
-					var val = addComment.children[0].children[0];
+					var addCommentInputWrapper 		= document.createElement('p');
 					
-					Pictre.extend(addComment).on('keydown',function(e) {
+					var addBodyToComment			= document.createElement('input');
+					addBodyToComment.type 			= 'text';
+					addBodyToComment.placeholder 	= 'Add a comment...';
 
-						if(e.keyCode == 13 && val.value != "") {
+					var addAuthorToComment 			= document.createElement('input');
+					addAuthorToComment.type 	 	= 'hidden';
+					addAuthorToComment.placeholder 	= placeholder;
 
-							var name = addComment.children[1].children[0];
+					addComment 						.appendChild(addCommentInputWrapper);
+					addCommentInputWrapper			.appendChild(addBodyToComment);
+					addCommentInputWrapper 			.appendChild(addAuthorToComment);
+					
+					Pictre.extend(addBodyToComment).on('keydown', function(e) {
 
-							if(Pictre.terminal.isCommand(val.value)) {
+						// check to see that key pressed was 'enter' and that 
+						// there is text in the comment input
+						if(e.keyCode != 13 || addBodyToComment.value == '') {
+							return false;
+						}
 
-								var cmd = val.value;
+						if(Pictre.terminal.isCommand(addBodyToComment.value)) {
 
-								name.disabled 	= true;
-								val.disabled 	= true;
-								val.value 		= "loading, please wait...";
+							var command = addBodyToComment.value;
 
-								Pictre.terminal.parse({
+							addBodyToComment.disabled 	= true;
+							addBodyToComment.value 		= 'loading, please wait...';
 
-									id 		: a.data.dbid,
-									src 	: a.data.src,
-									thumb 	: a.data.thumb,
-									command : cmd
+							Pictre.terminal.parse({
 
-								}, function(log) {
+								id 		: a.data.dbid,
+								src 	: a.data.src,
+								thumb 	: a.data.thumb,
+								command : command
 
-									if(log.error) {
+							}, function(data) {
 
-										val.value = log.error;
-
-										val.removeAttribute('disabled');
-										name.removeAttribute('disabled');
-
-									}
-
-								});
-
-							} else {
-
-								if(name.value != "") {
-									Pictre._storage.comments.author = name.value;
+								if(data.error) {
+									addBodyToComment.value = data.error;
+									addBodyToComment.removeAttribute('disabled');
 								}
 
-								b.data.comments[b.data.comments.length] 		= {};
-								b.data.comments[b.data.comments.length].author 	= name.value || 'Anonymous';
-								b.data.comments[b.data.comments.length].body 	= val.value;
+							});
 
-								b.data.comments.length++;
+							return false;
 
-								val.disabled 	= true;
-								val.value 		= "loading, please wait...";
-
-								var xhr = new XMLHttpRequest();
-
-								xhr.open('POST', Pictre._settings.cloud.address+'data.php', true);
-								xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-								xhr.send("type=store_comment&id=" + b.data.dbid+"&author=" + b.data.comments[b.data.comments.length-1].author + "&body=" + b.data.comments[b.data.comments.length-1].body);
-								
-								Pictre.extend(xhr).on('readystatechange',function() {
-
-									if(xhr.readyState == 4 && xhr.status == 200) {
-										if(xhr.responseText == "success") {
-											val.value = "";
-											loadComments();
-										} else {
-											val.value = xhr.responseText;
-										}
-
-										val.removeAttribute('disabled');
-									}
-
-								});
-
-							}
 						}
+
+						addBodyToComment.type 	= 'hidden';
+						addAuthorToComment.type = 'text';
+
+						addAuthorToComment.focus();
+
+					});
+
+					Pictre.extend(addAuthorToComment).on('keydown', function(e) {
+
+						// check to see that key pressed was 'enter' and that 
+						// there is text in the comment input
+						if(e.keyCode != 13 || addAuthorToComment.value == '') {
+							return false;
+						}
+
+						Pictre._storage.comments.author = addAuthorToComment.value;
+
+						b.data.comments[b.data.comments.length] 		= {};
+						b.data.comments[b.data.comments.length].author 	= addAuthorToComment.value || 'Anonymous';
+						b.data.comments[b.data.comments.length].body 	= addBodyToComment.value;
+
+						b.data.comments.length++;
+
+						addAuthorToComment.disabled 	= true;
+						addAuthorToComment.value 		= 'loading, please wait...';
+
+						var xhr = new XMLHttpRequest();
+
+						xhr.open('POST', Pictre._settings.cloud.address+'data.php', true);
+						xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+						xhr.send("type=store_comment&id=" + b.data.dbid+"&author=" + b.data.comments[b.data.comments.length-1].author + "&body=" + b.data.comments[b.data.comments.length-1].body);
+						
+						Pictre.extend(xhr).on('readystatechange',function() {
+
+							if(xhr.readyState == 4 && xhr.status == 200) {
+								if(xhr.responseText == "success") {
+									addAuthorToComment.value = '';
+									loadComments();
+								} else {
+									addAuthorToComment.value = xhr.responseText;
+								}
+
+								addAuthorToComment.removeAttribute('disabled');
+							}
+
+						});
+
 
 					});
 

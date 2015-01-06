@@ -1,4 +1,5 @@
 <?php
+
 header('Access-Control-Allow-Origin: *');
 
 $host 			= getenv('OPENSHIFT_MYSQL_DB_HOST');
@@ -485,6 +486,11 @@ try {
 
 if(isset($_FILES) && count($_FILES) > 0) {
 
+	if(!IN_PRODUCTION) {
+
+		die("success");
+	}
+
 	$up = array();
 	$n = count($_FILES);
 
@@ -492,11 +498,6 @@ if(isset($_FILES) && count($_FILES) > 0) {
 		$up[$i] = new Upload($pdo);
 		$up[$i]->id = $i;
 		$up[$i]->load($_FILES[$i], $_POST["exif" . $i], $_POST["album" . $i]);
-	}
-
-	if(!IN_PRODUCTION) {
-
-		die("success");
 	}
 
 	$album = $_POST["board"];

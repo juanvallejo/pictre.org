@@ -27,9 +27,9 @@
 </head>
 <body>
 <script>
-(function(w,o,n,d,e,r){n=o.createElement("div");n.id="wrapper";
-o.body.appendChild(n);d='http://static-pictre.rhcloud.com/';
-e=window.location.hostname=='localhost'?'http://localhost:7777/':'http://static-pictre.rhcloud.com/static/';Pictre.init(n,d,e);
+(function(w,o,n,d,e,r){n=o.createElement("div");n.id="wrapper";o.body.appendChild(n);
+d='http://static-pictre.rhcloud.com/';r=window.location.hostname=='localhost'?true:false;
+e=r?'http://localhost:7777/':'http://static-pictre.rhcloud.com/static/';Pictre.init(n,d,e,r);
 n.style.height=$(w).height()+"px";})(window,document);
 </script>
 </body>
