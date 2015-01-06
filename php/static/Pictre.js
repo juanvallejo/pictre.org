@@ -2794,7 +2794,7 @@ Pictre = {
 
 					var addComment 					= document.createElement('div');
 					addComment.className 			= 'comment';
-					addComment.style.marginBottom 	= "33px";
+					addComment.style.marginBottom 	= "20px";
 
 					var addCommentInputWrapper 		= document.createElement('p');
 					
@@ -2905,8 +2905,8 @@ Pictre = {
 
 							var comment = document.createElement("div");
 							comment.className = "comment";
-							comment.innerHTML = "<p>"+b.data.comments[i].body+"</p>";
-							comment.innerHTML += "<div class='author'>"+b.data.comments[i].author+"</div>";
+							comment.innerHTML = "<div class='author'>"+b.data.comments[i].author+"</div>";
+							comment.innerHTML += "<p>"+b.data.comments[i].body+"</p>";
 
 							comments.appendChild(comment);
 
@@ -2920,14 +2920,6 @@ Pictre = {
 						comments.style.borderBottomColor = "transparent";
 					}
 
-					var spacer = document.createElement("div");
-					spacer.className = "Pictre-spacer";
-
-					if(b.data.comments.length) {
-						spacer.style.borderTop = "1px solid rgb(61,65,65)";
-					}
-
-					comments.appendChild(spacer);
 				}
 			});
 
