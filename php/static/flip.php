@@ -46,6 +46,10 @@ function fix_orientation($fileandpath,$exif,$path) {
     die("img_res returned false");
  //   return false;
 
+ if(!$exif['Orientation']) {
+    return true;
+ }
+
   // The meat of the script really, the orientation is supplied as an integer, 
   // so we just rotate/flip it back to the correct orientation based on what we 
   // are told it currently is 
